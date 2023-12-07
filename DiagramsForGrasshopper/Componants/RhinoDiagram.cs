@@ -12,6 +12,7 @@ namespace DiagramsForGrasshopper
        
 
         public Diagram Diagram = null;
+        private Transform Xform = Transform.ZeroTransformation;
         /// <summary>
         /// Initializes a new instance of the RhinoDiagram class.
         /// </summary>
@@ -27,7 +28,10 @@ namespace DiagramsForGrasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+           
             pManager.AddGenericParameter("Diagram", "D", "Image or Diagram to display inside this componant", GH_ParamAccess.item);
+            pManager.AddTransformParameter("Transform", "Xfrom", "A transformation for the diagram", GH_ParamAccess.item);
+            this.Params.Input[1].Optional = true;
         }
 
         /// <summary>
@@ -48,6 +52,8 @@ namespace DiagramsForGrasshopper
         {
            
             Diagram diagram = null;
+            Transform xfrom = Transform.ZeroTransformation;
+
 
 
             if (!DA.GetData(0, ref diagram))
@@ -55,11 +61,16 @@ namespace DiagramsForGrasshopper
                 return;
             }
 
+            DA.GetData(1, ref xfrom);
+
+
+
             if (diagram == null)
             {
                 AddUsefulMessage(DA, "Diagram cannot be null");
                 return;
             }
+            Xform = xfrom;
             Diagram = diagram;
 
 
@@ -99,10 +110,16 @@ namespace DiagramsForGrasshopper
         {
             if (Diagram == null) { return; }
 
+            if (!this.Locked)
+            {
+                if (this.m_attributes.Selected) {
+                    Diagram.DrawRhinoPreview(args.Display, GH_Component.DocumentTolerance(), Xform, true);
+                } else {
+                    Diagram.DrawRhinoPreview(args.Display, GH_Component.DocumentTolerance(), Xform, false);
+                }
 
-           
-            Diagram.DrawRhinoPreview(args.Display, GH_Component.DocumentTolerance());
-            
+               
+            }
         }
         
     }

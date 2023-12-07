@@ -126,7 +126,7 @@ namespace DiagramsForGrasshopper.Componants
 
             
 
-            DiagramText diagramCurve = DiagramText.Create(text,new PointF((float)pt.X,(float)pt.Y), clr, (float)weight);
+            DiagramText diagramCurve = DiagramText.Create(text,new PointF((float)pt.X,(float)pt.Y), clr, (float)weight,justification,Color.Blue,true,Color.LightCyan,1f,true,"Arial",true,new SizeF(100F,100F),3f);
 
             DA.SetData(1, diagramCurve);
         }

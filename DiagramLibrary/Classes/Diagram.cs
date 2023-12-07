@@ -12,7 +12,7 @@ namespace DiagramLibrary
     {
         public static Color DefaultColor = Color.Black;
         public static float DefaultLineWieght = 1f;
-
+        public static Color SelectedColor = Color.FromArgb(128, Color.ForestGreen);
 
         private int m_width;
         private int m_height;
@@ -255,15 +255,15 @@ namespace DiagramLibrary
         }
 
 
-        public void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolernace) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
+        public void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolernace, Transform xform, bool colorOverride) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
         {
             // we could do with caching here
             
-            m_Background.DrawRhinoPreview(pipeline, tolernace);
+            m_Background.DrawRhinoPreview(pipeline, tolernace,xform, colorOverride);
 
                 foreach (DiagramObject obj in m_Objects)
                 {
-                    obj.DrawRhinoPreview(pipeline, tolernace);
+                    obj.DrawRhinoPreview(pipeline, tolernace,xform, colorOverride);
 
                 }
 

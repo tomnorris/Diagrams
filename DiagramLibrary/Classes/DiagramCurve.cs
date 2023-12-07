@@ -47,15 +47,28 @@ namespace DiagramLibrary
             
         }
 
-        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance)
+        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride)
         {
-                        
+            Color clr = Diagram.SelectedColor;
+            if (colorOverride == false)
+            {
+                clr = m_Colour;
+            }
+
             int thickness = (int)this.m_LineWeight;
-            if (thickness <= 0) {
+            if (thickness <= 0)
+            {
                 thickness = 1;
             }
 
-            pipeline.DrawCurve(m_Curve, m_Colour, thickness);
+            if (transform != Transform.ZeroTransformation) { 
+            Curve transformedCurve = m_Curve.DuplicateCurve();
+            transformedCurve.Transform(transform);
+
+            pipeline.DrawCurve(transformedCurve, clr, thickness);
+        } else {
+                pipeline.DrawCurve(m_Curve, clr, thickness);
+            }
 
 
         }

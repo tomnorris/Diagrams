@@ -58,7 +58,7 @@ namespace DiagramLibrary
 
        
 
-        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance)
+        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xfrom, bool colorOverride)
         {
 
 

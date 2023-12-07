@@ -13,7 +13,17 @@ namespace DiagramLibrary
     {
          protected Color m_Colour;
          protected float m_LineWeight;
-       public  abstract string DiagramObjectType();
+
+        public Color Colour { 
+            get { return m_Colour; }
+        }
+
+        public float LineWeight
+        {
+            get { return m_LineWeight; }
+        }
+
+        public  abstract string DiagramObjectType();
 
         public DiagramObject() { }
 
@@ -35,7 +45,7 @@ namespace DiagramLibrary
 
         public virtual void DrawBitmap(Graphics g) { }
 
-        public virtual void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance) { }
+        public virtual void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance,Transform xform,bool colorOverride) { }
 
     }
 }

@@ -26,13 +26,22 @@ namespace DiagramLibrary
 
 
 
-        public static DiagramText Create(string Text, PointF Location, Color Colour, float LineWeight)
+        public static DiagramText Create(string Text, PointF Location, Color Colour, float LineWeight,
+            TextJustification anchor, Color maskColour,bool drawFrame, Color frameColor,float frameLineWeight, 
+            bool maskEnabled, string fontName,bool wrapped, SizeF wrapSize, float padding)
         {
             DiagramText diagramText = new DiagramText();
             diagramText.m_Colour = Colour;
             diagramText.m_LineWeight = LineWeight;
             diagramText.m_Text = Text;
             diagramText.m_Location = Location;
+            diagramText.m_Anchor = anchor;
+            diagramText.m_Mask = DiagramFilledRectangle.Create(new Rectangle3d(Plane.WorldXY,1,1),maskColour,drawFrame,frameColor,frameLineWeight);
+            diagramText.m_MaskEnabled = maskEnabled;
+            diagramText.m_FontName = fontName;
+            diagramText.m_wrapped = wrapped;
+            diagramText.m_WrapSize = wrapSize;
+            diagramText.m_Padding = padding;
             return diagramText;
         }
 
@@ -125,31 +134,68 @@ namespace DiagramLibrary
             }
 
 
-            g.DrawString(m_Text, font, this.GetBrush(), CompensatedPoint);
+          
 
-
-            /* PointF pt = new PointF((float)m_Text.Plane.OriginX, -(float)m_Text.Plane.OriginY - (float)m_LineWeight);
+             PointF pt = new PointF(CompensatedPoint.X, -CompensatedPoint.Y - (float)m_LineWeight);
              g.ScaleTransform(1, -1);
-             g.DrawString(m_Text.PlainText, font, this.GetBrush(), pt);
+             g.DrawString(m_Text, font, this.GetBrush(), pt);
              g.ResetTransform();
-             */
+           
 
 
         }
 
 
 
-        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance)
+        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform,bool colorOverride)
         {
-            //this needs updateing
-         
 
-            /*var newText = m_Text.Duplicate() as TextEntity;
-            newText.Plane = Plane.WorldXY;
+            
+            SizeF AllowedTextSize = SizeF.Empty;
+            if (m_wrapped)
+            {
 
-            newText.Transform(Transform.Translation(new Vector3d(m_Text.Plane.Origin / m_LineWeight)));
-            pipeline.DrawText(newText, m_Colour, m_LineWeight);
-            */
+
+                AllowedTextSize = m_WrapSize;
+            }
+            else
+            {
+                AllowedTextSize = pipeline.Measure2dText(m_Text, new Point2d(0, 0), false, 0, (int)m_LineWeight, m_FontName).Size;
+
+
+            }
+
+
+
+            PointF CompensatedPoint = GetCompensatedPoint(AllowedTextSize);
+
+            if (m_MaskEnabled && m_Mask != null)
+            {
+
+                m_Mask.UpdateRectangle(CompensatedPoint, AllowedTextSize);
+                m_Mask.DrawRhinoPreview(pipeline, tolerance, xform, colorOverride);
+            }
+
+
+            TextEntity txt = new TextEntity();
+            txt.PlainText = m_Text;
+            txt.Font = new Rhino.DocObjects.Font(m_FontName, Rhino.DocObjects.Font.FontWeight.Normal, Rhino.DocObjects.Font.FontStyle.Upright,false,false);
+            txt.Plane = Plane.WorldXY;
+            txt.Plane.Transform(Transform.Translation(new Vector3d(m_Location.X,m_Location.Y,0)));
+            txt.Justification = m_Anchor;
+            txt.TextHeight = m_LineWeight;
+            txt.FormatWidth = m_WrapSize.Width;
+            
+
+            if (m_wrapped)
+            {
+                txt.WrapText();
+            }
+            
+
+
+            pipeline.DrawText(txt, m_Colour, m_LineWeight);
+            
 
 
         }

@@ -122,17 +122,29 @@ namespace DiagramLibrary
         }
 
 
-        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance)
+        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride)
         {
+
+            Color clr = Diagram.SelectedColor;
+            if (colorOverride == false)
+            {
+                clr = m_Colour;
+            }
+
+
             List<DiagramCurve> dcrvs = new List<DiagramCurve>();
             dcrvs.AddRange(m_OuterCurves);
             dcrvs.AddRange(m_InnerCurves);
             Curve[] crvs = dcrvs.Select(x => (Curve)x.GetCurve()).ToArray();
             Brep[] breps = Brep.CreatePlanarBreps(crvs, tolerance);
 
-            foreach (var item in breps)
+            foreach (Brep item in breps)
             {
-                pipeline.DrawBrepShaded(item, new Rhino.Display.DisplayMaterial(m_Colour, 1.0 - (m_Colour.A / 255)));
+                if (xform != Transform.ZeroTransformation)
+                {
+                    item.Transform(xform);
+                }
+                pipeline.DrawBrepShaded(item, new Rhino.Display.DisplayMaterial(clr, 1.0 - (clr.A / 255)));
             }
 
 
@@ -140,11 +152,11 @@ namespace DiagramLibrary
             if (m_DrawLine) {
                 foreach (var item in m_OuterCurves)
                 {
-                    item.DrawRhinoPreview(pipeline, tolerance);
+                    item.DrawRhinoPreview(pipeline, tolerance,xform, colorOverride);
                 }
                 foreach (var item in m_InnerCurves)
                 {
-                    item.DrawRhinoPreview(pipeline, tolerance);
+                    item.DrawRhinoPreview(pipeline, tolerance,xform, colorOverride);
                 }
 
             }
