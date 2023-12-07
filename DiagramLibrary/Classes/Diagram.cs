@@ -1,0 +1,277 @@
+﻿using Rhino.Geometry;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DiagramLibrary
+{
+    public class Diagram
+    {
+        public static Color DefaultColor = Color.Black;
+        public static float DefaultLineWieght = 1f;
+
+
+        private int m_width;
+        private int m_height;
+        private string m_Title;
+        private DiagramFilledRectangle m_Background;
+
+        private List<DiagramObject> m_Objects;
+
+
+        public string Title {
+            get { return m_Title; }
+        }
+
+        public Diagram Duplicate()
+        {
+            Diagram diagram = new Diagram();
+            diagram.m_width = m_width;
+            diagram.m_height = m_height;
+            diagram.m_Objects = m_Objects;
+                return diagram;
+        }
+
+        public Diagram() { }
+
+
+        public static Diagram Create(int width, int height, string Title, Color backgroundColour)
+        {
+            Diagram diagram = new Diagram();
+            diagram.m_width = width;
+            diagram. m_height = height;
+            diagram. m_Objects = new List<DiagramObject>();
+            diagram.m_Title = Title;
+            Rectangle3d rec = new Rectangle3d(Plane.WorldXY, width, height);
+            diagram.m_Background = DiagramFilledRectangle.Create(rec, backgroundColour, false, DefaultColor, DefaultLineWieght);
+            return diagram;
+        }
+
+        public void AddObjects(List<object> objs, double tolernace)
+        {
+            for (int i = 0; i < objs.Count; i++)
+            {
+
+              
+             
+                try
+                {
+                    var goo = objs[i] as Grasshopper.Kernel.Types.IGH_GeometricGoo;
+                    goo.CastTo(out GeometryBase geoBase);
+                    AddRhinoObject(objs[i], tolernace);
+
+                   
+
+                }
+                catch (Exception)
+                {
+                    AddDiagramObject(objs[i]);
+
+                }
+              
+               
+                
+            }
+          
+        }
+
+        public void AddDiagramObject(object obj )
+        {
+            var goo = obj as Grasshopper.Kernel.Types.IGH_Goo;
+            goo.CastTo(out DiagramObject DO);
+
+
+            switch (DO.DiagramObjectType())
+            {
+                case "DiagramCurve":
+                    goo.CastTo(out DiagramCurve diagramCurve);
+                  
+                 m_Objects.Add(diagramCurve);
+                    break;
+
+                case "DiagramFilledCurve":
+                    goo.CastTo(out DiagramFilledCurve diagramFilledCurve);
+                    m_Objects.Add(diagramFilledCurve);
+                    break;
+                case "DiagramImage":
+                    goo.CastTo(out DiagramImage diagramImage);
+                    m_Objects.Add(diagramImage);
+                    break;
+
+                case "DiagramText":
+                    goo.CastTo(out DiagramText diagramText);
+                    m_Objects.Add(diagramText);
+                    break;
+                default:
+                    break;
+            }
+           
+        }
+
+
+
+
+            public void AddRhinoObject(object obj, double tolernace) {
+            if (obj == null) { return; }
+
+
+            // if (obj is GeometryBase == false) {                return;            }
+
+            var goo = obj as Grasshopper.Kernel.Types.IGH_GeometricGoo;
+            goo.CastTo(out GeometryBase geoBase);
+
+            switch (geoBase.ObjectType)
+            {
+                case Rhino.DocObjects.ObjectType.None:
+                    break;
+                case Rhino.DocObjects.ObjectType.Point:
+                    break;
+                case Rhino.DocObjects.ObjectType.PointSet:
+                    break;
+                case Rhino.DocObjects.ObjectType.Curve:
+                    goo.CastTo(out Curve crv);
+                    
+                    DiagramCurve dCurve = DiagramCurve.Create(crv, DefaultColor, DefaultLineWieght);
+                    m_Objects.Add(dCurve);
+                    break;
+                case Rhino.DocObjects.ObjectType.Surface:
+                    goo.CastTo(out Surface srf);
+                  
+                    AddBrep(tolernace, srf.ToBrep());
+                    break;
+                case Rhino.DocObjects.ObjectType.Brep:
+                   
+                    goo.CastTo(out Brep brep);
+                    AddBrep(tolernace, brep);
+
+                    break;
+                case Rhino.DocObjects.ObjectType.Mesh:
+                    break;
+                case Rhino.DocObjects.ObjectType.Light:
+                    break;
+                case Rhino.DocObjects.ObjectType.Annotation:
+                    break;
+                case Rhino.DocObjects.ObjectType.InstanceDefinition:
+                    break;
+                case Rhino.DocObjects.ObjectType.InstanceReference:
+                    break;
+                case Rhino.DocObjects.ObjectType.TextDot:
+                    break;
+                case Rhino.DocObjects.ObjectType.Grip:
+                    break;
+                case Rhino.DocObjects.ObjectType.Detail:
+                    break;
+                case Rhino.DocObjects.ObjectType.Hatch:
+                    
+                    break;
+                case Rhino.DocObjects.ObjectType.MorphControl:
+                    break;
+                case Rhino.DocObjects.ObjectType.SubD:
+                    break;
+                case Rhino.DocObjects.ObjectType.BrepLoop:
+                    break;
+                case Rhino.DocObjects.ObjectType.PolysrfFilter:
+                    break;
+                case Rhino.DocObjects.ObjectType.EdgeFilter:
+                    break;
+                case Rhino.DocObjects.ObjectType.PolyedgeFilter:
+                    break;
+                case Rhino.DocObjects.ObjectType.MeshVertex:
+                    break;
+                case Rhino.DocObjects.ObjectType.MeshEdge:
+                    break;
+                case Rhino.DocObjects.ObjectType.MeshFace:
+                    break;
+                case Rhino.DocObjects.ObjectType.Cage:
+                    break;
+                case Rhino.DocObjects.ObjectType.Phantom:
+                    break;
+                case Rhino.DocObjects.ObjectType.ClipPlane:
+                    break;
+                case Rhino.DocObjects.ObjectType.Extrusion:
+                    goo.CastTo(out Extrusion ext);
+                   
+                    AddBrep(tolernace, ext.ToBrep());
+                    break;
+                case Rhino.DocObjects.ObjectType.AnyObject:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void AddBrep( double tolernace, Brep brep) {
+            m_Objects.AddRange(DiagramFilledCurve.CreateFromBrep(brep,DefaultColor,true,DefaultColor,DefaultLineWieght));
+        }
+
+        
+
+        public BoundingBox GetGeometryBoundingBox()
+        {
+            Plane pl = Plane.WorldXY;
+            return new Rectangle3d(pl, m_width, m_height).ToNurbsCurve().GetBoundingBox(false);
+        }
+
+        public Size GetBoundingSize(double scale)
+        {
+            BoundingBox bb = GetGeometryBoundingBox();
+            int width = (int)((bb.Max.X - bb.Min.X) * scale);
+            int height = (int)((bb.Max.Y - bb.Min.Y) * scale);
+            return new Size(width, height);
+        }
+
+
+        public Bitmap GetBitmap(double scale) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
+        {
+
+            Size sz = GetBoundingSize(scale);
+
+            Bitmap btm = new Bitmap(sz.Width, sz.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+
+
+            using (var graphics = Graphics.FromImage(btm))
+            {
+               
+
+
+                foreach (DiagramObject obj in m_Objects)
+                {
+                    obj.DrawBitmap(graphics);
+                   
+                }
+
+
+            }
+
+            btm.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+
+            return btm;
+
+        }
+
+
+        public void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolernace) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
+        {
+            // we could do with caching here
+            
+            m_Background.DrawRhinoPreview(pipeline, tolernace);
+
+                foreach (DiagramObject obj in m_Objects)
+                {
+                    obj.DrawRhinoPreview(pipeline, tolernace);
+
+                }
+
+
+
+        }
+
+
+
+    }
+}

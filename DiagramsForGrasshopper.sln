@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.902
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagramsForGrasshopper", "DiagramsForGrasshopper\DiagramsForGrasshopper.csproj", "{26E0B3E3-8997-42D6-BC6E-BA525E5D0935}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagramLibrary", "DiagramLibrary\DiagramLibrary.csproj", "{7685DF9D-4700-493C-99C6-4247F6F9B43B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26E0B3E3-8997-42D6-BC6E-BA525E5D0935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26E0B3E3-8997-42D6-BC6E-BA525E5D0935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26E0B3E3-8997-42D6-BC6E-BA525E5D0935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26E0B3E3-8997-42D6-BC6E-BA525E5D0935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7685DF9D-4700-493C-99C6-4247F6F9B43B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7685DF9D-4700-493C-99C6-4247F6F9B43B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7685DF9D-4700-493C-99C6-4247F6F9B43B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7685DF9D-4700-493C-99C6-4247F6F9B43B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D01B64F5-D319-433F-81BA-1C39DAE1FAC3}
+	EndGlobalSection
+EndGlobal

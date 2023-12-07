@@ -1,0 +1,9 @@
+C:\Users\tomno\OneDrive - Point Space Limited\CurvesPlusGit\Diagram\DiagramsForGrasshopper\DiagramsForGrasshopper\obj\Debug\DiagramsForGrasshopper.csprojAssemblyReference.cache
+C:\Users\tomno\OneDrive - Point Space Limited\CurvesPlusGit\Diagram\DiagramsForGrasshopper\DiagramsForGrasshopper\obj\Debug\DiagramsForGrasshopper.csproj.CoreCompileInputs.cache
+C:\Users\tomno\OneDrive - Point Space Limited\CurvesPlusGit\Diagram\DiagramsForGrasshopper\DiagramsForGrasshopper\bin\DiagramsForGrasshopper.dll
+C:\Users\tomno\OneDrive - Point Space Limited\CurvesPlusGit\Diagram\DiagramsForGrasshopper\DiagramsForGrasshopper\bin\DiagramsForGrasshopper.pdb
+C:\Users\tomno\OneDrive - Point Space Limited\CurvesPlusGit\Diagram\DiagramsForGrasshopper\DiagramsForGrasshopper\bin\DiagramLibrary.dll
+C:\Users\tomno\OneDrive - Point Space Limited\CurvesPlusGit\Diagram\DiagramsForGrasshopper\DiagramsForGrasshopper\bin\DiagramLibrary.pdb
+C:\Users\tomno\OneDrive - Point Space Limited\CurvesPlusGit\Diagram\DiagramsForGrasshopper\DiagramsForGrasshopper\obj\Debug\DiagramsForGrasshopper.csproj.CopyComplete
+C:\Users\tomno\OneDrive - Point Space Limited\CurvesPlusGit\Diagram\DiagramsForGrasshopper\DiagramsForGrasshopper\obj\Debug\DiagramsForGrasshopper.dll
+C:\Users\tomno\OneDrive - Point Space Limited\CurvesPlusGit\Diagram\DiagramsForGrasshopper\DiagramsForGrasshopper\obj\Debug\DiagramsForGrasshopper.pdb
