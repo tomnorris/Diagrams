@@ -39,7 +39,7 @@ namespace DiagramsForGrasshopper
             pManager.AddIntegerParameter("Width", "W", "Diagram Width in Pixels", GH_ParamAccess.item);
             pManager.AddGenericParameter("DiagramObject", "DO", "Diagram object or Rhino Geometry To Add to Diagram", GH_ParamAccess.list);
             pManager.AddTextParameter("Tile", "T", "Optional Diagram Title", GH_ParamAccess.item, "");
-            pManager.AddColourParameter("Colour", "T", "Optional Background Colour", GH_ParamAccess.item, System.Drawing.Color.Transparent);
+            pManager.AddColourParameter("Colour", "C", "Optional Background Colour", GH_ParamAccess.item, System.Drawing.Color.Transparent);
 
 
         }

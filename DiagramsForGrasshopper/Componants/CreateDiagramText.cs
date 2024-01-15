@@ -26,15 +26,13 @@ namespace DiagramsForGrasshopper.Componants
         {
             pManager.AddTextParameter("Text", "T", "Text as a string", GH_ParamAccess.item);
             pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item,new Point3d(0,0,0));
-            pManager.AddColourParameter("Colour", "C", "Colour for text", GH_ParamAccess.item, Color.Black);
-            pManager.AddNumberParameter("Weight", "LW", "Text size", GH_ParamAccess.item,1);
-            pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, "Arial");
-            pManager.AddIntegerParameter("Justification", "J", 
-                "Text justification 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right", 
-                GH_ParamAccess.item, 0);
-
-            
-
+         
+            pManager.AddNumberParameter("Scale", "S", "Text size", GH_ParamAccess.item,1);
+                    
+            pManager.AddNumberParameter("Max Width", "W", "Maximum Width, Set to less than 0 to ignore ", GH_ParamAccess.item, -1);
+            pManager.AddNumberParameter("Max Height", "H", "Maximum Height, Set to less than 0 to ignore", GH_ParamAccess.item, -1);
+             pManager.AddColourParameter("Colour", "C", "Colour for text", GH_ParamAccess.item, Color.Black);
+         
         }
 
         /// <summary>
@@ -53,25 +51,32 @@ namespace DiagramsForGrasshopper.Componants
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             double weight = 1;
-            Color clr = new Color();
+            Color clr = Color.Empty;
+            Color frameClr = Color.Empty;
+            Color maskClr = Color.Empty;
             string text = "";
-            Point3d pt = Point3d.Unset;
+            Point3d pt = new Point3d(0, 0, 0);
             string font = "Arial";
-            int justificationInt = 0;
+         
+            double padding = 3;
+            double width = -1;
+            double height = -1;
+           
 
 
             DA.GetData(0, ref text);
             DA.GetData(1, ref pt);
-           
-            DA.GetData(2, ref clr);
-            DA.GetData(3, ref weight);
+            DA.GetData(2, ref weight);
+             DA.GetData(3, ref width);
+            DA.GetData(4, ref height);
+             DA.GetData(5, ref clr);
+          
 
-            DA.GetData(4, ref font);
-            DA.GetData(5, ref justificationInt);
-
-
-
-
+            if (text == "")
+            {
+                AddUsefulMessage(DA, "Text cannot be Empty");
+                return;
+            }
 
             if (weight == double.NaN)
             {
@@ -84,49 +89,20 @@ namespace DiagramsForGrasshopper.Componants
                 return;
             }
 
-            TextJustification justification = TextJustification.BottomLeft;
-        
-            switch (justificationInt)
-            {
-                case 0:
-                    justification = TextJustification.BottomLeft;
-                    break;
-                case 1:
-                    justification = TextJustification.BottomCenter;
-                    break;
-                case 2:
-                    justification = TextJustification.BottomRight;
-                    break;
-                case 3:
-                    justification = TextJustification.MiddleLeft;
-                    break;
-                case 4:
-                    justification = TextJustification.MiddleCenter;
-                    break;
-                case 5:
-                    justification = TextJustification.MiddleRight;
-                    break;
-                case 6:
-                    justification = TextJustification.TopLeft;
-                    break;
-                case 7:
-                    justification = TextJustification.TopCenter;
-                    break;
-                case 8:
-                    justification = TextJustification.TopRight;
-                    break;
-                default:
-                    // Use default values
-                    justification = TextJustification.BottomLeft;
-                    break;
-            }
+            TextJustification anchor = TextJustification.BottomLeft;
 
-            
+          
+
+            TextJustification jusitification = TextJustification.BottomLeft;
+
+           
 
 
-            
+            bool showMask = false;
+           
 
-            DiagramText diagramCurve = DiagramText.Create(text,new PointF((float)pt.X,(float)pt.Y), clr, (float)weight,justification,Color.Blue,true,Color.LightCyan,1f,true,"Arial",true,new SizeF(100F,100F),3f);
+
+            DiagramText diagramCurve = DiagramText.Create(text,new PointF((float)pt.X,(float)pt.Y), clr, (float)weight,anchor,maskClr, frameClr,1f,showMask,font,new SizeF((float)width,(float)height),(float)padding, jusitification);
 
             DA.SetData(1, diagramCurve);
         }
@@ -149,7 +125,7 @@ namespace DiagramsForGrasshopper.Componants
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("5d84478c-324e-4368-83e6-8b75f2abc1e9"); }
+            get { return new Guid("1c44a5e7-7fdd-41e0-8d7d-4b4c27b77a12"); }
         }
     }
 }

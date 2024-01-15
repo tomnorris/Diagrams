@@ -224,7 +224,7 @@ namespace DiagramLibrary
         }
 
 
-        public Bitmap GetBitmap(double scale) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
+        public Bitmap DrawBitmap(double scale) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
         {
 
             Size sz = GetBoundingSize(scale);
@@ -235,9 +235,8 @@ namespace DiagramLibrary
 
             using (var graphics = Graphics.FromImage(btm))
             {
-               
 
-
+                m_Background.DrawBitmap(graphics);
                 foreach (DiagramObject obj in m_Objects)
                 {
                     obj.DrawBitmap(graphics);
