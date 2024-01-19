@@ -4,7 +4,7 @@ using System.Reflection;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 using DiagramLibrary;
-
+using System.Windows.Forms;
 
 namespace DiagramsForGrasshopper
 {
@@ -72,6 +72,50 @@ namespace DiagramsForGrasshopper
             DA.SetData(0, diagram);
         }
 
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            base.AppendAdditionalComponentMenuItems(menu);
+            Menu_AppendItem(menu, "Save", SaveHandler, true,false);
+
+            var setScale = Menu_AppendItem(menu, "Set Number");
+            Menu_AppendTextItem(setScale.DropDown, Scale.ToString(System.Globalization.CultureInfo.InvariantCulture), null, TextChanged, true);
+        }
+
+
+        private void TextChanged(Grasshopper.GUI.GH_MenuTextBox sender, string newText)
+        {
+            try
+            {
+                Scale = Convert.ToDouble(newText);
+                ExpireSolution(true);
+            }
+            catch (Exception)
+            {
+
+                Scale = 1;
+                ExpireSolution(true);
+            }
+           
+        }
+
+    
+
+        private void SaveHandler(object sender, EventArgs e)
+        {
+            Rhino.UI.SaveFileDialog saveFileDialog = new Rhino.UI.SaveFileDialog();
+            saveFileDialog.DefaultExt = ".png";
+            saveFileDialog.Filter = "Image files (*.png)|*.*";
+            saveFileDialog.Filter = "Bitmap Image (.bmp)|*.bmp|JPEG Image (.jpeg)|*.jpeg|Png Image (.png)|*.png";
+           
+            saveFileDialog.Title = "Save a file";
+            if (saveFileDialog.ShowSaveDialog())
+            {
+                string filename = saveFileDialog.FileName;
+                this.Bitmap.Save(filename);
+            }
+        }
+
+
 
 
         /// <summary>
@@ -102,5 +146,7 @@ namespace DiagramsForGrasshopper
             m_attributes = new DiagramComponentAttibutes(this);
 
         }
+
+
     }
 }

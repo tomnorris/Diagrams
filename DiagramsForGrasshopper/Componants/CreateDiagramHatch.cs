@@ -13,7 +13,7 @@ namespace DiagramsForGrasshopper.Componants
         /// Initializes a new instance of the CreateDiagramHatch class.
         /// </summary>
         public CreateDiagramHatch()
-          : base("CreateDiagramHatch", "Nickname",
+          : base("CreateDiagramHatch", "DHatch",
               "Description",
               "Display", "Diagram")
         {
@@ -59,7 +59,10 @@ namespace DiagramsForGrasshopper.Componants
             DA.GetData(4, ref weight);
 
 
-
+            if (brep == null) {
+                AddUsefulMessage(DA, "Brep cannot be Null");
+                return;
+            }
 
 
             if (weight == double.NaN)

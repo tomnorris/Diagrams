@@ -8,9 +8,7 @@ namespace DiagramsForGrasshopper
     public class DiagramComponentAttibutes : GH_ComponentAttributes
     {
 
-
-
-        // private double Scale = 1;
+        
         private float CapsuleHeight = 20;
 
 
@@ -74,7 +72,7 @@ namespace DiagramsForGrasshopper
                     new Point((int)(m_innerBounds.X + m_innerBounds.Width), (int)(m_innerBounds.Y + CapsuleHeight)));
 
                 string text = canvasDiagram.Diagram.Title;
-                graphics.DrawString(text, new Font(canvas.Font.FontFamily, 8), Brushes.Black, new Point((int)(m_innerBounds.X + 3), (int)(m_innerBounds.Y + 3)));
+                graphics.DrawString(text, new Font(canvas.Font.FontFamily,7f), new SolidBrush(canvas.ForeColor) , new Point((int)(m_innerBounds.X + 3), (int)(m_innerBounds.Y + 3)));
 
 
                 Rectangle rec = new Rectangle((int)this.Bounds.X+4, (int)(this.Bounds.Y + CapsuleHeight)+4, (int)this.Bounds.Width-8, (int)(this.Bounds.Width / size.Width * size.Height) -8);

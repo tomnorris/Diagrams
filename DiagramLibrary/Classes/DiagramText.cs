@@ -350,7 +350,18 @@ namespace DiagramLibrary
             SizeF actualTotalTextSize = SizeF.Empty;
             SizeF maskSize = SizeF.Empty;
 
-            
+            Color clr = Diagram.SelectedColor;
+            bool drawLines = m_MaskEnabled;
+            if (colorOverride == false)
+            {
+                clr = m_Colour;
+            }
+            else
+            {
+                drawLines = true;
+            }
+
+
             List<string> lines;
             List<SizeF> rowSizes;
 
@@ -385,7 +396,7 @@ namespace DiagramLibrary
 
             PointF anchorCompensatedPoint = GetAnchorCompensatedPoint(maskSize);
 
-            if (m_MaskEnabled && m_Mask != null)
+            if (drawLines && m_Mask != null)
             {
 
                 m_Mask.UpdateRectangle(anchorCompensatedPoint, maskSize);
@@ -428,7 +439,10 @@ namespace DiagramLibrary
                 Point3d pt = new Point3d(anchorCompensatedPoint.X + m_Padding + justificationCompensation, anchorCompensatedPoint.Y + m_Padding + verticalFustificationCompensation + (lineSpacingPixel  * (lines.Count-i)), 0);
                 var scale = Transform.Scale(new Point3d(pt.X, pt.Y, 0), m_LineWeight);
                 var trans = Transform.Translation(new Vector3d(pt.X, pt.Y, 0));
-                pipeline.DrawText(txt, m_Colour, scale * trans); //scale*trans order matters
+                var localXform = scale * trans;
+                
+
+                pipeline.DrawText(txt, clr, Transform.Multiply(xform,localXform)); //scale*trans order matters
             }
                                  
 

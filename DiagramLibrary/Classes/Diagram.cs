@@ -226,7 +226,7 @@ namespace DiagramLibrary
 
         public Bitmap DrawBitmap(double scale) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
         {
-
+            //TODO DrawBitmap needs to pass on the scale and draw accordingly
             Size sz = GetBoundingSize(scale);
 
             Bitmap btm = new Bitmap(sz.Width, sz.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -235,7 +235,7 @@ namespace DiagramLibrary
 
             using (var graphics = Graphics.FromImage(btm))
             {
-
+                graphics.FillRectangle(Brushes.White, new RectangleF(0, 0, this.m_width, this.m_height));// text displays badly without this, if no background is set
                 m_Background.DrawBitmap(graphics);
                 foreach (DiagramObject obj in m_Objects)
                 {
@@ -259,6 +259,12 @@ namespace DiagramLibrary
             // we could do with caching here
             
             m_Background.DrawRhinoPreview(pipeline, tolernace,xform, colorOverride);
+
+            if (m_Title != null) {
+                PointF pt = new PointF(0, this.m_height);
+                DiagramText title = DiagramText.Create(m_Title, pt, Color.Black, this.m_width /20, TextJustification.BottomLeft, Color.White, Color.Black, 1f, false, "Arial", new SizeF(-1, -1), 3, TextJustification.BottomLeft);
+                title.DrawRhinoPreview(pipeline, tolernace, xform, colorOverride);
+                    }
 
                 foreach (DiagramObject obj in m_Objects)
                 {

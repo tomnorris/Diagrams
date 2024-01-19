@@ -57,6 +57,12 @@ namespace DiagramsForGrasshopper.Componants
            DA.GetData(2, ref weight);
 
 
+            if (crv == null)
+            {
+                AddUsefulMessage(DA, "Curve cannot be Null");
+                return;
+            }
+
 
 
 

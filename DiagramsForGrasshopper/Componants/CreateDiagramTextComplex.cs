@@ -26,6 +26,7 @@ namespace DiagramsForGrasshopper.Componants
         {
             pManager.AddTextParameter("Text", "T", "Text as a string", GH_ParamAccess.item);
             pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item,Point3d.Unset);
+            pManager.HideParameter(1);
             pManager.AddIntegerParameter("Anchor", "A",
                  "Text Anchor 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right",
                  GH_ParamAccess.item, 0);

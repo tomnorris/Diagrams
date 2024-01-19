@@ -126,9 +126,14 @@ namespace DiagramLibrary
         {
 
             Color clr = Diagram.SelectedColor;
+            bool drawLines = this.m_DrawLine;
             if (colorOverride == false)
             {
                 clr = m_Colour;
+               
+            }
+            else {
+                drawLines = true;
             }
 
 
@@ -149,7 +154,7 @@ namespace DiagramLibrary
 
 
 
-            if (m_DrawLine) {
+            if (drawLines) {
                 foreach (var item in m_OuterCurves)
                 {
                     item.DrawRhinoPreview(pipeline, tolerance,xform, colorOverride);

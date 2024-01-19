@@ -26,7 +26,7 @@ namespace DiagramsForGrasshopper.Componants
         {
             pManager.AddTextParameter("Text", "T", "Text as a string", GH_ParamAccess.item);
             pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item,new Point3d(0,0,0));
-         
+            pManager.HideParameter(1);
             pManager.AddNumberParameter("Scale", "S", "Text size", GH_ParamAccess.item,1);
                     
             pManager.AddNumberParameter("Max Width", "W", "Maximum Width, Set to less than 0 to ignore ", GH_ParamAccess.item, -1);
