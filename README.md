@@ -9,11 +9,11 @@ There are two main goals with this project:
 ## What are the Constrains?
 Any diagram object must be reproducable both in the System.Drawing.Graphic Library and also the Rhino.Display.DisplayPipeline
 
-##The Two Halves
+## The Two Halves
 We want to encourage developers to ustilize this library within their own projects for all your diagram needs but we also want to give grasshopper users who are none devs the ability to build there own diagrams from componants.
 
-- **DiagramsLibrary -  For Developers** Include the Diagrams.dll within your project and write the logic for the diagrams within your componants, then you can use the `RhinoDiagram` and `CanvasDiagram` Componants from `DiagramsForGrasshopper` to view your diagrams.
-- **DiagramsForGrasshopper - For Grasshopper Users** This is a small libray of compnants which utilizle the DiagramsLibray so a Grasshopper user can build complex diagrams from strach. 
+- ** `DiagramsLibrary` -  For Developers** Include the Diagrams.dll within your project and write the logic for the diagrams within your componants, then you can use the `RhinoDiagram` and `CanvasDiagram` Componants from `DiagramsForGrasshopper` to view your diagrams.
+- ** `DiagramsForGrasshopper` - For Grasshopper Users** This is a small libray of compnants which utilizle the DiagramsLibray so a Grasshopper user can build complex diagrams from strach. 
 
 ## What Objects are currently supported?
 
