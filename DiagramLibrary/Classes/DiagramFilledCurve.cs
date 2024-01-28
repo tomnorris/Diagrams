@@ -12,7 +12,22 @@ namespace DiagramLibrary
     {
        protected bool m_DrawLine;
         protected Color m_LineColor;
-       
+        protected Color m_BackColour;
+        protected System.Drawing.Drawing2D.HatchStyle m_hatchStyle;
+        protected bool isSolid = true;
+
+        protected double m_hatchRotation = 0;
+
+        protected double m_hatchScale = 1;
+
+
+
+        public Color BackColour
+        {
+            get { return m_BackColour; }
+        }
+
+
         public override string DiagramObjectType() { return "DiagramFilledCurve"; }
 
         protected List<DiagramCurve> m_InnerCurves =  new List<DiagramCurve>();
@@ -79,6 +94,19 @@ namespace DiagramLibrary
             return diagramFilledCurve;
         }
 
+        
+
+        public Brush GetBrush()
+        {
+            if (isSolid)
+            {
+                return new SolidBrush(m_Colour);
+                
+            }
+            else {
+                return new System.Drawing.Drawing2D.HatchBrush(m_hatchStyle, m_Colour, m_BackColour);
+            }
+        }
 
 
 
@@ -110,6 +138,8 @@ namespace DiagramLibrary
             }
 
 
+
+          
         
             g.FillPath(this.GetBrush(),path);
 
@@ -141,15 +171,32 @@ namespace DiagramLibrary
             dcrvs.AddRange(m_OuterCurves);
             dcrvs.AddRange(m_InnerCurves);
             Curve[] crvs = dcrvs.Select(x => (Curve)x.GetCurve()).ToArray();
-            Brep[] breps = Brep.CreatePlanarBreps(crvs, tolerance);
+             Brep[] breps = Brep.CreatePlanarBreps(crvs, tolerance);
+
+            //Hatch Experiments to match bush
+            // Rhino.DocObjects.HatchPattern pattern = Rhino.RhinoDoc.ActiveDoc.HatchPatterns[1];
+
+            // Hatch[] hatches = Hatch.Create(crvs, 1, m_hatchRotation, m_hatchScale, tolerance);
+            
+           // var texture = new Rhino.DocObjects.Texture();
+           // texture.TextureType = Rhino.DocObjects.TextureType.Bitmap;
+          
+          var material = new Rhino.Display.DisplayMaterial(clr, 1.0 - (clr.A / 255));
+           
+           // material.SetBitmapTexture(texture)
 
             foreach (Brep item in breps)
+          //  foreach (Hatch hatch in hatches)
             {
                 if (xform != Transform.ZeroTransformation)
                 {
                     item.Transform(xform);
+                    
                 }
-                pipeline.DrawBrepShaded(item, new Rhino.Display.DisplayMaterial(clr, 1.0 - (clr.A / 255)));
+                //pipeline.DrawBrepShaded(item, mat);
+               
+
+                pipeline.DrawBrepShaded(item,material);
             }
 
 

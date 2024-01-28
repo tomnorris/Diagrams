@@ -26,7 +26,7 @@ namespace DiagramsForGrasshopper.Componants
         {
             pManager.AddTextParameter("Image", "C", "Height in Pixels", GH_ParamAccess.item);
             pManager.AddPointParameter("Location", "L", "Height in Pixels", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Width", "W", "Height in Pixels", GH_ParamAccess.item,-1);
+            pManager.AddNumberParameter("Width", "W", "Width in Pixels", GH_ParamAccess.item,-1);
             pManager.AddNumberParameter("Height", "H", "Height in Pixels", GH_ParamAccess.item, -1);
         }
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DiagramLibrary
 {
-    public class Diagram
+    public class Diagram :DiagramObject
     {
         public static Color DefaultColor = Color.Black;
         public static float DefaultLineWieght = 1f;
@@ -32,6 +32,7 @@ namespace DiagramLibrary
             diagram.m_width = m_width;
             diagram.m_height = m_height;
             diagram.m_Objects = m_Objects;
+            diagram.m_Colour = m_Colour;
                 return diagram;
         }
 
@@ -46,6 +47,7 @@ namespace DiagramLibrary
             diagram. m_Objects = new List<DiagramObject>();
             diagram.m_Title = Title;
             Rectangle3d rec = new Rectangle3d(Plane.WorldXY, width, height);
+            diagram.m_Colour = backgroundColour;
             diagram.m_Background = DiagramFilledRectangle.Create(rec, backgroundColour, false, DefaultColor, DefaultLineWieght);
             return diagram;
         }
@@ -68,7 +70,7 @@ namespace DiagramLibrary
                 }
                 catch (Exception)
                 {
-                    AddDiagramObject(objs[i]);
+                    AddDiagramObjectFromGoo(objs[i]);
 
                 }
               
@@ -78,7 +80,15 @@ namespace DiagramLibrary
           
         }
 
-        public void AddDiagramObject(object obj )
+
+        public void AddDiagramObject(DiagramObject obj)
+        {
+           
+                    m_Objects.Add(obj);
+            }
+
+
+                    public void AddDiagramObjectFromGoo(object obj )
         {
             var goo = obj as Grasshopper.Kernel.Types.IGH_Goo;
             goo.CastTo(out DiagramObject DO);
@@ -86,6 +96,11 @@ namespace DiagramLibrary
 
             switch (DO.DiagramObjectType())
             {
+                case "Diagram":
+                    goo.CastTo(out Diagram diagram);
+                     m_Objects.AddRange(diagram.m_Objects);
+                    break;
+
                 case "DiagramCurve":
                     goo.CastTo(out DiagramCurve diagramCurve);
                   
@@ -104,6 +119,14 @@ namespace DiagramLibrary
                 case "DiagramText":
                     goo.CastTo(out DiagramText diagramText);
                     m_Objects.Add(diagramText);
+                    break;
+                case "DiagramTable":
+                    goo.CastTo(out DiagramTable diagramTable);
+                    m_Objects.Add(diagramTable);
+                    break;
+                case "DiagramFilledRectangle":
+                    goo.CastTo(out DiagramFilledRectangle diagramFilledRectangle);
+                    m_Objects.Add(diagramFilledRectangle);
                     break;
                 default:
                     break;
@@ -276,7 +299,7 @@ namespace DiagramLibrary
 
         }
 
-
-
+        public override string DiagramObjectType() { return "Diagram"; }
+        
     }
 }

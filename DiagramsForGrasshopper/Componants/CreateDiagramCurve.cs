@@ -13,7 +13,7 @@ namespace DiagramsForGrasshopper.Componants
         /// Initializes a new instance of the CreateDiagramCurve class.
         /// </summary>
         public CreateDiagramCurve()
-          : base("CreateDiagramCurve", "Nickname",
+          : base("CreateDiagramCurve", "DCruve",
               "Description",
               "Display", "Diagram")
         {
@@ -63,21 +63,7 @@ namespace DiagramsForGrasshopper.Componants
                 return;
             }
 
-
-
-
-
-            if (weight == double.NaN)
-            {
-                AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], width cannot be NaN");
-                return;
-            }
-            if (weight < 0)
-            {
-                AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], width cannot be negative");
-                return;
-            }
-           
+                                              
 
             DiagramCurve diagramCurve = DiagramCurve.Create(crv,clr, (float)weight);
 

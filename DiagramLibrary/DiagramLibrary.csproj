@@ -62,6 +62,8 @@
     <Compile Include="Classes\DiagramFilledCurveGoo.cs" />
     <Compile Include="Classes\DiagramFilledRectangle.cs" />
     <Compile Include="Classes\DiagramFilledRectangleGoo.cs" />
+    <Compile Include="Classes\DiagramTable.cs" />
+    <Compile Include="Classes\DiagramTableGoo.cs" />
     <Compile Include="Classes\DiagramTextGoo.cs" />
     <Compile Include="Classes\DiagramImageGoo.cs" />
     <Compile Include="Classes\DiagramGoo.cs" />

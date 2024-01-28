@@ -16,6 +16,7 @@ namespace DiagramLibrary
 
 
 
+
         public static DiagramCurve Create(Curve crv, Color Colour, float LineWeight)
         {
             DiagramCurve diagramCurve = new DiagramCurve();
@@ -42,7 +43,11 @@ namespace DiagramLibrary
         {
            
             PointF[] pts = GetPoints();
+            if (pts != null)
+            {
                 g.DrawLines(this.GetPen(), pts);
+            }
+
          
             
         }
@@ -77,7 +82,10 @@ namespace DiagramLibrary
         public PointF[] GetPoints()
         {
             PolylineCurve polyc = m_Curve.ToPolyline(0.01, 0.01, 1, 1000);
-            
+
+            if (polyc == null) {
+                return null;
+            }
 
             PointF[] pts = new PointF[polyc.PointCount];
             for (int i = 0; i < polyc.PointCount; i++)

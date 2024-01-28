@@ -62,6 +62,7 @@
     <Compile Include="Componants\CreateDiagram.cs" />
     <Compile Include="Componants\CreateDiagramHatch.cs" />
     <Compile Include="Componants\CreateDiagramImage.cs" />
+    <Compile Include="Componants\CreateDiagramTable.cs" />
     <Compile Include="Componants\CreateDiagramText.cs" />
     <Compile Include="Componants\CreateDiagramTextComplex.cs" />
     <Compile Include="Componants\CreateDiagramCurve.cs" />

@@ -333,13 +333,24 @@ namespace DiagramLibrary
                 //Add Padding and Justification Compensation, note Y is negative and signes are reverse as we drawing this upside down
                 PointF pt = new PointF(anchorCompensatedPoint.X + m_Padding + justificationCompensation, -anchorCompensatedPoint.Y - m_Padding - actualTotalTextSize.Height - verticalFustificationCompensation + (lineSpacingPixel * i));
 
-                g.DrawString(lines[i], font, this.GetBrush(), new RectangleF(pt, actualTotalTextSize));
+                //  g.DrawString(lines[i], font, this.GetBrush(), new RectangleF(pt, actualTotalTextSize));
+                g.DrawString(lines[i], font, this.GetBrush(), new RectangleF(pt, new SizeF(actualTotalTextSize.Width, actualTotalTextSize.Height + (float)(m_LineWeight*0.1))));
             }
             g.ResetTransform();// End Upside Down
 
 
 
         }
+
+        public Brush GetBrush()
+        {
+           
+                return new SolidBrush(m_Colour);
+
+          
+           
+        }
+
 
 
 
@@ -440,9 +451,13 @@ namespace DiagramLibrary
                 var scale = Transform.Scale(new Point3d(pt.X, pt.Y, 0), m_LineWeight);
                 var trans = Transform.Translation(new Vector3d(pt.X, pt.Y, 0));
                 var localXform = scale * trans;
-                
+                var combinedForm = localXform;
+                if (xform != Transform.ZeroTransformation) {
+                    combinedForm = Transform.Multiply(xform, localXform);
+                }
 
-                pipeline.DrawText(txt, clr, Transform.Multiply(xform,localXform)); //scale*trans order matters
+
+                pipeline.DrawText(txt, clr, combinedForm); //scale*trans order matters
             }
                                  
 

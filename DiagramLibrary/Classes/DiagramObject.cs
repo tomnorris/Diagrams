@@ -12,7 +12,11 @@ namespace DiagramLibrary
     abstract public class DiagramObject 
     {
          protected Color m_Colour;
+      
          protected float m_LineWeight;
+
+    
+
 
         public Color Colour { 
             get { return m_Colour; }
@@ -34,10 +38,7 @@ namespace DiagramLibrary
             return new Pen(m_Colour, m_LineWeight);
         }
 
-        public Brush GetBrush()
-        {
-            return new SolidBrush(m_Colour);
-        }
+        
 
 
 

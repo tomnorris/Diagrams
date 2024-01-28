@@ -13,7 +13,7 @@ namespace DiagramsForGrasshopper.Componants
         /// Initializes a new instance of the CreateDiagramHatch class.
         /// </summary>
         public CreateDiagramHatch()
-          : base("CreateDiagramHatch", "DHatch",
+          : base("CreateDiagramSolidHatch", "DSHatch",
               "Description",
               "Display", "Diagram")
         {
@@ -61,18 +61,6 @@ namespace DiagramsForGrasshopper.Componants
 
             if (brep == null) {
                 AddUsefulMessage(DA, "Brep cannot be Null");
-                return;
-            }
-
-
-            if (weight == double.NaN)
-            {
-                AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], width cannot be NaN");
-                return;
-            }
-            if (weight < 0)
-            {
-                AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], width cannot be negative");
                 return;
             }
 
