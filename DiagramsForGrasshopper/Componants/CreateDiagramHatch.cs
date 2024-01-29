@@ -4,6 +4,7 @@ using System.Drawing;
 using DiagramLibrary;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+using System.Linq;
 
 namespace DiagramsForGrasshopper.Componants
 {
@@ -25,9 +26,9 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddBrepParameter("Brep", "B", "Height in Pixels", GH_ParamAccess.item);
-            pManager.AddColourParameter("FillColour", "FC", "Height in Pixels", GH_ParamAccess.item, Diagram.DefaultColor);
+            pManager.AddColourParameter("FillColour", "FClr", "Height in Pixels", GH_ParamAccess.item, Diagram.DefaultColor);
             pManager.AddBooleanParameter("DrawLines", "D", "Height in Pixels", GH_ParamAccess.item,true);
-            pManager.AddColourParameter("LineColour", "LC", "Height in Pixels", GH_ParamAccess.item, Diagram.DefaultColor);
+            pManager.AddColourParameter("LineColour", "LClr", "Height in Pixels", GH_ParamAccess.item, Diagram.DefaultColor);
             pManager.AddNumberParameter("Weight", "LW", "Height in Pixels", GH_ParamAccess.item, Diagram.DefaultLineWieght);
         }
 
@@ -37,7 +38,7 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramHatch", "DH", "Diagram", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -67,7 +68,29 @@ namespace DiagramsForGrasshopper.Componants
 
             List<DiagramFilledCurve> diagramCurves = DiagramFilledCurve.CreateFromBrep(brep, clr, drawLines, lnClr, (float)weight);
 
-            DA.SetDataList(1, diagramCurves);
+
+
+            if (diagramCurves == null || diagramCurves.Count == 0) {
+                return;
+            }
+            BoundingBox bb = BoundingBox.Empty;
+     
+            for (int i = 0; i < diagramCurves.Count; i++)
+            {
+                bb.Union(diagramCurves[i].GetBoundingBox());
+               
+            }
+
+            SizeF maxSize = new SizeF((float)(bb.Max.X - bb.Min.X), (float)(bb.Max.Y - bb.Min.Y));
+
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(maxSize.Width), (int)Math.Ceiling(maxSize.Height), null, Color.Transparent, new PointF((float)bb.Min.X,(float)bb.Min.Y));
+
+            for (int i = 0; i < diagramCurves.Count; i++)
+            {
+                diagram.AddDiagramObject(diagramCurves[i]);
+            }
+
+            DA.SetData(1, diagram);
         }
 
         /// <summary>

@@ -58,14 +58,8 @@
   <ItemGroup>
     <Compile Include="Classes\Diagram.cs" />
     <Compile Include="Classes\DiagramCurve.cs" />
-    <Compile Include="Classes\DiagramCurveGoo.cs" />
-    <Compile Include="Classes\DiagramFilledCurveGoo.cs" />
     <Compile Include="Classes\DiagramFilledRectangle.cs" />
-    <Compile Include="Classes\DiagramFilledRectangleGoo.cs" />
     <Compile Include="Classes\DiagramTable.cs" />
-    <Compile Include="Classes\DiagramTableGoo.cs" />
-    <Compile Include="Classes\DiagramTextGoo.cs" />
-    <Compile Include="Classes\DiagramImageGoo.cs" />
     <Compile Include="Classes\DiagramGoo.cs" />
     <Compile Include="Classes\DiagramFilledCurve.cs" />
     <Compile Include="Classes\DiagramImage.cs" />

@@ -38,6 +38,11 @@ namespace DiagramLibrary
             return diagramCurve;
         }
 
+        public override  BoundingBox GetBoundingBox() {
+            return this.m_Curve.GetBoundingBox(true);
+        }
+
+
 
         public override void DrawBitmap(Graphics g)
         {
@@ -52,7 +57,7 @@ namespace DiagramLibrary
             
         }
 
-        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride)
+        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride )
         {
             Color clr = Diagram.SelectedColor;
             if (colorOverride == false)

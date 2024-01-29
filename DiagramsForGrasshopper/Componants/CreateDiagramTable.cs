@@ -29,15 +29,15 @@ namespace DiagramsForGrasshopper.Componants
         pManager.AddTextParameter("Data", "D", "Data as a string DataTree each branch is a row", GH_ParamAccess.tree);
         pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item, new Point3d(0, 0, 0));
         pManager.HideParameter(1);
-        pManager.AddNumberParameter("TextScale", "S", "Text size", GH_ParamAccess.item, 1);
+        pManager.AddNumberParameter("TextScale", "TS", "Text size", GH_ParamAccess.item, 1);
         pManager.AddNumberParameter("LineWidth", "LW", "Frames Line widths", GH_ParamAccess.item, 1);
-        pManager.AddNumberParameter("CellWidths", "CW", "List of Widths for each column", GH_ParamAccess.list);
-        pManager.AddNumberParameter("CellHeight", "CH", "List of Heights for each Row", GH_ParamAccess.list, -1);
-        pManager.AddColourParameter("LineColour", "LC", "Colour for text and Lines", GH_ParamAccess.item, Color.Black);
+        pManager.AddNumberParameter("CellWidths", "CW", "List of Widths for each column, first value will be the default width", GH_ParamAccess.list);
+        pManager.AddNumberParameter("CellHeight", "CH", "List of Heights for each Row, first value will be the default height", GH_ParamAccess.list, -1);
+        pManager.AddColourParameter("LineColour", "LClr", "Colour for text and Lines", GH_ParamAccess.item, Color.Black);
             pManager.AddNumberParameter("Padding", "P", "Text Padding", GH_ParamAccess.item, 3);
             pManager.AddIntegerParameter("Jusitification", "J", "Text justification. Horizontals(Left, Center, Right) only take effect if Width is set, Verticals (Top, Middle, Bottom) only take effect if Height it set. 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right", GH_ParamAccess.item, 0);
             pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, "Arial");
-            pManager.AddColourParameter("Background Colour", "BC", "Back Colour", GH_ParamAccess.item, Color.Transparent);
+            pManager.AddColourParameter("Background Colour", "BClr", "Back Colour", GH_ParamAccess.item, Color.Transparent);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramTable", "DT", "Diagram", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -147,11 +147,11 @@ namespace DiagramsForGrasshopper.Componants
                     break;
             }
 
+            PointF location = new PointF((float)pt.X, (float)pt.Y);
 
-
-            DiagramTable diagramTable = DiagramTable.Create(data,width,height, (float )textScale, new PointF((float)pt.X, (float)pt.Y), clr, (float)lineWeight,font,(float)padding,jusitification);
+            DiagramTable diagramTable = DiagramTable.Create(data,width,height, (float )textScale, location, clr, (float)lineWeight,font,(float)padding,jusitification);
             SizeF size = diagramTable.GetTotalSize();
-            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), "", bgClr);
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, bgClr, location);
             diagram.AddDiagramObject( diagramTable );
 
 

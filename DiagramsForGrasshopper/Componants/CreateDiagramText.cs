@@ -27,11 +27,11 @@ namespace DiagramsForGrasshopper.Componants
             pManager.AddTextParameter("Text", "T", "Text as a string", GH_ParamAccess.item);
             pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item,new Point3d(0,0,0));
             pManager.HideParameter(1);
-            pManager.AddNumberParameter("Scale", "S", "Text size", GH_ParamAccess.item,1);
+            pManager.AddNumberParameter("TexScale", "TS", "Text size", GH_ParamAccess.item,1);
                     
             pManager.AddNumberParameter("Max Width", "W", "Maximum Width, Set to less than 0 to ignore ", GH_ParamAccess.item, -1);
             pManager.AddNumberParameter("Max Height", "H", "Maximum Height, Set to less than 0 to ignore", GH_ParamAccess.item, -1);
-             pManager.AddColourParameter("Colour", "C", "Colour for text", GH_ParamAccess.item, Color.Black);
+             pManager.AddColourParameter("Colour", "Clr", "Colour for text", GH_ParamAccess.item, Color.Black);
          
         }
 
@@ -41,7 +41,7 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramText", "DT", "Diagram", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -99,12 +99,17 @@ namespace DiagramsForGrasshopper.Componants
 
 
             bool showMask = false;
-           
+
+            PointF location = new PointF((float)pt.X, (float)pt.Y);
+
+            DiagramText diagramText = DiagramText.Create(text, location, clr, (float)weight,anchor,maskClr, frameClr,1f,showMask,font,new SizeF((float)width,(float)height),(float)padding, jusitification);
+                                  
+            SizeF size = diagramText.GetTotalSize();
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, diagramText.GetAnchorCompensatedPoint(size));
+            diagram.AddDiagramObject(diagramText);
 
 
-            DiagramText diagramCurve = DiagramText.Create(text,new PointF((float)pt.X,(float)pt.Y), clr, (float)weight,anchor,maskClr, frameClr,1f,showMask,font,new SizeF((float)width,(float)height),(float)padding, jusitification);
-
-            DA.SetData(1, diagramCurve);
+            DA.SetData(1, diagram);
         }
 
         /// <summary>

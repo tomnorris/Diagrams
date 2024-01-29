@@ -20,6 +20,10 @@ namespace DiagramLibrary
 
         protected double m_hatchScale = 1;
 
+               
+        protected List<DiagramCurve> m_InnerCurves =  new List<DiagramCurve>();
+        protected List<DiagramCurve> m_OuterCurves = new List<DiagramCurve>();
+
 
 
         public Color BackColour
@@ -29,10 +33,6 @@ namespace DiagramLibrary
 
 
         public override string DiagramObjectType() { return "DiagramFilledCurve"; }
-
-        protected List<DiagramCurve> m_InnerCurves =  new List<DiagramCurve>();
-        protected List<DiagramCurve> m_OuterCurves = new List<DiagramCurve>();
-
 
         public static DiagramFilledCurve Create(Curve[] OuterCurves, Curve[] InnerCurves, Color Colour, bool drawLine, Color LineColour, float LineWeight)
         {
@@ -108,6 +108,40 @@ namespace DiagramLibrary
             }
         }
 
+        public override BoundingBox GetBoundingBox()
+        {
+            BoundingBox bbox = BoundingBox.Empty;
+            for (int i = 0; i < this.m_InnerCurves.Count; i++)
+            {
+                bbox.Union(this.m_InnerCurves[i].GetBoundingBox());
+            }
+
+            for (int i = 0; i < this.m_OuterCurves.Count; i++)
+            {
+                bbox.Union(this.m_OuterCurves[i].GetBoundingBox());
+            }
+
+            return bbox;
+        }
+
+
+       
+
+
+        public PointF GetLocation()
+        {
+            BoundingBox bbox = BoundingBox.Empty;
+            for (int i = 0; i < this.m_InnerCurves.Count; i++)
+            {
+                bbox.Union(this.m_InnerCurves[i].GetBoundingBox());
+            }
+
+            for (int i = 0; i < this.m_OuterCurves.Count; i++)
+            {
+                bbox.Union(this.m_OuterCurves[i].GetBoundingBox());
+            }
+            return new PointF((float)(bbox.Min.X), (float)(bbox.Min.Y));
+        }
 
 
 
@@ -136,6 +170,7 @@ namespace DiagramLibrary
 
                 path.AddLines(pts);
             }
+
 
 
 

@@ -63,8 +63,9 @@ namespace DiagramLibrary
         }
 
 
-        public SizeF GetTotalSize()
+        public override BoundingBox GetBoundingBox()
         {
+        
             GetSizes(out SizeF[] sizes, out Rectangle3d[] recs);
 
             BoundingBox totalRec = recs[0].BoundingBox;
@@ -78,7 +79,7 @@ namespace DiagramLibrary
 
             totalRec.Union(new Point3d(m_Location.X,m_Location.Y,0));
 
-            return new SizeF((float)(totalRec.Max.X - totalRec.Min.X), (float)(totalRec.Max.Y - totalRec.Min.Y));
+            return totalRec;
 
         }
 

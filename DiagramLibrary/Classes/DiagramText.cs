@@ -73,7 +73,7 @@ namespace DiagramLibrary
         }
 
      
-        private PointF GetAnchorCompensatedPoint(SizeF size) {
+        public PointF GetAnchorCompensatedPoint(SizeF size) {
            PointF newPoint;
             switch (m_Anchor)
             {
@@ -135,8 +135,23 @@ namespace DiagramLibrary
 
 
 
+        public override BoundingBox GetBoundingBox()
+        {
+            SizeF totalSize;
 
-      
+            //Create a dummy graphics, for the measure text
+            using (var g = Graphics.FromImage(new Bitmap(100, 100)))
+            {
+                SizeF tempSize = GetTotalTextSize(g, out totalSize, out List<string> lines, out List<SizeF> rowSizes);
+
+            }
+
+            return new BoundingBox(m_Location.X, m_Location.Y, 0, m_Location.X + totalSize.Width, m_Location.Y + totalSize.Height, 0);
+        }
+
+
+    
+
 
         public List<string> TextLines(Graphics g, Font font, SizeF maxSize, StringFormat format, out SizeF totalSize, out List<SizeF> rowSizes)
         {
@@ -225,7 +240,7 @@ namespace DiagramLibrary
 
 
 
-        public SizeF getTotalTextSize(Graphics g , out SizeF maskSize , out List<string> lines, out List<SizeF> rowSizes) {
+        public SizeF GetTotalTextSize(Graphics g , out SizeF maskSize , out List<string> lines, out List<SizeF> rowSizes) {
             SizeF allowedTextSize = SizeF.Empty;
             var font = new System.Drawing.Font(m_FontName, (float)m_LineWeight);
 
@@ -278,7 +293,7 @@ namespace DiagramLibrary
 
             var font = new System.Drawing.Font(m_FontName, (float)m_LineWeight);
 
-            SizeF actualTotalTextSize = getTotalTextSize(g, out SizeF maskSize, out List<string> lines, out List<SizeF> rowSizes);
+            SizeF actualTotalTextSize = GetTotalTextSize(g, out SizeF maskSize, out List<string> lines, out List<SizeF> rowSizes);
                        
             PointF anchorCompensatedPoint = GetAnchorCompensatedPoint(maskSize);
 
@@ -378,7 +393,7 @@ namespace DiagramLibrary
 
             using (var g = Graphics.FromImage(pipeline.FrameBuffer))
             {
-                actualTotalTextSize = getTotalTextSize(g,  out maskSize, out lines, out rowSizes);
+                actualTotalTextSize = GetTotalTextSize(g,  out maskSize, out lines, out rowSizes);
 
                
             }

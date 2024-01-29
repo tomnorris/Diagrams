@@ -13,7 +13,7 @@ namespace DiagramsForGrasshopper.Componants
         /// Initializes a new instance of the CreateDiagramImage class.
         /// </summary>
         public CreateDiagramImage()
-          : base("CreateDiagramImage", "Nickname",
+          : base("CreateDiagramImage", "DImage",
               "Description",
               "Display", "Diagram")
         {
@@ -24,10 +24,10 @@ namespace DiagramsForGrasshopper.Componants
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Image", "C", "Height in Pixels", GH_ParamAccess.item);
-            pManager.AddPointParameter("Location", "L", "Height in Pixels", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Width", "W", "Width in Pixels", GH_ParamAccess.item,-1);
-            pManager.AddNumberParameter("Height", "H", "Height in Pixels", GH_ParamAccess.item, -1);
+            pManager.AddTextParameter("Image", "Img", "File path to the image", GH_ParamAccess.item);
+            pManager.AddPointParameter("Location", "L", "Point locatin for the image", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Width", "W", "Width in Pixels, Optional: set to less than 0 to use the image's width", GH_ParamAccess.item,-1);
+            pManager.AddNumberParameter("Height", "H", "Height in Pixels, Optional: set to less than 0 to use the image's height", GH_ParamAccess.item, -1);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramText", "DT", "Diagram", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -69,9 +69,17 @@ namespace DiagramsForGrasshopper.Componants
             }
 
 
-            DiagramImage diagramCurve = DiagramImage.Create(path, new PointF((float)pt.X, (float)pt.Y), new SizeF((float)width, (float)height));
+            PointF location = new PointF((float)pt.X, (float)pt.Y);
 
-            DA.SetData(1, diagramCurve);
+            DiagramImage diagramImage = DiagramImage.Create(path, location, new SizeF((float)width, (float)height));
+            SizeF size = diagramImage.GetTotalSize();
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, location);
+            diagram.AddDiagramObject(diagramImage);
+
+
+            DA.SetData(1, diagram);
+
+
 
         }
 

@@ -30,16 +30,16 @@ namespace DiagramsForGrasshopper.Componants
             pManager.AddIntegerParameter("Anchor", "A",
                  "Text Anchor 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right",
                  GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Scale", "S", "Text size", GH_ParamAccess.item,1);
+            pManager.AddNumberParameter("TextScale", "TS", "Text size", GH_ParamAccess.item,1);
             pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, "Arial");
                       
             pManager.AddNumberParameter("Max Width", "W", "Maximum Width, Set to less than 0 to ignore ", GH_ParamAccess.item, -1);
             pManager.AddNumberParameter("Max Height", "H", "Maximum Height, Set to less than 0 to ignore", GH_ParamAccess.item, -1);
             pManager.AddNumberParameter("Padding", "P", "Text Padding", GH_ParamAccess.item, 0);
             pManager.AddIntegerParameter("Jusitification", "J", "Text justification. Horizontals(Left, Center, Right) only take effect if Width is set, Verticals (Top, Middle, Bottom) only take effect if Height it set. 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right", GH_ParamAccess.item, 0);
-            pManager.AddColourParameter("Colour", "C", "Colour for text", GH_ParamAccess.item, Color.Black);
-            pManager.AddColourParameter("FrameColor", "FC", "Colour for text", GH_ParamAccess.item, Color.Empty);
-            pManager.AddColourParameter("MaskColor", "MC", "Colour for text", GH_ParamAccess.item, Color.Empty);
+            pManager.AddColourParameter("Colour", "Clr", "Colour for text", GH_ParamAccess.item, Color.Black);
+            pManager.AddColourParameter("FrameColor", "FClr", "Colour for text", GH_ParamAccess.item, Color.Empty);
+            pManager.AddColourParameter("BackgroundColor", "BgClr", "Colour for text", GH_ParamAccess.item, Color.Empty);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramText", "DT", "Diagram", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -192,9 +192,16 @@ namespace DiagramsForGrasshopper.Componants
                 showMask = true;
             }
 
-            DiagramText diagramCurve = DiagramText.Create(text,new PointF((float)pt.X,(float)pt.Y), clr, (float)weight,anchor,maskClr, frameClr,1f,showMask,font,new SizeF((float)width,(float)height),(float)padding, jusitification);
+            PointF location = new PointF((float)pt.X, (float)pt.Y);
 
-            DA.SetData(1, diagramCurve);
+            DiagramText diagramText = DiagramText.Create(text, location, clr, (float)weight, anchor, maskClr, frameClr, 1f, showMask, font, new SizeF((float)width, (float)height), (float)padding, jusitification);
+
+            SizeF size = diagramText.GetTotalSize();
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, diagramText.GetAnchorCompensatedPoint(size));
+            diagram.AddDiagramObject(diagramText);
+
+
+            DA.SetData(1, diagram);
         }
 
         /// <summary>

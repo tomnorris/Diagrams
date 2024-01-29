@@ -71,9 +71,11 @@ namespace DiagramsForGrasshopper
                 graphics.DrawLine(Pens.DarkGray, new Point((int)(m_innerBounds.X+m_innerBounds.Width), (int)(m_innerBounds.Y + CapsuleHeight)), 
                     new Point((int)(m_innerBounds.X + m_innerBounds.Width), (int)(m_innerBounds.Y + CapsuleHeight)));
 
-                string text = canvasDiagram.Diagram.Title;
-                graphics.DrawString(text, new Font(canvas.Font.FontFamily,7f), new SolidBrush(canvas.ForeColor) , new Point((int)(m_innerBounds.X + 3), (int)(m_innerBounds.Y + 3)));
-
+                if (canvasDiagram.Diagram.Title != null)
+                {
+                    string text = canvasDiagram.Diagram.Title;
+                    graphics.DrawString(text, new Font(canvas.Font.FontFamily, 7f), new SolidBrush(canvas.ForeColor), new Point((int)(m_innerBounds.X + 3), (int)(m_innerBounds.Y + 3)));
+                }
 
                 Rectangle rec = new Rectangle((int)this.Bounds.X+4, (int)(this.Bounds.Y + CapsuleHeight)+4, (int)this.Bounds.Width-8, (int)(this.Bounds.Width / size.Width * size.Height) -8);
                 graphics.FillRectangle(Brushes.White, rec);

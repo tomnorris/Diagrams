@@ -24,8 +24,8 @@ namespace DiagramsForGrasshopper.Componants
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddCurveParameter("Curve", "C", "Height in Pixels", GH_ParamAccess.item);
-            pManager.AddColourParameter("Colour", "LC", "Height in Pixels", GH_ParamAccess.item);
+            pManager.AddCurveParameter("Curve", "Crv", "Height in Pixels", GH_ParamAccess.item);
+            pManager.AddColourParameter("Colour", "Clr", "Height in Pixels", GH_ParamAccess.item);
             pManager.AddNumberParameter("Weight", "LW", "Height in Pixels", GH_ParamAccess.item);
 
 
@@ -38,7 +38,7 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramCurve", "DC", "Diagram", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -67,7 +67,12 @@ namespace DiagramsForGrasshopper.Componants
 
             DiagramCurve diagramCurve = DiagramCurve.Create(crv,clr, (float)weight);
 
-            DA.SetData(1, diagramCurve);
+            SizeF size = diagramCurve.GetTotalSize();
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, diagramCurve.GetLocation());
+            diagram.AddDiagramObject(diagramCurve);
+
+
+            DA.SetData(1, diagram);
 
 
         }

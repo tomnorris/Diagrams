@@ -38,15 +38,24 @@ namespace DiagramLibrary
             return new Pen(m_Colour, m_LineWeight);
         }
 
+
+        public PointF GetLocation()
+        {
+            BoundingBox bbox = this.GetBoundingBox();
+            return new PointF((float)(bbox.Min.X), (float)(bbox.Min.Y));
+        }
+
+
+        public SizeF GetTotalSize() {
+            BoundingBox bbox = this.GetBoundingBox();
+            return new SizeF((float)(bbox.Max.X - bbox.Min.X), (float)(bbox.Max.Y - bbox.Min.Y));
+        }
+
+        public virtual BoundingBox GetBoundingBox() {throw new NotImplementedException();}
         
+        public virtual void DrawBitmap(Graphics g) { throw new NotImplementedException(); }
 
-
-
-     
-
-        public virtual void DrawBitmap(Graphics g) { }
-
-        public virtual void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance,Transform xform,bool colorOverride) { }
+        public virtual void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance,Transform xform,bool colorOverride) { throw new NotImplementedException(); }
 
     }
 }

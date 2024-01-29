@@ -27,8 +27,14 @@ namespace DiagramLibrary
             diagramImage.m_ImagePath = imagePath;            
             diagramImage.m_Image = Bitmap.FromFile(imagePath); 
             diagramImage.m_Location = Location;
-            diagramImage.m_Size = Size;
+            if (Size == SizeF.Empty)
+            {
+                diagramImage.m_Size = diagramImage.m_Image.Size;
+            }
+            else {
+                diagramImage.m_Size = Size;
 
+            }
             return diagramImage;
         }
 
@@ -44,13 +50,15 @@ namespace DiagramLibrary
             return diagramImage;
         }
 
-
+        public override BoundingBox GetBoundingBox() {
+            return new BoundingBox(m_Location.X,m_Location.Y,0, m_Location.X+ m_Size.Width, m_Location.Y + m_Size.Height, 0);
+        }
 
 
         public override void DrawBitmap(Graphics g)
         {
 
-           
+           // Drawn Upside Down as final image is flipped
             g.ScaleTransform(1, -1);
             g.DrawImage(m_Image, m_Location.X, -m_Location.Y- m_Size.Height, m_Size.Width, m_Size.Height);
             g.ResetTransform();
@@ -61,9 +69,6 @@ namespace DiagramLibrary
         public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xfrom, bool colorOverride)
         {
 
-
-            //   Rhino.Display.DisplayBitmap btm = new Rhino.Display.DisplayBitmap(new Bitmap(m_Image));
-            // pipeline.DrawSprite(btm,new Point3d(m_Location.X,m_Location.Y,0),m_Size.Width,false);
             Rectangle3d rec = new Rectangle3d(Plane.WorldXY, new Interval(m_Location.X, m_Location.X + m_Size.Width), new Interval(m_Location.Y, m_Location.Y + m_Size.Height));
             Brep brep = Brep.CreateTrimmedPlane(Plane.WorldXY, rec.ToNurbsCurve());
 

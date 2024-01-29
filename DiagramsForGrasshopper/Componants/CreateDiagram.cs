@@ -37,9 +37,9 @@ namespace DiagramsForGrasshopper
         {
             pManager.AddIntegerParameter("Height", "H", "Diagram Height in Pixels", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Width", "W", "Diagram Width in Pixels", GH_ParamAccess.item);
-            pManager.AddGenericParameter("DiagramObject", "DO", "Diagram object or Rhino Geometry To Add to Diagram", GH_ParamAccess.list);
-            pManager.AddTextParameter("Tile", "T", "Optional Diagram Title", GH_ParamAccess.item, "");
-            pManager.AddColourParameter("Colour", "C", "Optional Background Colour", GH_ParamAccess.item, System.Drawing.Color.Transparent);
+            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram objects or Rhino Geometry To Add to Diagram", GH_ParamAccess.list);
+            pManager.AddTextParameter("Title", "Title", "Optional Diagram Title", GH_ParamAccess.item, "");
+            pManager.AddColourParameter("Colour", "BgClr", "Optional Background Colour", GH_ParamAccess.item, System.Drawing.Color.Transparent);
 
 
         }
@@ -63,7 +63,7 @@ namespace DiagramsForGrasshopper
             int width = -1;
             int height = -1;
             List<Object> objs = new List<Object>();
-            string title = "";
+            string title = null; // null means it will be ignored 
             Color clr = System.Drawing.Color.Transparent;
 
             DA.GetData(0, ref width);
