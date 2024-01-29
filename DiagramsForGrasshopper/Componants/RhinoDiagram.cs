@@ -112,11 +112,9 @@ namespace DiagramsForGrasshopper
 
             if (!this.Locked)
             {
-                if (this.m_attributes.Selected) {
-                    Diagram.DrawRhinoPreview(args.Display, GH_Component.DocumentTolerance(), Xform, true);
-                } else {
-                    Diagram.DrawRhinoPreview(args.Display, GH_Component.DocumentTolerance(), Xform, false);
-                }
+              
+                    Diagram.DrawRhinoPreview(args.Display, GH_Component.DocumentTolerance(), Xform, this.m_attributes.Selected);
+                
 
                
             }
