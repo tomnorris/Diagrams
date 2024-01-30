@@ -62,6 +62,20 @@ namespace DiagramLibrary
             return diagramTable;
         }
 
+        public string ToCSV() {
+            string returnString = "";
+            for (int i = 0; i < this.m_Data.Branches.Count; i++)
+            {
+                
+                for (int j = 1; j < this.m_Data.Branches[i].Count; j++)
+                {
+                    returnString += this.m_Data.Branches[i] + ",";
+                }
+                returnString += "\n";
+
+            }
+            return returnString;
+        }
 
         public override BoundingBox GetBoundingBox()
         {

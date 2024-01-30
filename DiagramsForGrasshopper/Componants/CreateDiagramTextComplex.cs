@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace DiagramsForGrasshopper.Componants
 {
-    public class CreateDiagramTextComplex : ReportBaseComponent
+    public class CreateDiagramTextComplex : DiagramComponent
     {
         /// <summary>
         /// Initializes a new instance of the CreateDiagramText class.
@@ -25,7 +25,7 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Text", "T", "Text as a string", GH_ParamAccess.item);
-            pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item,Point3d.Unset);
+            pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item, new Point3d(0, 0, 0));
             pManager.HideParameter(1);
             pManager.AddIntegerParameter("Anchor", "A",
                  "Text Anchor 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right",
@@ -42,20 +42,13 @@ namespace DiagramsForGrasshopper.Componants
             pManager.AddColourParameter("BackgroundColor", "BgClr", "Colour for text", GH_ParamAccess.item, Color.Empty);
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {
-            base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
-        }
+       
 
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
-        protected override void SolveInstance(IGH_DataAccess DA)
+        public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
             double weight = 1;
             Color clr = Color.Empty;
@@ -92,19 +85,10 @@ namespace DiagramsForGrasshopper.Componants
             if (text == "")
             {
                 AddUsefulMessage(DA, "Text cannot be Empty");
-                return;
+                return null;
             }
 
-            if (weight == double.NaN)
-            {
-                AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], width cannot be NaN");
-                return;
-            }
-            if (weight < 0)
-            {
-                AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], width cannot be negative");
-                return;
-            }
+            
 
             TextJustification anchor = TextJustification.BottomLeft;
 
@@ -199,9 +183,7 @@ namespace DiagramsForGrasshopper.Componants
             SizeF size = diagramText.GetTotalSize();
             Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, diagramText.GetAnchorCompensatedPoint(size));
             diagram.AddDiagramObject(diagramText);
-
-
-            DA.SetData(1, diagram);
+            return diagram;
         }
 
         /// <summary>

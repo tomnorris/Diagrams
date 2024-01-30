@@ -207,31 +207,33 @@ namespace DiagramLibrary
             dcrvs.AddRange(m_InnerCurves);
             Curve[] crvs = dcrvs.Select(x => (Curve)x.GetCurve()).ToArray();
              Brep[] breps = Brep.CreatePlanarBreps(crvs, tolerance);
-
-            //Hatch Experiments to match bush
-            // Rhino.DocObjects.HatchPattern pattern = Rhino.RhinoDoc.ActiveDoc.HatchPatterns[1];
-
-            // Hatch[] hatches = Hatch.Create(crvs, 1, m_hatchRotation, m_hatchScale, tolerance);
-            
-           // var texture = new Rhino.DocObjects.Texture();
-           // texture.TextureType = Rhino.DocObjects.TextureType.Bitmap;
-          
-          var material = new Rhino.Display.DisplayMaterial(clr, 1.0 - (clr.A / 255));
-           
-           // material.SetBitmapTexture(texture)
-
-            foreach (Brep item in breps)
-          //  foreach (Hatch hatch in hatches)
+            if (breps != null)
             {
-                if (xform != Transform.ZeroTransformation)
-                {
-                    item.Transform(xform);
-                    
-                }
-                //pipeline.DrawBrepShaded(item, mat);
-               
+                //Hatch Experiments to match bush
+                // Rhino.DocObjects.HatchPattern pattern = Rhino.RhinoDoc.ActiveDoc.HatchPatterns[1];
 
-                pipeline.DrawBrepShaded(item,material);
+                // Hatch[] hatches = Hatch.Create(crvs, 1, m_hatchRotation, m_hatchScale, tolerance);
+
+                // var texture = new Rhino.DocObjects.Texture();
+                // texture.TextureType = Rhino.DocObjects.TextureType.Bitmap;
+
+                var material = new Rhino.Display.DisplayMaterial(clr, 1.0 - (clr.A / 255));
+
+                // material.SetBitmapTexture(texture)
+
+                foreach (Brep item in breps)
+                //  foreach (Hatch hatch in hatches)
+                {
+                    if (xform != Transform.ZeroTransformation)
+                    {
+                        item.Transform(xform);
+
+                    }
+                    //pipeline.DrawBrepShaded(item, mat);
+
+
+                    pipeline.DrawBrepShaded(item, material);
+                }
             }
 
 

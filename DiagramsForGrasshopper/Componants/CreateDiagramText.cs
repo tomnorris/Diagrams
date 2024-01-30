@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace DiagramsForGrasshopper.Componants
 {
-    public class CreateDiagramText : ReportBaseComponent
+    public class CreateDiagramText : DiagramComponent
     {
         /// <summary>
         /// Initializes a new instance of the CreateDiagramText class.
@@ -35,20 +35,12 @@ namespace DiagramsForGrasshopper.Componants
          
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {
-            base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
-        }
-
+ 
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
-        protected override void SolveInstance(IGH_DataAccess DA)
+        public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
             double weight = 1;
             Color clr = Color.Empty;
@@ -75,19 +67,10 @@ namespace DiagramsForGrasshopper.Componants
             if (text == "")
             {
                 AddUsefulMessage(DA, "Text cannot be Empty");
-                return;
+                return null;
             }
 
-            if (weight == double.NaN)
-            {
-                AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], width cannot be NaN");
-                return;
-            }
-            if (weight < 0)
-            {
-                AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], width cannot be negative");
-                return;
-            }
+         
 
             TextJustification anchor = TextJustification.BottomLeft;
 
@@ -107,9 +90,8 @@ namespace DiagramsForGrasshopper.Componants
             SizeF size = diagramText.GetTotalSize();
             Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, diagramText.GetAnchorCompensatedPoint(size));
             diagram.AddDiagramObject(diagramText);
+            return diagram;
 
-
-            DA.SetData(1, diagram);
         }
 
         /// <summary>

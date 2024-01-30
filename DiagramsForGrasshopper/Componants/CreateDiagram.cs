@@ -14,7 +14,7 @@ using System.Drawing;
 
 namespace DiagramsForGrasshopper
 {
-    public class CreateDiagram : ReportBaseComponent
+    public class CreateDiagram : DiagramComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -44,21 +44,14 @@ namespace DiagramsForGrasshopper
 
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {
-            base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("Diagram", "D", "The Diagram, use CanvasDiagram or RhinoDiagram Componants to view the diagram", GH_ParamAccess.item);
-        }
+
 
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
         /// to store data in output parameters.</param>
-        protected override void SolveInstance(IGH_DataAccess DA)
+        public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
             int width = -1;
             int height = -1;
@@ -76,27 +69,7 @@ namespace DiagramsForGrasshopper
 
 
 
-
-            if (width == double.NaN)
-                {
-                    AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], width cannot be NaN");
-                    return;
-                }
-                if (width < 0)
-                {
-                    AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], width cannot be negative");
-                    return;
-                }
-                if (height == double.NaN)
-                {
-                    AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], height cannot be NaN");
-                    return;
-                }
-                if (height < 0)
-                {
-                    AddUsefulMessage(DA, "Either set a valid [Width, Height and Location] or [Rectangle], height cannot be negative");
-                    return;
-                }
+            
           
            
 
@@ -108,7 +81,7 @@ namespace DiagramsForGrasshopper
 
 
 
-            DA.SetData(1, diagram);
+         return diagram;
 
         }
 

@@ -23,6 +23,8 @@ namespace DiagramsForGrasshopper
 
         public void AddUsefulMessage(IGH_DataAccess DA, string message, GH_RuntimeMessageLevel level = GH_RuntimeMessageLevel.Error)
         {
+           
+
             try
             {
 

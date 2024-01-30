@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace DiagramsForGrasshopper.Componants
 {
-    public class CreateDiagramImage : ReportBaseComponent
+    public class CreateDiagramImage : DiagramComponent
     {
         /// <summary>
         /// Initializes a new instance of the CreateDiagramImage class.
@@ -30,20 +30,13 @@ namespace DiagramsForGrasshopper.Componants
             pManager.AddNumberParameter("Height", "H", "Height in Pixels, Optional: set to less than 0 to use the image's height", GH_ParamAccess.item, -1);
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {
-            base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
-        }
+
 
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
-        protected override void SolveInstance(IGH_DataAccess DA)
+        public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
             string path = "";
             Point3d pt = Point3d.Unset;
@@ -77,7 +70,7 @@ namespace DiagramsForGrasshopper.Componants
             diagram.AddDiagramObject(diagramImage);
 
 
-            DA.SetData(1, diagram);
+            return diagram;
 
 
 

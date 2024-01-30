@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace DiagramsForGrasshopper.Componants
 {
-    public class CreateDiagramHatch : ReportBaseComponent
+    public class CreateDiagramHatch : DiagramComponent
     {
         /// <summary>
         /// Initializes a new instance of the CreateDiagramHatch class.
@@ -33,19 +33,10 @@ namespace DiagramsForGrasshopper.Componants
         }
 
         /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {
-            base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
-        }
-
-        /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
-        protected override void SolveInstance(IGH_DataAccess DA)
+        public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
             double weight = 1;
             Color clr = new Color();
@@ -62,7 +53,7 @@ namespace DiagramsForGrasshopper.Componants
 
             if (brep == null) {
                 AddUsefulMessage(DA, "Brep cannot be Null");
-                return;
+                return null;
             }
 
 
@@ -71,7 +62,7 @@ namespace DiagramsForGrasshopper.Componants
 
 
             if (diagramCurves == null || diagramCurves.Count == 0) {
-                return;
+                return null;
             }
             BoundingBox bb = BoundingBox.Empty;
      
@@ -90,7 +81,7 @@ namespace DiagramsForGrasshopper.Componants
                 diagram.AddDiagramObject(diagramCurves[i]);
             }
 
-            DA.SetData(1, diagram);
+           return diagram;
         }
 
         /// <summary>

@@ -10,7 +10,8 @@ using DiagramLibrary;
 
 namespace DiagramsForGrasshopper.Componants
 {
-    public class CreateDiagramTable : ReportBaseComponent { 
+    public class CreateDiagramTable : DiagramComponent
+    { 
         /// <summary>
         /// Initializes a new instance of the CreateDiagramTable class.
         /// </summary>
@@ -40,20 +41,24 @@ namespace DiagramsForGrasshopper.Componants
             pManager.AddColourParameter("Background Colour", "BClr", "Back Colour", GH_ParamAccess.item, Color.Transparent);
         }
 
+
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
+            pManager.AddGenericParameter("CSV", "CSV", "CSV format of the table data", GH_ParamAccess.item);
         }
+
+
+
 
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
-        protected override void SolveInstance(IGH_DataAccess DA)
+        public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
             double lineWeight = 1;
             double textScale = 1;
@@ -74,7 +79,7 @@ namespace DiagramsForGrasshopper.Componants
             if (!DA.GetDataTree(0, out data))
             {
                 AddUsefulMessage(DA, "data cannot be Empty");
-                return;
+                return null;
             }
          
             DA.GetData(1, ref pt);
@@ -93,18 +98,18 @@ namespace DiagramsForGrasshopper.Componants
             if (data == null)
             {
               
-                return;
+                return null;
             }
 
             if (width.Count == 0)
             {
                 AddUsefulMessage(DA, "Cell Widths need at least on value");
-                return;
+                return null;
             }
             if (height.Count == 0)
             {
                 AddUsefulMessage(DA, "Cell Heights need at least on value");
-                return;
+                return null;
             }
 
 
@@ -155,7 +160,10 @@ namespace DiagramsForGrasshopper.Componants
             diagram.AddDiagramObject( diagramTable );
 
 
-            DA.SetData(1, diagram);
+           
+
+            DA.SetData(2, diagramTable.ToCSV());
+            return diagram;
         }
 
         /// <summary>

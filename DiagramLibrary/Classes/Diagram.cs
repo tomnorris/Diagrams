@@ -106,6 +106,8 @@ namespace DiagramLibrary
             var goo = obj as Grasshopper.Kernel.Types.IGH_Goo;
 
             goo.CastTo(out Diagram diagram);
+            if (diagram == null) { return;  }
+            if (diagram.m_Objects.Count == 0) { return;  }
             m_Objects.AddRange(diagram.m_Objects);
 
             

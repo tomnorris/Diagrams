@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace DiagramsForGrasshopper.Componants
 {
-    public class CreateDiagramCurve : ReportBaseComponent
+    public class CreateDiagramCurve : DiagramComponent
     {
         /// <summary>
         /// Initializes a new instance of the CreateDiagramCurve class.
@@ -32,20 +32,13 @@ namespace DiagramsForGrasshopper.Componants
 
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-        {
-            base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram", GH_ParamAccess.item);
-        }
+
 
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
-        protected override void SolveInstance(IGH_DataAccess DA)
+        public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
 
             double weight = 1;
@@ -60,7 +53,7 @@ namespace DiagramsForGrasshopper.Componants
             if (crv == null)
             {
                 AddUsefulMessage(DA, "Curve cannot be Null");
-                return;
+                return null;
             }
 
                                               
@@ -72,7 +65,7 @@ namespace DiagramsForGrasshopper.Componants
             diagram.AddDiagramObject(diagramCurve);
 
 
-            DA.SetData(1, diagram);
+           return diagram;
 
 
         }
