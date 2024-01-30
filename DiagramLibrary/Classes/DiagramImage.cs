@@ -10,8 +10,7 @@ namespace DiagramLibrary
 {
    public  class DiagramImage : DiagramObject
     {
-        public override string DiagramObjectType() { return "DiagramImage"; }
-
+    
         private Image m_Image;
         private PointF m_Location;
         private SizeF m_Size;

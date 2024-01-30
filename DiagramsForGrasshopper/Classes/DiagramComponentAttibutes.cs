@@ -26,10 +26,10 @@ namespace DiagramsForGrasshopper
 
             CanvasDiagram owner = this.Owner as CanvasDiagram;
 
-            if (owner.Diagram != null)
+            if (owner.m_Diagram != null)
             {
 
-                Size size = owner.Diagram.GetBoundingSize(owner.Scale);
+                Size size = owner.m_Diagram.GetBoundingSize(owner.Scale);
                 if (size.Width > 10)
                 {
 
@@ -62,19 +62,19 @@ namespace DiagramsForGrasshopper
 
 
             CanvasDiagram canvasDiagram = this.Owner as CanvasDiagram;
-            if (canvasDiagram.Diagram != null)
+            if (canvasDiagram.m_Diagram != null)
             {
               
-                Size size = canvasDiagram.Diagram.GetBoundingSize(canvasDiagram.Scale);
+                Size size = canvasDiagram.m_Diagram.GetBoundingSize(canvasDiagram.Scale);
 
                 graphics.DrawLine(Pens.DarkGray, m_innerBounds.Location, new Point((int)m_innerBounds.X, (int)(m_innerBounds.Y + CapsuleHeight)));
                 graphics.DrawLine(Pens.DarkGray, new Point((int)(m_innerBounds.X+m_innerBounds.Width), (int)(m_innerBounds.Y + CapsuleHeight)), 
                     new Point((int)(m_innerBounds.X + m_innerBounds.Width), (int)(m_innerBounds.Y + CapsuleHeight)));
 
-                if (canvasDiagram.Diagram.Title != null)
+                if (canvasDiagram.m_Diagram.Title != null)
                 {
-                    string text = canvasDiagram.Diagram.Title;
-                    graphics.DrawString(text, new Font(canvas.Font.FontFamily, 7f), new SolidBrush(canvas.ForeColor), new Point((int)(m_innerBounds.X + 3), (int)(m_innerBounds.Y + 3)));
+                    string text = canvasDiagram.m_Diagram.Title.Text;
+                    graphics.DrawString(text, new Font(canvasDiagram.m_Diagram.Title.FontName,8f), new SolidBrush(canvas.ForeColor), new Point((int)(m_innerBounds.X + 3), (int)(m_innerBounds.Y + 3)));
                 }
 
                 Rectangle rec = new Rectangle((int)this.Bounds.X+4, (int)(this.Bounds.Y + CapsuleHeight)+4, (int)this.Bounds.Width-8, (int)(this.Bounds.Width / size.Width * size.Height) -8);
@@ -86,7 +86,7 @@ namespace DiagramsForGrasshopper
 
                     if (canvasDiagram.Update || canvasDiagram.Bitmap == null)
                     {
-                        canvasDiagram.Bitmap = canvasDiagram.Diagram.DrawBitmap(canvasDiagram.Scale);
+                        canvasDiagram.Bitmap = canvasDiagram.m_Diagram.DrawBitmap(canvasDiagram.Scale);
                         canvasDiagram.Update = false;
                     }
                     

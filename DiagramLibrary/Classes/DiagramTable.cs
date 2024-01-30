@@ -24,9 +24,7 @@ namespace DiagramLibrary
         private TextJustification m_Justification = TextJustification.None;
 
 
-        public override string DiagramObjectType() { return "DiagramTable"; }
-
-
+     
 
 
         public static DiagramTable Create(GH_Structure<GH_String> data, List<double> cellWidths, List<double> cellHeights, float textSize, PointF Location, Color Colour, float LineWeight, string fontName, float padding, TextJustification justification)

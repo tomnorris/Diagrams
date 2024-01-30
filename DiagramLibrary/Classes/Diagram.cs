@@ -14,10 +14,10 @@ namespace DiagramLibrary
         private PointF m_Location;
         private int m_width;
         private int m_height;
-        private string m_Title;
+        private DiagramText m_Title;
+        private string m_TitleFont = "Arial";
+      
         private Color m_Colour;
-                           
-
         private DiagramFilledRectangle m_Background;
 
         private List<DiagramObject> m_Objects;
@@ -30,10 +30,20 @@ namespace DiagramLibrary
 
 
 
-        public string Title
+        public DiagramText Title
         {
             get { return m_Title; }
+            set { m_Title = value; }
         }
+
+
+        public List<DiagramObject> Objects
+        {
+            get { return m_Objects; }
+            
+        }
+
+
 
         public Diagram Duplicate()
         {
@@ -42,26 +52,31 @@ namespace DiagramLibrary
             diagram.m_height = m_height;
             diagram.m_Objects = m_Objects;
             diagram.m_Colour = m_Colour;
+            diagram.Title = m_Title;
+            diagram.m_TitleFont = m_TitleFont;
+      
+
+
             return diagram;
         }
 
         public Diagram() { }
 
 
-        public static Diagram Create(int width, int height, string Title, Color backgroundColour)
+        public static Diagram Create(int width, int height, DiagramText title, Color backgroundColour)
         {
-                      return Create( width,  height,  Title,  backgroundColour, new PointF(0,0) );
+                      return Create( width,  height, title,  backgroundColour, new PointF(0,0) );
         }
 
 
         //Do not use the location to set the diagram location in the RhinoPreview, use the xfrom in the DrawinRhinoPreview method, the diagram location is used to compensate for single object diagram's locations
-        public static Diagram Create(int width, int height, string Title, Color backgroundColour, PointF location)
+        public static Diagram Create(int width, int height, DiagramText title, Color backgroundColour, PointF location)
         {
             Diagram diagram = new Diagram();
             diagram.m_width = width;
             diagram.m_height = height;
             diagram.m_Objects = new List<DiagramObject>();
-            diagram.m_Title = Title;
+            diagram.m_Title = title;
             Plane plane = Plane.WorldXY;
             plane.Origin = new Point3d(location.X,location.Y,0);
             Rectangle3d rec = new Rectangle3d(plane, width, height);
@@ -277,7 +292,12 @@ namespace DiagramLibrary
             if (m_Title != null)
             {
                 PointF pt = new PointF(0, this.m_height);
-                DiagramText title = DiagramText.Create(m_Title, pt, Color.Black, this.m_width / 20, TextJustification.BottomLeft, Color.White, Color.Black, 1f, false, "Arial", new SizeF(-1, -1), 3, TextJustification.BottomLeft);
+                DiagramText title = m_Title;
+title.Location = pt;
+                if (title.LineWeight < 0) {
+                    title.LineWeight = this.m_width / 20;
+                }
+                  
                 title.DrawRhinoPreview(pipeline, tolernace, xform, colorOverride);
             }
 

@@ -5,6 +5,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 using DiagramLibrary;
 using System.Drawing;
+using System.Linq;
 
 
 // In order to load the result of this wizard, you will also need to
@@ -38,7 +39,7 @@ namespace DiagramsForGrasshopper
             pManager.AddIntegerParameter("Height", "H", "Diagram Height in Pixels", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Width", "W", "Diagram Width in Pixels", GH_ParamAccess.item);
             pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram objects or Rhino Geometry To Add to Diagram", GH_ParamAccess.list);
-            pManager.AddTextParameter("Title", "Title", "Optional Diagram Title", GH_ParamAccess.item, "");
+            pManager.AddGenericParameter("Title", "Title", "Optional Diagram Title", GH_ParamAccess.item);
             pManager.AddColourParameter("Colour", "BgClr", "Optional Background Colour", GH_ParamAccess.item, System.Drawing.Color.Transparent);
 
 
@@ -56,16 +57,43 @@ namespace DiagramsForGrasshopper
             int width = -1;
             int height = -1;
             List<Object> objs = new List<Object>();
-            string title = null; // null means it will be ignored 
+            Grasshopper.Kernel.Types.IGH_Goo titleObj = null;
+
             Color clr = System.Drawing.Color.Transparent;
 
             DA.GetData(0, ref width);
             DA.GetData(1, ref height);
             
             DA.GetDataList(2, objs);
-            DA.GetData(3, ref title);
+            DA.GetData(3, ref titleObj);
             DA.GetData(4, ref clr);
 
+            DiagramText titleDiagram = null;
+            if (titleObj.GetType() == typeof(Grasshopper.Kernel.Types.GH_String)) {
+                titleObj.CastTo(out string diagramTitleString);
+                titleDiagram = DiagramText.Create(diagramTitleString, PointF.Empty, Color.Black, -1F, TextJustification.BottomLeft, Color.White, Color.Black, 1F, false, "Arial", new SizeF(-1, -1), 3, TextJustification.BottomLeft);
+
+            } else {
+                try
+                {
+                    titleObj.CastTo(out Diagram diagramTitleDiagram);
+
+                    titleDiagram = diagramTitleDiagram.Objects.Where(x => x.GetType() == typeof(DiagramText)).FirstOrDefault() as DiagramText;
+
+                }
+                catch (Exception)
+                {
+
+                 
+                }
+                   
+
+
+
+                
+
+
+            }
 
 
 
@@ -74,7 +102,7 @@ namespace DiagramsForGrasshopper
            
 
 
-            Diagram diagram = Diagram.Create(width, height, title, clr);
+            Diagram diagram = Diagram.Create(width, height, titleDiagram, clr);
             diagram.AddObjects(objs, GH_Component.DocumentTolerance());
 
 

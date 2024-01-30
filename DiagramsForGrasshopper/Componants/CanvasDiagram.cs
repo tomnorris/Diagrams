@@ -12,7 +12,7 @@ namespace DiagramsForGrasshopper
     {
 
 
-        public Diagram Diagram = null;
+        public Diagram m_Diagram = null;
         public double Scale = 1;
         public bool Update = true;
         public System.Drawing.Bitmap Bitmap = null;
@@ -35,7 +35,15 @@ namespace DiagramsForGrasshopper
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Diagram", "D", "Diagram to display inside this componant", GH_ParamAccess.item);
+            this.Params.Input[0].ObjectChanged += RhinoDiagram_ObjectChanged;
         }
+         
+
+        private void RhinoDiagram_ObjectChanged(IGH_DocumentObject sender, GH_ObjectChangedEventArgs e)
+        {
+            m_Diagram = null;
+        }
+    
 
         /// <summary>
         /// Registers all the output parameters for this component.
@@ -67,7 +75,7 @@ namespace DiagramsForGrasshopper
                 return;
             }
 
-            Diagram = diagram;
+            m_Diagram = diagram;
 
             DA.SetData(0, diagram);
         }

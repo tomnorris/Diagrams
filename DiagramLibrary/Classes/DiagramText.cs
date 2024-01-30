@@ -20,11 +20,25 @@ namespace DiagramLibrary
         private SizeF m_WrapSize;
         private float m_Padding = 0f;
         private TextJustification m_Justification = TextJustification.None;
-       
 
 
+        public PointF Location
+        {
+            get { return m_Location; }  
+            set { m_Location = value; } 
+        }
 
-        public override string DiagramObjectType() { return "DiagramText"; }
+        public string Text
+        {
+            get { return m_Text; }
+            set { m_Text = value; }
+        }
+
+        public string FontName
+        {
+            get { return m_FontName; }
+            set { m_FontName = value; }
+        }
 
 
 

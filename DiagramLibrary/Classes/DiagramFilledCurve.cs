@@ -32,8 +32,7 @@ namespace DiagramLibrary
         }
 
 
-        public override string DiagramObjectType() { return "DiagramFilledCurve"; }
-
+        
         public static DiagramFilledCurve Create(Curve[] OuterCurves, Curve[] InnerCurves, Color Colour, bool drawLine, Color LineColour, float LineWeight)
         {
 

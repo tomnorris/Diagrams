@@ -20,14 +20,16 @@ namespace DiagramLibrary
 
         public Color Colour { 
             get { return m_Colour; }
+            set { m_Colour = value;  }
         }
 
-        public float LineWeight
+        public float LineWeight //For text this is text size?!
         {
             get { return m_LineWeight; }
+            set { m_LineWeight = value; }
         }
 
-        public  abstract string DiagramObjectType();
+       
 
         public DiagramObject() { }
 

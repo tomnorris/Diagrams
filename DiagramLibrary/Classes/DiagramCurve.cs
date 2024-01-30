@@ -11,8 +11,7 @@ namespace DiagramLibrary
     public class DiagramCurve:DiagramObject
     {
         private Curve m_Curve;
-        public override string DiagramObjectType() { return "DiagramCurve"; }
-
+     
 
 
 
