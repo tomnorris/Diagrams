@@ -37,7 +37,7 @@ namespace DiagramsForGrasshopper
 
         private void RhinoDiagram_ObjectChanged(IGH_DocumentObject sender, GH_ObjectChangedEventArgs e)
         {
-          p_Diagram = null;
+          m_Diagram = null;
         }
 
     
@@ -61,7 +61,7 @@ namespace DiagramsForGrasshopper
                 return null;
             }
 
-            DA.GetData(1, ref p_Xform);
+            DA.GetData(1, ref m_Xform);
             return diagram;
 
 

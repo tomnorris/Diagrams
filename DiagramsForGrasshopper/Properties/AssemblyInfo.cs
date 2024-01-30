@@ -19,6 +19,9 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
+
+[assembly: Grasshopper.Kernel.GH_Loading(Grasshopper.Kernel.GH_LoadingDemand.Default)]
+
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("26e0b3e3-8997-42d6-bc6e-ba525e5d0935")]
 

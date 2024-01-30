@@ -16,12 +16,18 @@ namespace DiagramLibrary
         private int m_height;
         private string m_Title;
         private Color m_Colour;
-
-      
+                           
 
         private DiagramFilledRectangle m_Background;
 
         private List<DiagramObject> m_Objects;
+
+
+        static public string LibraryVersion()
+        {
+            return typeof(Diagram).Assembly.GetName().Version.ToString();
+        }
+
 
 
         public string Title
