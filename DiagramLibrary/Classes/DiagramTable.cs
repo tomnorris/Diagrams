@@ -67,9 +67,9 @@ namespace DiagramLibrary
             for (int i = 0; i < this.m_Data.Branches.Count; i++)
             {
                 
-                for (int j = 1; j < this.m_Data.Branches[i].Count; j++)
+                for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
                 {
-                    returnString += this.m_Data.Branches[i] + ",";
+                    returnString += this.m_Data.Branches[i][j].Value + ",";
                 }
                 returnString += "\n";
 
