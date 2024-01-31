@@ -29,17 +29,13 @@ namespace DiagramsForGrasshopper
         {
 
             pManager.AddGenericParameter("Diagram", "D", "Image or Diagram to display inside this componant", GH_ParamAccess.item);
-            this.Params.Input[0].ObjectChanged += RhinoDiagram_ObjectChanged;
+        
 
             pManager.AddTransformParameter("Transform", "Xfrom", "A transformation for the diagram", GH_ParamAccess.item);
             this.Params.Input[1].Optional = true;
         }
 
-        private void RhinoDiagram_ObjectChanged(IGH_DocumentObject sender, GH_ObjectChangedEventArgs e)
-        {
-          m_Diagram = null;
-        }
-
+       
     
 
         /// <summary>

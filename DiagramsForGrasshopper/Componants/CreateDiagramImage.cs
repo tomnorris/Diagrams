@@ -25,12 +25,14 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Image", "Img", "File path to the image", GH_ParamAccess.item);
-            pManager.AddPointParameter("Location", "L", "Point locatin for the image", GH_ParamAccess.item);
+         //   this.Params.Input[0].ObjectChanged += CreateDiagramImage_ObjectChanged;
+            pManager.AddPointParameter("Location", "L", "Point locatin for the image", GH_ParamAccess.item, new Point3d(0,0,0));
+            pManager.HideParameter(1);
             pManager.AddNumberParameter("Width", "W", "Width in Pixels, Optional: set to less than 0 to use the image's width", GH_ParamAccess.item,-1);
             pManager.AddNumberParameter("Height", "H", "Height in Pixels, Optional: set to less than 0 to use the image's height", GH_ParamAccess.item, -1);
         }
 
-
+     
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -66,7 +68,7 @@ namespace DiagramsForGrasshopper.Componants
 
             DiagramImage diagramImage = DiagramImage.Create(path, location, new SizeF((float)width, (float)height));
             SizeF size = diagramImage.GetTotalSize();
-            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, location);
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, 0, Color.Transparent, location);
             diagram.AddDiagramObject(diagramImage);
 
 

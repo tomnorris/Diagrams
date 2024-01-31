@@ -10,7 +10,7 @@ namespace DiagramLibrary
 {
    public  class DiagramFilledCurve : DiagramObject
     {
-       protected bool m_DrawLine;
+      
         protected Color m_LineColor;
         protected Color m_BackColour;
         protected System.Drawing.Drawing2D.HatchStyle m_hatchStyle;
@@ -33,13 +33,13 @@ namespace DiagramLibrary
 
 
         
-        public static DiagramFilledCurve Create(Curve[] OuterCurves, Curve[] InnerCurves, Color Colour, bool drawLine, Color LineColour, float LineWeight)
+        public static DiagramFilledCurve Create(Curve[] OuterCurves, Curve[] InnerCurves, Color Colour, Color LineColour, float LineWeight)
         {
 
             DiagramFilledCurve diagramFilledCurve = new DiagramFilledCurve();
             diagramFilledCurve.m_Colour = Colour;
             diagramFilledCurve.m_LineWeight = LineWeight;
-            diagramFilledCurve.m_DrawLine = drawLine;
+          
             diagramFilledCurve. m_LineColor = LineColour;
 
             for (int i = 0; i < OuterCurves.Length; i++)
@@ -58,7 +58,7 @@ namespace DiagramLibrary
             return diagramFilledCurve;
         }
 
-        public static List<DiagramFilledCurve> CreateFromBrep(Brep brep, Color Colour, bool drawLine, Color LineColour, float LineWeight)
+        public static List<DiagramFilledCurve> CreateFromBrep(Brep brep, Color Colour, Color LineColour, float LineWeight)
         {
             List<DiagramFilledCurve> hatches = new List<DiagramFilledCurve>();
 
@@ -69,7 +69,7 @@ namespace DiagramLibrary
                 Curve[] crvsOuter = brep.Faces[i].DuplicateFace(false).DuplicateNakedEdgeCurves(true, false);
 
 
-                DiagramFilledCurve dHatch = DiagramFilledCurve.Create(crvsOuter, crvsInner, Colour, drawLine, LineColour, LineWeight);
+                DiagramFilledCurve dHatch = DiagramFilledCurve.Create(crvsOuter, crvsInner, Colour, LineColour, LineWeight);
                 hatches.Add(dHatch);
 
 
@@ -85,8 +85,7 @@ namespace DiagramLibrary
             DiagramFilledCurve diagramFilledCurve = new DiagramFilledCurve();
             diagramFilledCurve.m_Colour = m_Colour;
             diagramFilledCurve.m_LineWeight = m_LineWeight;
-            diagramFilledCurve.m_DrawLine = m_DrawLine;
-            diagramFilledCurve.m_LineColor = m_LineColor;
+                     diagramFilledCurve.m_LineColor = m_LineColor;
             diagramFilledCurve.m_OuterCurves = m_OuterCurves;
             diagramFilledCurve.m_InnerCurves = m_InnerCurves;
             
@@ -177,7 +176,7 @@ namespace DiagramLibrary
         
             g.FillPath(this.GetBrush(),path);
 
-            if (m_DrawLine) {
+            if (m_LineWeight > 0) {
                 g.DrawPath(this.GetPen(), path);
 
             }
@@ -190,7 +189,7 @@ namespace DiagramLibrary
         {
 
             Color clr = Diagram.SelectedColor;
-            bool drawLines = this.m_DrawLine;
+            bool drawLines = m_LineWeight > 0;
             if (colorOverride == false)
             {
                 clr = m_Colour;

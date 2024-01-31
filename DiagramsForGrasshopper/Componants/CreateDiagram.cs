@@ -36,15 +36,20 @@ namespace DiagramsForGrasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Height", "H", "Diagram Height in Pixels", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Width", "W", "Diagram Width in Pixels", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Height", "H", "Diagram Height in Pixels", GH_ParamAccess.item, -1);
+            pManager.AddIntegerParameter("Width", "W", "Diagram Width in Pixels", GH_ParamAccess.item, -1);
             pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram objects or Rhino Geometry To Add to Diagram", GH_ParamAccess.list);
+        //    this.Params.Input[2].ObjectChanged += CreateDiagram_ObjectChanged;
             pManager.AddGenericParameter("Title", "Title", "Optional Diagram Title", GH_ParamAccess.item);
+            this.Params.Input[3].Optional = true;
             pManager.AddColourParameter("Colour", "BgClr", "Optional Background Colour", GH_ParamAccess.item, System.Drawing.Color.Transparent);
+            pManager.AddNumberParameter("Frame Line Weight", "FLW", "Optional Frame Line Weight", GH_ParamAccess.item, 0);
+            pManager.AddColourParameter("Frame Colour", "FClr", "Optional Frame Line Colour", GH_ParamAccess.item, Diagram.DefaultColor);
 
 
         }
 
+      
 
 
         /// <summary>
@@ -60,6 +65,8 @@ namespace DiagramsForGrasshopper
             Grasshopper.Kernel.Types.IGH_Goo titleObj = null;
 
             Color clr = System.Drawing.Color.Transparent;
+            Color fclr = Diagram.DefaultColor;
+            double frameLineWeight = 0;
 
             DA.GetData(0, ref width);
             DA.GetData(1, ref height);
@@ -68,17 +75,22 @@ namespace DiagramsForGrasshopper
             DA.GetData(3, ref titleObj);
             DA.GetData(4, ref clr);
 
+            DA.GetData(5, ref frameLineWeight);
+            DA.GetData(6, ref Diagram.DefaultColor);
+
+
+
             DiagramText titleDiagram = null;
             if (titleObj.GetType() == typeof(Grasshopper.Kernel.Types.GH_String)) {
                 titleObj.CastTo(out string diagramTitleString);
-                titleDiagram = DiagramText.Create(diagramTitleString, PointF.Empty, Color.Black, -1F, TextJustification.BottomLeft, Color.White, Color.Black, 1F, false, "Arial", new SizeF(-1, -1), 3, TextJustification.BottomLeft);
+                titleDiagram = DiagramText.Create(diagramTitleString, PointF.Empty, Diagram.DefaultColor, -1f, TextJustification.BottomLeft, Color.Transparent, Diagram.DefaultColor, 0, "Arial", new SizeF(-1, -1), 3, TextJustification.BottomLeft);
 
             } else {
                 try
                 {
                     titleObj.CastTo(out Diagram diagramTitleDiagram);
 
-                    titleDiagram = diagramTitleDiagram.Objects.Where(x => x.GetType() == typeof(DiagramText)).FirstOrDefault() as DiagramText;
+                    titleDiagram = (diagramTitleDiagram.Objects.Where(x => x.GetType() == typeof(DiagramText)).FirstOrDefault() as DiagramText).Duplicate();
 
                 }
                 catch (Exception)
@@ -102,7 +114,7 @@ namespace DiagramsForGrasshopper
            
 
 
-            Diagram diagram = Diagram.Create(width, height, titleDiagram, clr);
+            Diagram diagram = Diagram.Create(width, height, titleDiagram, clr, (float)frameLineWeight, fclr);
             diagram.AddObjects(objs, GH_Component.DocumentTolerance());
 
 

@@ -26,10 +26,26 @@ namespace DiagramsForGrasshopper
 
             CanvasDiagram owner = this.Owner as CanvasDiagram;
 
-            if (owner.m_Diagram != null)
-            {
 
-                Size size = owner.m_Diagram.GetBoundingSize(owner.Scale);
+            DiagramLibrary.Diagram diagram = null;
+            var diagramOutput = owner.Params.Output[0].VolatileData;
+
+           
+            for (int i = 0; i < diagramOutput.PathCount; i++)
+            {
+                var diagramGooList = diagramOutput.get_Branch(diagramOutput.Paths[i]);
+
+                for (int j = 0; j < diagramGooList.Count; j++)
+                {
+                    var diagramGoo = diagramGooList[j] as Grasshopper.Kernel.Types.IGH_Goo;
+                    diagramGoo.CastTo(out  diagram);
+                    break;
+                }
+                break;
+            }
+
+            if (diagram != null) {
+                Size size = diagram.GetBoundingSize(owner.Scale);
                 if (size.Width > 10)
                 {
 
@@ -38,6 +54,8 @@ namespace DiagramsForGrasshopper
                 }
                 owner.Update = true;
             }
+
+
 
 
             m_innerBounds = new RectangleF(Pivot.X, Pivot.Y, width, height);
@@ -62,19 +80,41 @@ namespace DiagramsForGrasshopper
 
 
             CanvasDiagram canvasDiagram = this.Owner as CanvasDiagram;
-            if (canvasDiagram.m_Diagram != null)
+
+
+            DiagramLibrary.Diagram diagram = null;
+            var diagramOutput = canvasDiagram.Params.Output[0].VolatileData;
+            for (int i = 0; i < diagramOutput.PathCount; i++)
+            {
+                var diagramGooList = diagramOutput.get_Branch(diagramOutput.Paths[i]);
+
+                for (int j = 0; j < diagramGooList.Count; j++)
+                {
+                    var diagramGoo = diagramGooList[j] as Grasshopper.Kernel.Types.IGH_Goo;
+                    diagramGoo.CastTo(out diagram);
+                    break;
+                }
+                break;
+            }
+
+
+
+
+
+
+            if (diagram != null)
             {
               
-                Size size = canvasDiagram.m_Diagram.GetBoundingSize(canvasDiagram.Scale);
+                Size size = diagram.GetBoundingSize(canvasDiagram.Scale);
 
                 graphics.DrawLine(Pens.DarkGray, m_innerBounds.Location, new Point((int)m_innerBounds.X, (int)(m_innerBounds.Y + CapsuleHeight)));
                 graphics.DrawLine(Pens.DarkGray, new Point((int)(m_innerBounds.X+m_innerBounds.Width), (int)(m_innerBounds.Y + CapsuleHeight)), 
                     new Point((int)(m_innerBounds.X + m_innerBounds.Width), (int)(m_innerBounds.Y + CapsuleHeight)));
 
-                if (canvasDiagram.m_Diagram.Title != null)
+                if (diagram.Title != null)
                 {
-                    string text = canvasDiagram.m_Diagram.Title.Text;
-                    graphics.DrawString(text, new Font(canvasDiagram.m_Diagram.Title.FontName,8f), new SolidBrush(canvas.ForeColor), new Point((int)(m_innerBounds.X + 3), (int)(m_innerBounds.Y + 3)));
+                    string text = diagram.Title.Text;
+                    graphics.DrawString(text, new Font(diagram.Title.FontName,8f), new SolidBrush(canvas.ForeColor), new Point((int)(m_innerBounds.X + 3), (int)(m_innerBounds.Y + 3)));
                 }
 
                 Rectangle rec = new Rectangle((int)this.Bounds.X+4, (int)(this.Bounds.Y + CapsuleHeight)+4, (int)this.Bounds.Width-8, (int)(this.Bounds.Width / size.Width * size.Height) -8);
@@ -86,7 +126,7 @@ namespace DiagramsForGrasshopper
 
                     if (canvasDiagram.Update || canvasDiagram.Bitmap == null)
                     {
-                        canvasDiagram.Bitmap = canvasDiagram.m_Diagram.DrawBitmap(canvasDiagram.Scale);
+                        canvasDiagram.Bitmap = diagram.DrawBitmap(canvasDiagram.Scale);
                         canvasDiagram.Update = false;
                     }
                     

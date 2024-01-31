@@ -22,7 +22,7 @@ namespace DiagramLibrary
         {
             DiagramImage diagramImage = new DiagramImage();
             diagramImage.m_Colour = Diagram.DefaultColor;
-            diagramImage.m_LineWeight = Diagram.DefaultLineWieght;
+            diagramImage.m_LineWeight = Diagram.DefaultLineWeight;
             diagramImage.m_ImagePath = imagePath;            
             diagramImage.m_Image = Bitmap.FromFile(imagePath); 
             diagramImage.m_Location = Location;

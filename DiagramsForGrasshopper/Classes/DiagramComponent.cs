@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel;
+﻿using DiagramLibrary;
+using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,8 @@ namespace DiagramsForGrasshopper
 
 
         protected bool m_VersionChecked = false;
-        protected  Transform m_Xform = Transform.ZeroTransformation;
-      protected  DiagramLibrary.Diagram m_Diagram = null;
+        protected Transform m_Xform = Transform.ZeroTransformation;
+      //  protected DiagramLibrary.Diagram m_Diagram = null;
 
         public DiagramComponent(string a, string b, string c, string d, string e)
            : base(a, b, c, d, e) // pass through the GH_Comp
@@ -28,49 +29,101 @@ namespace DiagramsForGrasshopper
 
         }
 
-       
+
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            m_Diagram = null;
+         //   m_Diagram = null;
             m_Xform = Transform.ZeroTransformation;
             this.CheckLibraryVersion(DA);
 
 
-            m_Diagram = DiagramSolveInstance(DA);
+            Diagram diagram = DiagramSolveInstance(DA);
 
 
 
-            DA.SetData(1, m_Diagram);
+            DA.SetData(1, diagram);
         }
 
         public virtual DiagramLibrary.Diagram DiagramSolveInstance(IGH_DataAccess DA) { return null; }
 
-        
+
 
         public override BoundingBox ClippingBox
         {
 
             get
             {
-              
-                if (m_Diagram != null) { return m_Diagram.GetGeometryBoundingBox(); } else { return BoundingBox.Empty; }
+                BoundingBox returnBox = BoundingBox.Empty;
+                try
+                {
+
+
+                    var diagramOutput = this.Params.Output[1].VolatileData;
+                    for (int i = 0; i < diagramOutput.PathCount; i++)
+                    {
+                        var diagramGooList = diagramOutput.get_Branch(diagramOutput.Paths[i]);
+
+                        for (int j = 0; j < diagramGooList.Count; j++)
+                        {
+                            var diagramGoo = diagramGooList[j] as Grasshopper.Kernel.Types.IGH_Goo;
+                            diagramGoo.CastTo(out Diagram diagram);
+
+                            if (diagram == null) { continue; }
+                            returnBox.Union(diagram.GetGeometryBoundingBox());
+
+
+                        }
+
+                    }
+
+
+                }
+                catch (Exception)
+                {
+
+
+                }
+
+                return returnBox;
+
             }
         }
 
         public override void DrawViewportWires(IGH_PreviewArgs args)
         {
-          
-            if (m_Diagram == null) { return; }
-
-            if (!this.Locked)
+            try
             {
 
-                m_Diagram.DrawRhinoPreview(args.Display, GH_Component.DocumentTolerance(), m_Xform, this.m_attributes.Selected);
+                if (!this.Locked)
+                {
+                    var diagramOutput = this.Params.Output[1].VolatileData;
+                    for (int i = 0; i < diagramOutput.PathCount; i++)
+                    {
+                        var diagramGooList = diagramOutput.get_Branch(diagramOutput.Paths[i]);
 
+                        for (int j = 0; j < diagramGooList.Count; j++)
+                        {
+                            var diagramGoo = diagramGooList[j] as Grasshopper.Kernel.Types.IGH_Goo;
+                            diagramGoo.CastTo(out Diagram diagram);
+
+                            if (diagram == null) { continue; }
+                                                       
+                            diagram.DrawRhinoPreview(args.Display, GH_Component.DocumentTolerance(), m_Xform, this.m_attributes.Selected);
+                        }
+                    }
+
+                }
 
 
             }
+            catch (Exception)
+            {
+
+
+            }
+
+
         }
 
 
@@ -93,7 +146,7 @@ namespace DiagramsForGrasshopper
                         break;
 
                     case VersionComparision.LibraryVersionIsNewer:
-                        this.AddUsefulMessage(DA, "ERROR01: The Diagrams Library (.dll) currently loaded in grasshopper is newer than the library this component was built against therefore results might be unpredicatble, error prone and newer features will be ignored. Check for an update on Food for Rhino or the Package Manager. Library Version: "+ libraryVersion + ", Componant was Built Against Version:" + componantLibraryVersion, GH_RuntimeMessageLevel.Warning);
+                        this.AddUsefulMessage(DA, "ERROR01: The Diagrams Library (.dll) currently loaded in grasshopper is newer than the library this component was built against therefore results might be unpredicatble, error prone and newer features will be ignored. Check for an update on Food for Rhino or the Package Manager. Library Version: " + libraryVersion + ", Componant was Built Against Version:" + componantLibraryVersion, GH_RuntimeMessageLevel.Warning);
                         break;
                     case VersionComparision.ComponantVersionIsNewer:
                         this.AddUsefulMessage(DA, "ERROR02: This Component was built against a newer version of the Diagrams Library (.dll) than the one currently loaded in grasshopper therefore results might be unpredicatble, error prone and newer features will be ignored. Check for an update on Food for Rhino or the Package Manager for any packages that create diagrams. Library Version: " + libraryVersion + ", Componant was Built Against Version:" + componantLibraryVersion, GH_RuntimeMessageLevel.Warning);

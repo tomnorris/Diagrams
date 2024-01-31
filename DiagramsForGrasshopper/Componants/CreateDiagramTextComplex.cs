@@ -25,24 +25,26 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Text", "T", "Text as a string", GH_ParamAccess.item);
+       //     this.Params.Input[0].ObjectChanged += CreateDiagramTextComplex_ObjectChanged ;
             pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item, new Point3d(0, 0, 0));
             pManager.HideParameter(1);
             pManager.AddIntegerParameter("Anchor", "A",
                  "Text Anchor 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right",
                  GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("TextScale", "TS", "Text size", GH_ParamAccess.item,1);
+            pManager.AddNumberParameter("TextScale", "TS", "Text size", GH_ParamAccess.item,Diagram.DefaultTextScale);
             pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, "Arial");
                       
             pManager.AddNumberParameter("Max Width", "W", "Maximum Width, Set to less than 0 to ignore ", GH_ParamAccess.item, -1);
             pManager.AddNumberParameter("Max Height", "H", "Maximum Height, Set to less than 0 to ignore", GH_ParamAccess.item, -1);
             pManager.AddNumberParameter("Padding", "P", "Text Padding", GH_ParamAccess.item, 0);
             pManager.AddIntegerParameter("Jusitification", "J", "Text justification. Horizontals(Left, Center, Right) only take effect if Width is set, Verticals (Top, Middle, Bottom) only take effect if Height it set. 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right", GH_ParamAccess.item, 0);
-            pManager.AddColourParameter("Colour", "Clr", "Colour for text", GH_ParamAccess.item, Color.Black);
-            pManager.AddColourParameter("FrameColor", "FClr", "Colour for text", GH_ParamAccess.item, Color.Empty);
-            pManager.AddColourParameter("BackgroundColor", "BgClr", "Colour for text", GH_ParamAccess.item, Color.Empty);
+            pManager.AddColourParameter("Colour", "Clr", "Colour for text", GH_ParamAccess.item, Diagram.DefaultColor);
+            pManager.AddColourParameter("FrameColor", "FClr", "Colour for text", GH_ParamAccess.item, Diagram.DefaultColor);
+            pManager.AddColourParameter("BackgroundColor", "BgClr", "BackgroundColour for text", GH_ParamAccess.item, Color.Transparent);
+            pManager.AddNumberParameter("FrameLineWeight", "FLW", "Line Weight of the Frame", GH_ParamAccess.item, Diagram.DefaultLineWeight);
         }
 
-       
+     
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -50,10 +52,10 @@ namespace DiagramsForGrasshopper.Componants
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
-            double weight = 1;
-            Color clr = Color.Empty;
-            Color frameClr = Color.Empty;
-            Color maskClr = Color.Empty;
+            double textScale = Diagram.DefaultTextScale;
+            Color clr = Diagram.DefaultColor;
+            Color frameClr = Diagram.DefaultColor;
+            Color maskClr = Color.Transparent;
             string text = "";
             Point3d pt = new Point3d(0, 0, 0);
             string font = "Arial";
@@ -62,6 +64,7 @@ namespace DiagramsForGrasshopper.Componants
             double width = -1;
             double height = -1;
             int jusitificationInt = 0;
+            double frameLineWieght = Diagram.DefaultLineWeight;
 
 
             DA.GetData(0, ref text);
@@ -69,7 +72,7 @@ namespace DiagramsForGrasshopper.Componants
             DA.GetData(2, ref anchorInt);
 
 
-            DA.GetData(3, ref weight);
+            DA.GetData(3, ref textScale);
             DA.GetData(4, ref font);
 
 
@@ -81,6 +84,7 @@ namespace DiagramsForGrasshopper.Componants
             DA.GetData(9, ref clr);
             DA.GetData(10, ref frameClr);
             DA.GetData(11, ref maskClr);
+            DA.GetData(12, ref frameLineWieght);
 
             if (text == "")
             {
@@ -165,23 +169,17 @@ namespace DiagramsForGrasshopper.Componants
             }
 
 
-            bool showMask = false;
+        
            
 
-            if (maskClr != Color.Empty) {
-                showMask = true;
-            }
-
-            if (frameClr != Color.Empty) {
-                showMask = true;
-            }
+           
 
             PointF location = new PointF((float)pt.X, (float)pt.Y);
 
-            DiagramText diagramText = DiagramText.Create(text, location, clr, (float)weight, anchor, maskClr, frameClr, 1f, showMask, font, new SizeF((float)width, (float)height), (float)padding, jusitification);
+            DiagramText diagramText = DiagramText.Create(text, location, clr, (float)textScale, anchor, maskClr, frameClr, (float)frameLineWieght, font, new SizeF((float)width, (float)height), (float)padding, jusitification);
 
             SizeF size = diagramText.GetTotalSize();
-            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, diagramText.GetAnchorCompensatedPoint(size));
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent,0,Color.Transparent, diagramText.GetAnchorCompensatedPoint(size));
             diagram.AddDiagramObject(diagramText);
             return diagram;
         }

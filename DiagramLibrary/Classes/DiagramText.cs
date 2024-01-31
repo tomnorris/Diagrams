@@ -15,7 +15,8 @@ namespace DiagramLibrary
         private PointF m_Location;
         private TextJustification m_Anchor;
         private DiagramFilledRectangle m_Mask = null;
-        private bool m_MaskEnabled = false;
+        private float m_TextSize;
+     
         private string m_FontName = "Arial";
         private SizeF m_WrapSize;
         private float m_Padding = 0f;
@@ -41,19 +42,26 @@ namespace DiagramLibrary
         }
 
 
+        public float TextSize
+        {
+            get { return m_TextSize; }
+            set { m_TextSize = value; }
+        }
 
-        public static DiagramText Create(string Text, PointF Location, Color Colour, float LineWeight,
+
+
+        public static DiagramText Create(string Text, PointF Location, Color Colour, float textSize,
             TextJustification anchor, Color maskColour, Color frameColor,float frameLineWeight, 
-            bool maskEnabled, string fontName, SizeF wrapSize, float padding, TextJustification justification)
+            string fontName, SizeF wrapSize, float padding, TextJustification justification)
         {
             DiagramText diagramText = new DiagramText();
             diagramText.m_Colour = Colour;
-            diagramText.m_LineWeight = LineWeight;
+            diagramText.m_TextSize = textSize;
             diagramText.m_Text = Text;
             diagramText.m_Location = Location;
             diagramText.m_Anchor = anchor;
-            diagramText.m_Mask = DiagramFilledRectangle.Create(new Rectangle3d(Plane.WorldXY,1,1),maskColour, maskEnabled, frameColor,frameLineWeight);
-            diagramText.m_MaskEnabled = maskEnabled;
+            diagramText.m_Mask = DiagramFilledRectangle.Create(new Rectangle3d(Plane.WorldXY,1,1),maskColour, frameColor,frameLineWeight);//Size is updated at drawtime
+
             diagramText.m_FontName = fontName;
      
             diagramText.m_WrapSize = wrapSize;
@@ -67,12 +75,11 @@ namespace DiagramLibrary
             DiagramText diagramText = new DiagramText();
             diagramText.m_Location = m_Location;
             diagramText.m_Colour = m_Colour;
-            diagramText.m_LineWeight = m_LineWeight;
+            diagramText.m_TextSize = m_TextSize;
             diagramText.m_Text = m_Text;
             diagramText.m_Anchor = m_Anchor;
             diagramText.m_Mask = m_Mask;
-            diagramText.m_MaskEnabled = m_MaskEnabled;
-            diagramText.m_FontName = m_FontName;
+                       diagramText.m_FontName = m_FontName;
          
             diagramText.m_WrapSize = m_WrapSize;
             diagramText.m_Padding = m_Padding;
@@ -80,10 +87,10 @@ namespace DiagramLibrary
             return diagramText;
         }
 
-        public void EnableMask(Color color,bool DrawLine,Color LineColor, float LineWeight)
+        public void SetMask(Color color,bool DrawLine,Color LineColor, float LineWeight)
         {
-            m_Mask = DiagramFilledRectangle.Create(new Rectangle3d(Plane.WorldXY, 10, 10), color, DrawLine, LineColor, LineWeight);
-            m_MaskEnabled = true;
+            m_Mask = DiagramFilledRectangle.Create(new Rectangle3d(Plane.WorldXY, 10, 10), color, LineColor, LineWeight);//Size is updated at drawtime
+           
         }
 
      
@@ -92,10 +99,10 @@ namespace DiagramLibrary
             switch (m_Anchor)
             {
                 case TextJustification.None:
-                    newPoint = new PointF(m_Location.X - m_Padding,m_LineWeight );
+                    newPoint = new PointF(m_Location.X - m_Padding, m_TextSize);
                     break;
                 case TextJustification.Left:
-                    newPoint = new PointF(m_Location.X - m_Padding, m_LineWeight );
+                    newPoint = new PointF(m_Location.X - m_Padding, m_TextSize);
                     break;
                 case TextJustification.Center:
                     newPoint = new PointF(m_Location.X - (size.Width / 2),m_Location.Y);
@@ -140,7 +147,7 @@ namespace DiagramLibrary
                     newPoint = new PointF(m_Location.X - size.Width, m_Location.Y - size.Height);
                     break;
                 default:
-                    newPoint= new PointF(m_Location.X - m_Padding, m_LineWeight );
+                    newPoint= new PointF(m_Location.X - m_Padding, m_TextSize);
                     break;
             }
 
@@ -184,7 +191,7 @@ namespace DiagramLibrary
             for (int i = 0; i < words.Length; i++)
             {
                 string tempLine = currentLine + ' ' + words[i]; // Add each word
-                SizeF textSize = g.MeasureString(tempLine, font, new SizeF(maxSize.Width, m_LineWeight), format, out int charsFitted, out int linesFilled);
+                SizeF textSize = g.MeasureString(tempLine, font, new SizeF(maxSize.Width, m_TextSize), format, out int charsFitted, out int linesFilled);
 
 
                 if (maxSize.Height > 0 && currentHeight + textSize.Height >= maxSize.Height)
@@ -255,8 +262,15 @@ namespace DiagramLibrary
 
 
         public SizeF GetTotalTextSize(Graphics g , out SizeF maskSize , out List<string> lines, out List<SizeF> rowSizes) {
+            if (m_TextSize <= 0) {
+                maskSize = SizeF.Empty;
+                lines = new List<string>();
+                rowSizes = new List<SizeF>();
+                return SizeF.Empty;
+            }
+
             SizeF allowedTextSize = SizeF.Empty;
-            var font = new System.Drawing.Font(m_FontName, (float)m_LineWeight);
+            var font = new System.Drawing.Font(m_FontName,m_TextSize);
 
             StringFormat format = new StringFormat();
 
@@ -305,13 +319,14 @@ namespace DiagramLibrary
         public override void DrawBitmap(Graphics g)
         {
 
-            var font = new System.Drawing.Font(m_FontName, (float)m_LineWeight);
+            var font = new System.Drawing.Font(m_FontName, m_TextSize);
 
             SizeF actualTotalTextSize = GetTotalTextSize(g, out SizeF maskSize, out List<string> lines, out List<SizeF> rowSizes);
                        
             PointF anchorCompensatedPoint = GetAnchorCompensatedPoint(maskSize);
 
-            if (m_MaskEnabled && m_Mask != null)
+            bool maskEnabled = m_Mask.LineWeight > 0;
+            if (maskEnabled)
             {
                 m_Mask.UpdateRectangle(anchorCompensatedPoint, maskSize);
                 m_Mask.DrawBitmap(g);
@@ -363,7 +378,7 @@ namespace DiagramLibrary
                 PointF pt = new PointF(anchorCompensatedPoint.X + m_Padding + justificationCompensation, -anchorCompensatedPoint.Y - m_Padding - actualTotalTextSize.Height - verticalFustificationCompensation + (lineSpacingPixel * i));
 
                 //  g.DrawString(lines[i], font, this.GetBrush(), new RectangleF(pt, actualTotalTextSize));
-                g.DrawString(lines[i], font, this.GetBrush(), new RectangleF(pt, new SizeF(actualTotalTextSize.Width, actualTotalTextSize.Height + (float)(m_LineWeight*0.1))));
+                g.DrawString(lines[i], font, this.GetBrush(), new RectangleF(pt, new SizeF(actualTotalTextSize.Width, actualTotalTextSize.Height + (m_TextSize * 0.1F))));
             }
             g.ResetTransform();// End Upside Down
 
@@ -391,7 +406,7 @@ namespace DiagramLibrary
             SizeF maskSize = SizeF.Empty;
 
             Color clr = Diagram.SelectedColor;
-            bool drawLines = m_MaskEnabled;
+            bool drawLines = m_Mask.LineWeight > 0;
             if (colorOverride == false)
             {
                 clr = m_Colour;
@@ -412,7 +427,7 @@ namespace DiagramLibrary
                
             }
 
-            var font = new System.Drawing.Font(m_FontName, (float)m_LineWeight);
+            var font = new System.Drawing.Font(m_FontName, m_TextSize);
             int lineSpacing = font.FontFamily.GetLineSpacing(FontStyle.Regular);
             float lineSpacingPixel = font.Size * lineSpacing / font.FontFamily.GetEmHeight(FontStyle.Regular);
 
@@ -452,7 +467,7 @@ namespace DiagramLibrary
                 Plane pln = Plane.WorldXY;
                 txt.Plane = pln;
                 txt.Justification = m_Anchor;
-                txt.TextHeight = m_LineWeight;
+                txt.TextHeight = m_TextSize;
 
 
 
@@ -477,7 +492,7 @@ namespace DiagramLibrary
 
 
                 Point3d pt = new Point3d(anchorCompensatedPoint.X + m_Padding + justificationCompensation, anchorCompensatedPoint.Y + m_Padding + verticalFustificationCompensation + (lineSpacingPixel  * (lines.Count-i)), 0);
-                var scale = Transform.Scale(new Point3d(pt.X, pt.Y, 0), m_LineWeight);
+                var scale = Transform.Scale(new Point3d(pt.X, pt.Y, 0), m_TextSize);
                 var trans = Transform.Translation(new Vector3d(pt.X, pt.Y, 0));
                 var localXform = scale * trans;
                 var combinedForm = localXform;

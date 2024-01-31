@@ -194,7 +194,7 @@ namespace DiagramLibrary
 
                 for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
                 {
-                    var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, new PointF((float)recs[currentIndex].Plane.Origin.X, (float)recs[currentIndex].Plane.Origin.Y), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent,1, false, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
+                    var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, new PointF((float)recs[currentIndex].Plane.Origin.X, (float)recs[currentIndex].Plane.Origin.Y), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent,-1,  m_FontName, sizes[currentIndex], m_Padding, m_Justification);
                     txt.DrawBitmap(g);
                     currentIndex++;
                 }
@@ -230,7 +230,7 @@ namespace DiagramLibrary
 
                 for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
                 {
-                    var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, new PointF((float)recs[currentIndex].Plane.Origin.X, (float)recs[currentIndex].Plane.Origin.Y), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent, 1, false, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
+                    var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, new PointF((float)recs[currentIndex].Plane.Origin.X, (float)recs[currentIndex].Plane.Origin.Y), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
                     txt.DrawRhinoPreview(pipeline, tolerance, xform, colorOverride);
                     currentIndex++;
                 }

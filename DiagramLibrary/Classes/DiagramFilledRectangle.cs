@@ -8,13 +8,12 @@ namespace DiagramLibrary
     {
         
 
-        public static DiagramFilledRectangle Create(Rectangle3d outerRectangle, Color colour, bool drawLine, Color lineColour, float lineWeight)
+        public static DiagramFilledRectangle Create(Rectangle3d outerRectangle, Color colour, Color lineColour, float lineWeight)
         {
             DiagramFilledRectangle rectangle = new DiagramFilledRectangle();
             rectangle.m_Colour = colour;
             rectangle.m_LineWeight = lineWeight;
-            rectangle.m_DrawLine = drawLine;
-            rectangle.m_LineColor = lineColour;
+                    rectangle.m_LineColor = lineColour;
 
             
                 rectangle.m_OuterCurves.Add(DiagramCurve.Create(outerRectangle.ToNurbsCurve(), lineColour, lineWeight));
@@ -54,7 +53,7 @@ namespace DiagramLibrary
            
             duplicatedRectangle.m_Colour = m_Colour;
             duplicatedRectangle.m_LineWeight = m_LineWeight;
-            duplicatedRectangle.m_DrawLine = m_DrawLine;
+      
             duplicatedRectangle.m_LineColor = m_LineColor;
 
             return duplicatedRectangle;

@@ -8,17 +8,20 @@ namespace DiagramLibrary
     public class Diagram
     {
         public static Color DefaultColor = Color.Black;
-        public static float DefaultLineWieght = 1f;
+        public static float DefaultLineWeight = 1f;
+        public static float DefaultTextScale = 10f;
         public static Color SelectedColor = Color.FromArgb(128, Color.ForestGreen);
 
         private PointF m_Location;
-        private int m_width;
-        private int m_height;
+        private int m_Width;
+        private int m_Height;
         private DiagramText m_Title;
         private string m_TitleFont = "Arial";
       
-        private Color m_Colour;
-        private DiagramFilledRectangle m_Background;
+        private Color m_BackgroundColour;
+        private Color m_FrameColour;
+        private float m_FrameLineWeight;
+    
 
         private List<DiagramObject> m_Objects;
 
@@ -48,13 +51,14 @@ namespace DiagramLibrary
         public Diagram Duplicate()
         {
             Diagram diagram = new Diagram();
-            diagram.m_width = m_width;
-            diagram.m_height = m_height;
+            diagram.m_Width = m_Width;
+            diagram.m_Height = m_Height;
             diagram.m_Objects = m_Objects;
-            diagram.m_Colour = m_Colour;
+            diagram.m_FrameColour = m_FrameColour;
             diagram.Title = m_Title;
             diagram.m_TitleFont = m_TitleFont;
-      
+            diagram.m_FrameColour = m_FrameColour;
+            diagram. m_FrameLineWeight = m_FrameLineWeight;
 
 
             return diagram;
@@ -63,25 +67,25 @@ namespace DiagramLibrary
         public Diagram() { }
 
 
-        public static Diagram Create(int width, int height, DiagramText title, Color backgroundColour)
+        public static Diagram Create(int width, int height, DiagramText title, Color backgroundColour,float frameLineWeight, Color frameColour)
         {
-                      return Create( width,  height, title,  backgroundColour, new PointF(0,0) );
+                      return Create( width,  height, title,  backgroundColour, frameLineWeight, frameColour, new PointF(0,0) );
         }
 
 
         //Do not use the location to set the diagram location in the RhinoPreview, use the xfrom in the DrawinRhinoPreview method, the diagram location is used to compensate for single object diagram's locations
-        public static Diagram Create(int width, int height, DiagramText title, Color backgroundColour, PointF location)
+        public static Diagram Create(int width, int height, DiagramText title, Color backgroundColour, float frameLineWeight, Color frameColour, PointF location)
         {
             Diagram diagram = new Diagram();
-            diagram.m_width = width;
-            diagram.m_height = height;
+            diagram.m_Width = width;
+            diagram.m_Height = height;
             diagram.m_Objects = new List<DiagramObject>();
             diagram.m_Title = title;
-            Plane plane = Plane.WorldXY;
-            plane.Origin = new Point3d(location.X,location.Y,0);
-            Rectangle3d rec = new Rectangle3d(plane, width, height);
-            diagram.m_Colour = backgroundColour;
-            diagram.m_Background = DiagramFilledRectangle.Create(rec, backgroundColour, false, DefaultColor, DefaultLineWieght);
+            diagram.m_BackgroundColour = backgroundColour;
+            diagram.m_FrameColour = frameColour;
+            diagram.m_FrameLineWeight = frameLineWeight;
+
+
             diagram.m_Location = location;
             return diagram;
         }
@@ -159,7 +163,7 @@ namespace DiagramLibrary
                 case Rhino.DocObjects.ObjectType.Curve:
                     goo.CastTo(out Curve crv);
 
-                    DiagramCurve dCurve = DiagramCurve.Create(crv, DefaultColor, DefaultLineWieght);
+                    DiagramCurve dCurve = DiagramCurve.Create(crv, DefaultColor, DefaultLineWeight);
                     m_Objects.Add(dCurve);
                     break;
                 case Rhino.DocObjects.ObjectType.Surface:
@@ -230,7 +234,7 @@ namespace DiagramLibrary
 
         private void AddBrep(double tolernace, Brep brep)
         {
-            m_Objects.AddRange(DiagramFilledCurve.CreateFromBrep(brep, DefaultColor, true, DefaultColor, DefaultLineWieght));
+            m_Objects.AddRange(DiagramFilledCurve.CreateFromBrep(brep, DefaultColor, DefaultColor, DefaultLineWeight));
         }
 
 
@@ -238,7 +242,7 @@ namespace DiagramLibrary
         public BoundingBox GetGeometryBoundingBox()
         {
             Plane pl = Plane.WorldXY;
-            return new Rectangle3d(pl, m_width, m_height).ToNurbsCurve().GetBoundingBox(false);
+            return new Rectangle3d(pl, m_Width, m_Height).ToNurbsCurve().GetBoundingBox(false);
         }
 
         public Size GetBoundingSize(double scale)
@@ -249,6 +253,14 @@ namespace DiagramLibrary
             return new Size(width, height);
         }
 
+
+        private DiagramFilledRectangle GetBackground() {
+            Plane plane = Plane.WorldXY;
+            plane.Origin = new Point3d(m_Location.X, m_Location.Y, 0);
+            Rectangle3d rec = new Rectangle3d(plane, m_Width, m_Height);
+          return DiagramFilledRectangle.Create(rec, m_BackgroundColour, m_FrameColour, m_FrameLineWeight);
+
+        }
 
         public Bitmap DrawBitmap(double scale) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
         {
@@ -262,8 +274,8 @@ namespace DiagramLibrary
             using (var graphics = Graphics.FromImage(btm))
             {
                 graphics.TranslateTransform(-m_Location.X, -m_Location.Y, System.Drawing.Drawing2D.MatrixOrder.Append);
-                graphics.FillRectangle(Brushes.White, new RectangleF(0, 0, this.m_width, this.m_height));// text displays badly without this, if no background is set
-                m_Background.DrawBitmap(graphics);
+                graphics.FillRectangle(Brushes.White, new RectangleF(0, 0, this.m_Width, this.m_Height));// text displays badly without this, if no background is set
+                GetBackground().DrawBitmap(graphics);
                 foreach (DiagramObject obj in m_Objects)
                 {
                     obj.DrawBitmap(graphics);
@@ -287,15 +299,15 @@ namespace DiagramLibrary
                 xform = Transform.Multiply(xform,Transform.Translation(new Vector3d(-m_Location.X, -m_Location.Y, 0)));
             }
 
-            m_Background.DrawRhinoPreview(pipeline, tolernace, xform, colorOverride);
+            GetBackground().DrawRhinoPreview(pipeline, tolernace, xform, colorOverride);
 
             if (m_Title != null)
             {
-                PointF pt = new PointF(0, this.m_height);
+                PointF pt = new PointF(0, this.m_Height);
                 DiagramText title = m_Title;
 title.Location = pt;
-                if (title.LineWeight < 0) {
-                    title.LineWeight = this.m_width / 20;
+                if (title.TextSize < 0) {
+                    title.TextSize = this.m_Width / 20;
                 }
                   
                 title.DrawRhinoPreview(pipeline, tolernace, xform, colorOverride);

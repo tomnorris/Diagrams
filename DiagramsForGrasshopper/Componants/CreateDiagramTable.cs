@@ -28,19 +28,21 @@ namespace DiagramsForGrasshopper.Componants
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
         pManager.AddTextParameter("Data", "D", "Data as a string DataTree each branch is a row", GH_ParamAccess.tree);
-        pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item, new Point3d(0, 0, 0));
+         //   this.Params.Input[0].ObjectChanged += CreateDiagramTable_ObjectChanged;
+            pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item, new Point3d(0, 0, 0));
         pManager.HideParameter(1);
-        pManager.AddNumberParameter("TextScale", "TS", "Text size", GH_ParamAccess.item, 1);
-        pManager.AddNumberParameter("LineWidth", "LW", "Frames Line widths", GH_ParamAccess.item, 1);
-        pManager.AddNumberParameter("CellWidths", "CW", "List of Widths for each column, first value will be the default width", GH_ParamAccess.list);
-        pManager.AddNumberParameter("CellHeight", "CH", "List of Heights for each Row, first value will be the default height", GH_ParamAccess.list, -1);
-        pManager.AddColourParameter("LineColour", "LClr", "Colour for text and Lines", GH_ParamAccess.item, Color.Black);
+        pManager.AddNumberParameter("TextScale", "TS", "Text size", GH_ParamAccess.item, Diagram.DefaultTextScale);
+        pManager.AddNumberParameter("LineWidth", "LW", "Frames Line widths", GH_ParamAccess.item, Diagram.DefaultLineWeight);
+        pManager.AddNumberParameter("CellWidths", "CW", "List of Widths for each column, first value will be the default width", GH_ParamAccess.list,100);
+        pManager.AddNumberParameter("CellHeight", "CH", "List of Heights for each Row, first value will be the default height", GH_ParamAccess.list,30);
+        pManager.AddColourParameter("LineColour", "LClr", "Colour for text and Lines", GH_ParamAccess.item, Diagram.DefaultColor);
             pManager.AddNumberParameter("Padding", "P", "Text Padding", GH_ParamAccess.item, 3);
             pManager.AddIntegerParameter("Jusitification", "J", "Text justification. Horizontals(Left, Center, Right) only take effect if Width is set, Verticals (Top, Middle, Bottom) only take effect if Height it set. 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right", GH_ParamAccess.item, 0);
             pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, "Arial");
             pManager.AddColourParameter("Background Colour", "BClr", "Back Colour", GH_ParamAccess.item, Color.Transparent);
         }
 
+     
 
         /// <summary>
         /// Registers all the output parameters for this component.
@@ -60,10 +62,10 @@ namespace DiagramsForGrasshopper.Componants
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
-            double lineWeight = 1;
-            double textScale = 1;
-            Color clr = Color.Empty;
-            Color bgClr = Color.Empty;
+            double lineWeight = Diagram.DefaultLineWeight;
+            double textScale = Diagram.DefaultTextScale;
+            Color clr = Diagram.DefaultColor;
+            Color bgClr = Color.Transparent;
 
             Point3d pt = new Point3d(0, 0, 0);
             string font = "Arial";
@@ -156,7 +158,7 @@ namespace DiagramsForGrasshopper.Componants
 
             DiagramTable diagramTable = DiagramTable.Create(data,width,height, (float )textScale, location, clr, (float)lineWeight,font,(float)padding,jusitification);
             SizeF size = diagramTable.GetTotalSize();
-            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, bgClr, location);
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, bgClr,0,Color.Transparent,location);
             diagram.AddDiagramObject( diagramTable );
 
 

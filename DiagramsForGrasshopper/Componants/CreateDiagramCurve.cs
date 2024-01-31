@@ -24,9 +24,10 @@ namespace DiagramsForGrasshopper.Componants
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddCurveParameter("Curve", "Crv", "Height in Pixels", GH_ParamAccess.item);
-            pManager.AddColourParameter("Colour", "Clr", "Height in Pixels", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Weight", "LW", "Height in Pixels", GH_ParamAccess.item);
+            pManager.AddCurveParameter("Curve", "Crv", "The Curve", GH_ParamAccess.item);
+        //    this.Params.Input[0].ObjectChanged += CreateDiagramCurve_ObjectChanged; 
+            pManager.AddColourParameter("Colour", "Clr", "Colour of the Curve", GH_ParamAccess.item, Diagram.DefaultColor);
+            pManager.AddNumberParameter("Weight", "LW", "Line Weigh of the Curve", GH_ParamAccess.item,Diagram.DefaultLineWeight);
 
 
 
@@ -41,8 +42,8 @@ namespace DiagramsForGrasshopper.Componants
         public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
 
-            double weight = 1;
-            Color clr = new Color();
+            double weight = Diagram.DefaultLineWeight;
+            Color clr = Diagram.DefaultColor;
             Curve crv = null;
 
             DA.GetData(0, ref crv);
@@ -61,7 +62,7 @@ namespace DiagramsForGrasshopper.Componants
             DiagramCurve diagramCurve = DiagramCurve.Create(crv,clr, (float)weight);
 
             SizeF size = diagramCurve.GetTotalSize();
-            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, diagramCurve.GetLocation());
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent,0,Color.Transparent, diagramCurve.GetLocation());
             diagram.AddDiagramObject(diagramCurve);
 
 
