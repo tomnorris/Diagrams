@@ -37,7 +37,7 @@ namespace DiagramLibrary
             return diagramImage;
         }
 
-        public DiagramImage Duplicate()
+        public override DiagramObject Duplicate()
         {
             DiagramImage diagramImage = new DiagramImage();
             diagramImage.m_Colour = m_Colour;

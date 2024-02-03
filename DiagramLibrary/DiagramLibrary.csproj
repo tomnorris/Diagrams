@@ -56,8 +56,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\BaseCurveDiagramObject.cs" />
     <Compile Include="Classes\Diagram.cs" />
     <Compile Include="Classes\DiagramCurve.cs" />
+    <Compile Include="Classes\DiagramCurveEnd.cs" />
     <Compile Include="Classes\DiagramFilledRectangle.cs" />
     <Compile Include="Classes\DiagramTable.cs" />
     <Compile Include="Classes\DiagramGoo.cs" />

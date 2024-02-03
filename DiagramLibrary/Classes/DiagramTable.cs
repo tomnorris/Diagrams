@@ -43,7 +43,7 @@ namespace DiagramLibrary
             return diagramTable;
         }
 
-        public DiagramTable Duplicate()
+        public override DiagramObject Duplicate()
         {
             DiagramTable diagramTable = new DiagramTable();
             diagramTable.m_Location = m_Location;

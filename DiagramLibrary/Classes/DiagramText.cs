@@ -70,7 +70,7 @@ namespace DiagramLibrary
             return diagramText;
         }
 
-        public DiagramText Duplicate()
+        public override DiagramObject Duplicate()
         {
             DiagramText diagramText = new DiagramText();
             diagramText.m_Location = m_Location;

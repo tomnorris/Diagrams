@@ -33,7 +33,7 @@ namespace DiagramLibrary
 
         public DiagramObject() { }
 
-       
+   
        
 
         public Pen GetPen() {
@@ -41,7 +41,7 @@ namespace DiagramLibrary
         }
 
 
-        public PointF GetLocation()
+        public virtual PointF GetLocation()
         {
             BoundingBox bbox = this.GetBoundingBox();
             return new PointF((float)(bbox.Min.X), (float)(bbox.Min.Y));
@@ -58,6 +58,8 @@ namespace DiagramLibrary
         public virtual void DrawBitmap(Graphics g) { throw new NotImplementedException(); }
 
         public virtual void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance,Transform xform,bool colorOverride) { throw new NotImplementedException(); }
+
+        public virtual DiagramObject Duplicate() { throw new NotImplementedException();  }
 
     }
 }

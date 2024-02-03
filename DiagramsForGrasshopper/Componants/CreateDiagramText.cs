@@ -27,7 +27,7 @@ namespace DiagramsForGrasshopper.Componants
             pManager.AddTextParameter("Text", "T", "Text as a string", GH_ParamAccess.item);
          //   this.Params.Input[0].ObjectChanged += CreateDiagramText_ObjectChanged;
 
-            pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item,new Point3d(0,0,0));
+            pManager.AddPointParameter("Location", "L", "Location for text", GH_ParamAccess.item, Point3d.Origin);
             pManager.HideParameter(1);
             pManager.AddNumberParameter("TextScale", "TS", "Text size", GH_ParamAccess.item, Diagram.DefaultTextScale);
                     

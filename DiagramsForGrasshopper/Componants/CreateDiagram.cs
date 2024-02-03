@@ -90,7 +90,7 @@ namespace DiagramsForGrasshopper
                 {
                     titleObj.CastTo(out Diagram diagramTitleDiagram);
 
-                    titleDiagram = (diagramTitleDiagram.Objects.Where(x => x.GetType() == typeof(DiagramText)).FirstOrDefault() as DiagramText).Duplicate();
+                    titleDiagram = (diagramTitleDiagram.Objects.Where(x => x.GetType() == typeof(DiagramText)).FirstOrDefault() as DiagramText).Duplicate() as DiagramText;
 
                 }
                 catch (Exception)

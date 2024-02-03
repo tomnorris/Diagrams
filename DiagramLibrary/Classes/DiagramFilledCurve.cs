@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DiagramLibrary
 {
-   public  class DiagramFilledCurve : DiagramObject
+   public  class DiagramFilledCurve : BaseCurveDiagramObject
     {
       
         protected Color m_LineColor;
@@ -79,20 +79,70 @@ namespace DiagramLibrary
 
             return hatches;
         }
-      
-        public DiagramFilledCurve Duplicate()
+
+        public override DiagramObject Duplicate()
         {
             DiagramFilledCurve diagramFilledCurve = new DiagramFilledCurve();
             diagramFilledCurve.m_Colour = m_Colour;
             diagramFilledCurve.m_LineWeight = m_LineWeight;
                      diagramFilledCurve.m_LineColor = m_LineColor;
-            diagramFilledCurve.m_OuterCurves = m_OuterCurves;
-            diagramFilledCurve.m_InnerCurves = m_InnerCurves;
-            
+
+            for (int i = 0; i < m_OuterCurves.Count; i++)
+            {
+                diagramFilledCurve.m_OuterCurves.Add(m_OuterCurves[i].DuplicateDiagramCurve());
+            }
+
+            for (int i = 0; i < m_InnerCurves.Count; i++)
+            {
+                diagramFilledCurve.m_InnerCurves.Add(m_InnerCurves[i].DuplicateDiagramCurve());
+            }
+          
             return diagramFilledCurve;
         }
 
-        
+
+
+        public override BaseCurveDiagramObject SetLocationAndDirectionForDrawing(Point3d basePoint, Vector3d baseDirection, Point3d location, Vector3d rotation)
+        {
+
+            if (baseDirection == Vector3d.Unset)
+            {
+                return null;
+            }
+
+
+            DiagramFilledCurve clone = Duplicate() as DiagramFilledCurve;
+                           
+
+            for (int i = 0; i < clone.m_InnerCurves.Count; i++)
+
+            {
+
+                clone.m_InnerCurves[i].Curve.Translate(new Vector3d(location.X - basePoint.X, location.Y - basePoint.Y, 0));
+                double angle = Vector3d.VectorAngle(baseDirection, rotation, Plane.WorldXY);
+                clone.m_InnerCurves[i].Curve.Rotate(angle, Plane.WorldXY.Normal, location);
+
+            }
+
+
+
+            for (int i = 0; i < clone.m_OuterCurves.Count; i++)
+
+            {
+
+                clone.m_OuterCurves[i].Curve.Translate(new Vector3d(location.X - basePoint.X, location.Y - basePoint.Y, 0));
+                double angle = Vector3d.VectorAngle(baseDirection, rotation, Plane.WorldXY);
+                clone.m_OuterCurves[i].Curve.Rotate(angle, Plane.WorldXY.Normal, location);
+
+            }
+
+
+
+            return clone;
+        }
+
+
+
 
         public Brush GetBrush()
         {
@@ -126,7 +176,7 @@ namespace DiagramLibrary
        
 
 
-        public PointF GetLocation()
+        public override PointF GetLocation()
         {
             BoundingBox bbox = BoundingBox.Empty;
             for (int i = 0; i < this.m_InnerCurves.Count; i++)

@@ -153,5 +153,13 @@ namespace DiagramsForGrasshopper
         }
 
 
+        public override GH_Exposure Exposure
+
+        {
+
+            get { return GH_Exposure.primary; }
+
+        }
+
     }
 }
