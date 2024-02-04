@@ -77,7 +77,10 @@ namespace DiagramLibrary
         public static Diagram Create(int width, int height, DiagramText title, Color backgroundColour, float frameLineWeight, Color frameColour, PointF location)
         {
             Diagram diagram = new Diagram();
-            diagram.m_Width = width;
+
+         
+                diagram.m_Width = width;
+                  
             diagram.m_Height = height;
             diagram.m_Objects = new List<DiagramObject>();
             diagram.m_Title = title;
@@ -245,26 +248,59 @@ namespace DiagramLibrary
 
 
 
-        public BoundingBox GetGeometryBoundingBox()
+        public Rectangle3d GetGeometryBoundingRectangle()
         {
             Plane pl = Plane.WorldXY;
-            return new Rectangle3d(pl, m_Width, m_Height).ToNurbsCurve().GetBoundingBox(false);
+
+            if (m_Width <= 0 || m_Height <= 0)
+            {
+                BoundingBox bb = BoundingBox.Unset;
+                foreach (var item in m_Objects)
+                {
+                    bb.Union(item.GetBoundingBox());
+                }
+
+                double width = m_Width;
+                double height = m_Height;
+
+                if (m_Width <= 0) {
+                    width = bb.Max.X - bb.Min.X;
+                }
+
+                if (height <= 0) {
+                    height = bb.Max.Y - bb.Min.Y;
+                }
+
+
+                return new Rectangle3d(pl, width, height);
+
+
+            }
+            else {
+                return new Rectangle3d(pl, m_Width, m_Height);
+            }
+
+          
+        }
+
+
+        public BoundingBox GetGeometryBoundingBox()
+        {
+            return this.GetGeometryBoundingRectangle().ToNurbsCurve().GetBoundingBox(false);
+                       
         }
 
         public Size GetBoundingSize(double scale)
         {
-            BoundingBox bb = GetGeometryBoundingBox();
-            int width = (int)((bb.Max.X - bb.Min.X) * scale);
-            int height = (int)((bb.Max.Y - bb.Min.Y) * scale);
-            return new Size(width, height);
+            Rectangle3d bb = GetGeometryBoundingRectangle();
+        
+            return new Size((int)Math.Ceiling(bb.Width), (int)Math.Ceiling(bb.Height));
         }
 
 
         private DiagramFilledRectangle GetBackground() {
-            Plane plane = Plane.WorldXY;
-            plane.Origin = new Point3d(m_Location.X, m_Location.Y, 0);
-            Rectangle3d rec = new Rectangle3d(plane, m_Width, m_Height);
-          return DiagramFilledRectangle.Create(rec, m_BackgroundColour, m_FrameColour, m_FrameLineWeight);
+        
+          return DiagramFilledRectangle.Create(this.GetGeometryBoundingRectangle(), m_BackgroundColour, m_FrameColour, m_FrameLineWeight);
 
         }
 
