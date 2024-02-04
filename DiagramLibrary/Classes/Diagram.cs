@@ -101,7 +101,7 @@ namespace DiagramLibrary
                 {
                     var goo = objs[i] as Grasshopper.Kernel.Types.IGH_GeometricGoo;
                     goo.CastTo(out GeometryBase geoBase);
-                    AddRhinoObject(objs[i], tolernace);
+                    AddRhinoObject(component,objs[i], tolernace);
 
 
 
@@ -148,7 +148,7 @@ namespace DiagramLibrary
 
 
 
-        public void AddRhinoObject(object obj, double tolernace)
+        public void AddRhinoObject(Grasshopper.Kernel.GH_Component component, object obj, double tolernace)
         {
             if (obj == null) { return; }
 

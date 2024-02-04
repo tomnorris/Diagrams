@@ -161,7 +161,7 @@ namespace DiagramLibrary
             SizeF totalSize;
 
             //Create a dummy graphics, for the measure text
-            using (var g = Graphics.FromImage(new Bitmap(100, 100)))
+            using (var g = Graphics.FromImage(new Bitmap(10, 10)))
             {
                 SizeF tempSize = GetTotalTextSize(g, out totalSize, out List<string> lines, out List<SizeF> rowSizes);
 
@@ -420,7 +420,8 @@ namespace DiagramLibrary
             List<string> lines;
             List<SizeF> rowSizes;
 
-            using (var g = Graphics.FromImage(pipeline.FrameBuffer))
+            //Create a dummy graphics, for the measure text
+            using (var g = Graphics.FromImage(new Bitmap(10, 10)))
             {
                 actualTotalTextSize = GetTotalTextSize(g,  out maskSize, out lines, out rowSizes);
 

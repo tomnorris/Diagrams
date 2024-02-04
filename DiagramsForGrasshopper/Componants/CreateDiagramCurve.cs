@@ -66,7 +66,7 @@ namespace DiagramsForGrasshopper.Componants
             }
 
            
-
+             
 
 
             DiagramCurve diagramCurve = DiagramCurve.Create(crv,clr, (float)weight);
