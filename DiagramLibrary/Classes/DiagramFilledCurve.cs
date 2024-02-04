@@ -209,16 +209,7 @@ namespace DiagramLibrary
 
         public override PointF GetLocation()
         {
-            BoundingBox bbox = BoundingBox.Empty;
-            for (int i = 0; i < this.m_InnerCurves.Count; i++)
-            {
-                bbox.Union(this.m_InnerCurves[i].GetBoundingBox());
-            }
-
-            for (int i = 0; i < this.m_OuterCurves.Count; i++)
-            {
-                bbox.Union(this.m_OuterCurves[i].GetBoundingBox());
-            }
+            BoundingBox bbox = GetBoundingBox();
             return new PointF((float)(bbox.Min.X), (float)(bbox.Min.Y));
         }
 

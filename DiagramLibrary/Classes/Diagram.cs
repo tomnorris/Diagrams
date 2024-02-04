@@ -299,8 +299,11 @@ namespace DiagramLibrary
 
 
         private DiagramFilledRectangle GetBackground() {
-        
-          return DiagramFilledRectangle.Create(this.GetGeometryBoundingRectangle(), m_BackgroundColour, m_FrameColour, m_FrameLineWeight);
+
+            Rectangle3d bbr = this.GetGeometryBoundingRectangle();
+            bbr.Transform(Transform.Translation(m_Location.X,m_Location.Y,0));
+
+          return DiagramFilledRectangle.Create(bbr, m_BackgroundColour, m_FrameColour, m_FrameLineWeight);
 
         }
 
@@ -338,7 +341,10 @@ namespace DiagramLibrary
         public void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolernace, Transform xform, bool colorOverride)
         {
             if (m_Location != PointF.Empty) {
-                xform = Transform.Multiply(xform,Transform.Translation(new Vector3d(-m_Location.X, -m_Location.Y, 0)));
+               
+
+                    xform = Transform.Multiply(xform, Transform.Translation(new Vector3d(-m_Location.X, -m_Location.Y, 0)));
+                
             }
 
             GetBackground().DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride);
