@@ -53,13 +53,13 @@ namespace DiagramLibrary
             return new SizeF((float)(bbox.Max.X - bbox.Min.X), (float)(bbox.Max.Y - bbox.Min.Y));
         }
 
-        public virtual BoundingBox GetBoundingBox() {throw new NotImplementedException();}
-        
-        public virtual void DrawBitmap(Graphics g) { throw new NotImplementedException(); }
+        public abstract BoundingBox GetBoundingBox();
 
-        public virtual void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance,Transform xform,bool colorOverride) { throw new NotImplementedException(); }
+        public abstract void DrawBitmap(Graphics g);
 
-        public virtual DiagramObject Duplicate() { throw new NotImplementedException();  }
+        public abstract void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride);
+
+        public abstract DiagramObject Duplicate();
 
     }
 }
