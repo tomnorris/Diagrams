@@ -244,10 +244,14 @@ namespace DiagramLibrary
             }
 
             foreach (DiagramCurve crv in m_InnerCurves)
+
             {
+                System.Drawing.Drawing2D.GraphicsPath holdPath = new System.Drawing.Drawing2D.GraphicsPath();
                 PointF[] pts = crv.GetPoints();
 
-                path.AddLines(pts);
+                holdPath.AddLines(pts);
+
+                path.AddPath(holdPath, false);
             }
 
 
