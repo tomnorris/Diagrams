@@ -50,6 +50,26 @@ namespace DiagramLibrary
 
 
 
+
+        public static DiagramText Create(string Text, PointF Location,float textSize)
+        {
+            DiagramText diagramText = new DiagramText();
+            diagramText.m_Colour = Diagram.DefaultColor;
+            diagramText.m_TextSize = textSize;
+            diagramText.m_Text = Text;
+            diagramText.m_Location = Location;
+            diagramText.m_Anchor = TextJustification.BottomLeft;
+            diagramText.m_Mask = DiagramFilledRectangle.Create(new Rectangle3d(Plane.WorldXY, 1, 1), Color.Transparent, Diagram.DefaultColor, 0);//Size is updated at drawtime
+
+            diagramText.m_FontName = "Arial";
+
+            diagramText.m_WrapSize = new Size(-1,-1);
+            diagramText.m_Padding = 3f;
+            diagramText.m_Justification = TextJustification.BottomLeft;
+            return diagramText;
+        }
+
+
         public static DiagramText Create(string Text, PointF Location, Color Colour, float textSize,
             TextJustification anchor, Color maskColour, Color frameColor,float frameLineWeight, 
             string fontName, SizeF wrapSize, float padding, TextJustification justification)

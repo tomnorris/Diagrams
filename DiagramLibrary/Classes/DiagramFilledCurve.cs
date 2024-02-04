@@ -45,7 +45,25 @@ namespace DiagramLibrary
         }
 
 
-        
+
+        public static DiagramFilledCurve Create(Curve curve, Color Colour, Color LineColour, float LineWeight)
+        {
+
+            DiagramFilledCurve diagramFilledCurve = new DiagramFilledCurve();
+            diagramFilledCurve.m_Colour = Colour;
+            diagramFilledCurve.m_LineWeight = LineWeight;
+
+            diagramFilledCurve.m_LineColor = LineColour;
+
+         
+                diagramFilledCurve.m_OuterCurves.Add(DiagramCurve.Create(curve, LineColour, LineWeight));
+
+            return diagramFilledCurve;
+        }
+
+
+
+
         public static DiagramFilledCurve Create(Curve[] OuterCurves, Curve[] InnerCurves, Color Colour, Color LineColour, float LineWeight)
         {
 
