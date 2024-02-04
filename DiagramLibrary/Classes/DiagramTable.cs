@@ -170,7 +170,7 @@ namespace DiagramLibrary
         }
 
 
-        public override void DrawBitmap(Graphics g)
+        public override void DrawBitmap(Grasshopper.Kernel.GH_Component component, Graphics g)
         {
 
 
@@ -183,7 +183,7 @@ namespace DiagramLibrary
             for (int i = 0; i < recs.Length; i++)
             {
                 var crv = DiagramCurve.Create(recs[i].ToNurbsCurve(), m_Colour, m_LineWeight);
-                crv.DrawBitmap(g);
+                crv.DrawBitmap(component,g);
             }
 
 
@@ -195,7 +195,7 @@ namespace DiagramLibrary
                 for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
                 {
                     var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, new PointF((float)recs[currentIndex].Plane.Origin.X, (float)recs[currentIndex].Plane.Origin.Y), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent,-1,  m_FontName, sizes[currentIndex], m_Padding, m_Justification);
-                    txt.DrawBitmap(g);
+                    txt.DrawBitmap(component,g);
                     currentIndex++;
                 }
 
@@ -206,7 +206,7 @@ namespace DiagramLibrary
 
 
 
-        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride)
+        public override void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride)
         {
 
 
@@ -219,7 +219,7 @@ namespace DiagramLibrary
             for (int i = 0; i < recs.Length; i++)
             {
                 var crv = DiagramCurve.Create(recs[i].ToNurbsCurve(), m_Colour, m_LineWeight);
-                crv.DrawRhinoPreview(pipeline, tolerance, xform, colorOverride);
+                crv.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride);
             }
 
 
@@ -231,7 +231,7 @@ namespace DiagramLibrary
                 for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
                 {
                     var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, new PointF((float)recs[currentIndex].Plane.Origin.X, (float)recs[currentIndex].Plane.Origin.Y), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
-                    txt.DrawRhinoPreview(pipeline, tolerance, xform, colorOverride);
+                    txt.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride);
                     currentIndex++;
                 }
 

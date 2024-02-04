@@ -90,7 +90,7 @@ namespace DiagramLibrary
             return diagram;
         }
 
-        public void AddObjects(List<object> objs, double tolernace)
+        public void AddObjects(Grasshopper.Kernel.GH_Component component, List<object> objs, double tolernace)
         {
             for (int i = 0; i < objs.Count; i++)
             {
@@ -108,7 +108,7 @@ namespace DiagramLibrary
                 }
                 catch (Exception)
                 {
-                    AddDiagramObjectFromGoo(objs[i]);
+                    AddDiagramObjectFromGoo(component,objs[i]);
 
                 }
 
@@ -126,9 +126,15 @@ namespace DiagramLibrary
         }
 
 
-        public void AddDiagramObjectFromGoo(object obj)
+        public void AddDiagramObjectFromGoo(Grasshopper.Kernel.GH_Component component, object obj)
         {
+            if (obj == null) {
+                component.AddRuntimeMessage(Grasshopper.Kernel.GH_RuntimeMessageLevel.Warning, "Cannont add null object to diagram");
+                return;
+            }
+
             var goo = obj as Grasshopper.Kernel.Types.IGH_Goo;
+
 
             goo.CastTo(out Diagram diagram);
             if (diagram == null) { return;  }
@@ -262,7 +268,7 @@ namespace DiagramLibrary
 
         }
 
-        public Bitmap DrawBitmap(double scale) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
+        public Bitmap DrawBitmap(Grasshopper.Kernel.GH_Component component, double scale) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
         {
             //TODO DrawBitmap needs to pass on the scale and draw accordingly
             Size sz = GetBoundingSize(scale);
@@ -275,10 +281,10 @@ namespace DiagramLibrary
             {
                 graphics.TranslateTransform(-m_Location.X, -m_Location.Y, System.Drawing.Drawing2D.MatrixOrder.Append);
                 graphics.FillRectangle(Brushes.White, new RectangleF(0, 0, this.m_Width, this.m_Height));// text displays badly without this, if no background is set
-                GetBackground().DrawBitmap(graphics);
+                GetBackground().DrawBitmap(component,graphics);
                 foreach (DiagramObject obj in m_Objects)
                 {
-                    obj.DrawBitmap(graphics);
+                    obj.DrawBitmap(component,graphics);
 
                 }
 
@@ -293,13 +299,13 @@ namespace DiagramLibrary
         }
 
 
-        public void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolernace, Transform xform, bool colorOverride)
+        public void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolernace, Transform xform, bool colorOverride)
         {
             if (m_Location != PointF.Empty) {
                 xform = Transform.Multiply(xform,Transform.Translation(new Vector3d(-m_Location.X, -m_Location.Y, 0)));
             }
 
-            GetBackground().DrawRhinoPreview(pipeline, tolernace, xform, colorOverride);
+            GetBackground().DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride);
 
             if (m_Title != null)
             {
@@ -310,12 +316,12 @@ title.Location = pt;
                     title.TextSize = this.m_Width / 20;
                 }
                   
-                title.DrawRhinoPreview(pipeline, tolernace, xform, colorOverride);
+                title.DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride);
             }
 
             foreach (DiagramObject obj in m_Objects)
             {
-                obj.DrawRhinoPreview(pipeline, tolernace, xform, colorOverride);
+                obj.DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride);
 
             }
 

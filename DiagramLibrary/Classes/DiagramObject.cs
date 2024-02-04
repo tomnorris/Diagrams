@@ -18,7 +18,7 @@ namespace DiagramLibrary
     
 
 
-        public Color Colour { 
+        public virtual Color Colour { 
             get { return m_Colour; }
             set { m_Colour = value;  }
         }
@@ -55,9 +55,9 @@ namespace DiagramLibrary
 
         public abstract BoundingBox GetBoundingBox();
 
-        public abstract void DrawBitmap(Graphics g);
+        public abstract void DrawBitmap(Grasshopper.Kernel.GH_Component component,Graphics g);
 
-        public abstract void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride);
+        public abstract void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component,Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride);
 
         public abstract DiagramObject Duplicate();
 

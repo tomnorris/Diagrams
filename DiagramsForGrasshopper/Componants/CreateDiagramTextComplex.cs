@@ -88,7 +88,7 @@ namespace DiagramsForGrasshopper.Componants
 
             if (text == "")
             {
-                AddUsefulMessage(DA, "Text cannot be Empty");
+                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error,"Text cannot be Empty");
                 return null;
             }
 

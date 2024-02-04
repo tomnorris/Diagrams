@@ -54,7 +54,7 @@ namespace DiagramLibrary
         }
 
 
-        public override void DrawBitmap(Graphics g)
+        public override void DrawBitmap(Grasshopper.Kernel.GH_Component component, Graphics g)
         {
 
            // Drawn Upside Down as final image is flipped
@@ -65,7 +65,7 @@ namespace DiagramLibrary
 
        
 
-        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xfrom, bool colorOverride)
+        public override void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xfrom, bool colorOverride)
         {
 
             Rectangle3d rec = new Rectangle3d(Plane.WorldXY, new Interval(m_Location.X, m_Location.X + m_Size.Width), new Interval(m_Location.Y, m_Location.Y + m_Size.Height));

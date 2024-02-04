@@ -20,7 +20,9 @@ namespace DiagramLibrary
 
         protected double m_hatchScale = 1;
 
-               
+        protected Rhino.Display.DisplayMaterial m_CachedMaterial = null;
+        protected Rhino.Display.DisplayMaterial m_CachedSelectedMaterial = null;
+
         protected List<DiagramCurve> m_InnerCurves =  new List<DiagramCurve>();
         protected List<DiagramCurve> m_OuterCurves = new List<DiagramCurve>();
 
@@ -29,6 +31,17 @@ namespace DiagramLibrary
         public Color BackColour
         {
             get { return m_BackColour; }
+            set { m_BackColour = value;
+                m_CachedMaterial = null;
+            }
+        }
+
+        public override Color Colour
+        {
+            get { return m_BackColour; }
+    set { m_BackColour = value;
+                m_CachedMaterial = null;
+            }
         }
 
 
@@ -193,7 +206,7 @@ namespace DiagramLibrary
 
 
 
-        public override void DrawBitmap(Graphics g)
+        public override void DrawBitmap( Grasshopper.Kernel.GH_Component component, Graphics g)
 
         {
 
@@ -235,20 +248,38 @@ namespace DiagramLibrary
         }
 
 
-        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride)
+        public override void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride)
         {
 
             Color clr = Diagram.SelectedColor;
-            bool drawLines = m_LineWeight > 0;
+            Rhino.Display.DisplayMaterial material = null;
+          bool drawLines = m_LineWeight > 0;
             if (colorOverride == false)
             {
                 clr = m_Colour;
-               
+
+                if (m_CachedMaterial == null)
+                {
+                    m_CachedMaterial = new Rhino.Display.DisplayMaterial(clr, 1.0 - (clr.A / 255));
+                }
+
+                material = m_CachedMaterial;
+              
+
+
             }
             else {
                 drawLines = true;
+
+                if (m_CachedSelectedMaterial == null)
+                {
+                    m_CachedSelectedMaterial = new Rhino.Display.DisplayMaterial(clr, 1.0 - (clr.A / 255));
+                }
+                material = m_CachedSelectedMaterial;
             }
 
+
+            
 
             List<DiagramCurve> dcrvs = new List<DiagramCurve>();
             dcrvs.AddRange(m_OuterCurves);
@@ -265,7 +296,8 @@ namespace DiagramLibrary
                 // var texture = new Rhino.DocObjects.Texture();
                 // texture.TextureType = Rhino.DocObjects.TextureType.Bitmap;
 
-                var material = new Rhino.Display.DisplayMaterial(clr, 1.0 - (clr.A / 255));
+
+            
 
                 // material.SetBitmapTexture(texture)
 
@@ -289,11 +321,11 @@ namespace DiagramLibrary
             if (drawLines) {
                 foreach (var item in m_OuterCurves)
                 {
-                    item.DrawRhinoPreview(pipeline, tolerance,xform, colorOverride);
+                    item.DrawRhinoPreview( component,pipeline, tolerance,xform, colorOverride);
                 }
                 foreach (var item in m_InnerCurves)
                 {
-                    item.DrawRhinoPreview(pipeline, tolerance,xform, colorOverride);
+                    item.DrawRhinoPreview( component,pipeline, tolerance,xform, colorOverride);
                 }
 
             }

@@ -47,7 +47,7 @@ namespace DiagramLibrary
 
     
 
-        public void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride,Point3d location, Vector3d rotation)
+        public void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component,Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride,Point3d location, Vector3d rotation)
 
         {
 
@@ -59,15 +59,15 @@ namespace DiagramLibrary
             var positionedObject = m_Object.SetLocationAndDirectionForDrawing(m_BasePoint, flipCorrectedDirection, location, rotation);
             if (positionedObject != null)
             {
-                positionedObject.DrawRhinoPreview(pipeline,  tolerance,  transform,  colorOverride);
+                positionedObject.DrawRhinoPreview( component,pipeline,  tolerance,  transform,  colorOverride);
             }
         }
 
 
-        public void DrawBitmap(Graphics g, Point3d location, Vector3d rotation) {
+        public void DrawBitmap(Grasshopper.Kernel.GH_Component component,Graphics g, Point3d location, Vector3d rotation) {
             var positionedObject = m_Object.SetLocationAndDirectionForDrawing(m_BasePoint, m_BaseDirection,location, rotation);
             if (positionedObject != null) {
-                positionedObject.DrawBitmap(g);
+                positionedObject.DrawBitmap( component,g);
             }
         }
 

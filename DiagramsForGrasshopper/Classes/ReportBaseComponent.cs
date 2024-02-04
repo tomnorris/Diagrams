@@ -7,35 +7,29 @@ namespace DiagramsForGrasshopper
 {
     public abstract class ReportBaseComponent : GH_Component
     {
-       public ReportBaseComponent(string a, string b, string c, string d, string e)
-          : base(a,b,c,d,e) // pass through the GH_Comp
+
+
+        public ReportBaseComponent(string a, string b, string c, string d, string e)
+           : base(a, b, c, d, e) // pass through the GH_Comp
         {
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddTextParameter("Report", "R", "A report from this componant", GH_ParamAccess.list);
-        
+
         }
 
-
-
-
-        public void AddUsefulMessage(IGH_DataAccess DA, string message, GH_RuntimeMessageLevel level = GH_RuntimeMessageLevel.Error)
+        protected override void SolveInstance(IGH_DataAccess DA)
         {
-           
+            this.ClearRuntimeMessages();
+            DiagramCompnentSolveInstance(DA);
 
-            try
-            {
-
-                DA.SetDataList(0, new List<string> { message });
-            }
-            catch (Exception ex)
-            {
-                // not all component have the report 
-            }
-
-            this.AddRuntimeMessage(level, message);
+            DA.SetData(0, this.RuntimeMessages(GH_RuntimeMessageLevel.Blank | GH_RuntimeMessageLevel.Error | GH_RuntimeMessageLevel.Remark | GH_RuntimeMessageLevel.Warning));
         }
+
+        public virtual  void DiagramCompnentSolveInstance(IGH_DataAccess DA) { }
+
+        
     }
 }

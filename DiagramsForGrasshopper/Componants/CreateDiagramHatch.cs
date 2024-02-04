@@ -53,7 +53,7 @@ namespace DiagramsForGrasshopper.Componants
 
 
             if (brep == null) {
-                AddUsefulMessage(DA, "Brep cannot be Null");
+                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Brep cannot be Null");
                 return null;
             }
 

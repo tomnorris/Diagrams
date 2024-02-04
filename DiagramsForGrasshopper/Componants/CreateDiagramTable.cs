@@ -80,7 +80,7 @@ namespace DiagramsForGrasshopper.Componants
             GH_Structure<GH_String> data;
             if (!DA.GetDataTree(0, out data))
             {
-                AddUsefulMessage(DA, "data cannot be Empty");
+                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "data cannot be Empty");
                 return null;
             }
          
@@ -105,12 +105,12 @@ namespace DiagramsForGrasshopper.Componants
 
             if (width.Count == 0)
             {
-                AddUsefulMessage(DA, "Cell Widths need at least on value");
+                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cell Widths need at least on value");
                 return null;
             }
             if (height.Count == 0)
             {
-                AddUsefulMessage(DA, "Cell Heights need at least on value");
+                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cell Heights need at least on value");
                 return null;
             }
 

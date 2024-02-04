@@ -126,7 +126,7 @@ namespace DiagramsForGrasshopper
 
                     if (canvasDiagram.Update || canvasDiagram.Bitmap == null)
                     {
-                        canvasDiagram.Bitmap = diagram.DrawBitmap(canvasDiagram.Scale);
+                        canvasDiagram.Bitmap = diagram.DrawBitmap(canvasDiagram, canvasDiagram.Scale);
                         canvasDiagram.Update = false;
                     }
                     

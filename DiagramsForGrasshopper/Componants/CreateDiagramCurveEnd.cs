@@ -64,7 +64,7 @@ namespace DiagramsForGrasshopper
 
             if (crv == null)
             {
-                AddUsefulMessage(DA, "Curve cannot be Null");
+                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error,"Curve cannot be Null");
                 return null;
             }
 

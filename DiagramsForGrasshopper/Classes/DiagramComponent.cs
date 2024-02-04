@@ -14,7 +14,7 @@ namespace DiagramsForGrasshopper
 
         protected bool m_VersionChecked = false;
         protected Transform m_Xform = Transform.ZeroTransformation;
-      //  protected DiagramLibrary.Diagram m_Diagram = null;
+   
 
         public DiagramComponent(string a, string b, string c, string d, string e)
            : base(a, b, c, d, e) // pass through the GH_Comp
@@ -31,13 +31,13 @@ namespace DiagramsForGrasshopper
 
 
 
-        protected override void SolveInstance(IGH_DataAccess DA)
+
+        public override void DiagramCompnentSolveInstance(IGH_DataAccess DA)
         {
-         //   m_Diagram = null;
+     
             m_Xform = Transform.ZeroTransformation;
             this.CheckLibraryVersion(DA);
-
-
+            
             Diagram diagram = DiagramSolveInstance(DA);
 
 
@@ -45,7 +45,7 @@ namespace DiagramsForGrasshopper
             DA.SetData(1, diagram);
         }
 
-        public virtual DiagramLibrary.Diagram DiagramSolveInstance(IGH_DataAccess DA) { return null; }
+        public abstract DiagramLibrary.Diagram DiagramSolveInstance(IGH_DataAccess DA);
 
 
 
@@ -109,7 +109,7 @@ namespace DiagramsForGrasshopper
 
                             if (diagram == null) { continue; }
                                                        
-                            diagram.DrawRhinoPreview(args.Display, GH_Component.DocumentTolerance(), m_Xform, this.m_attributes.Selected);
+                            diagram.DrawRhinoPreview(this, args.Display, GH_Component.DocumentTolerance(), m_Xform, this.m_attributes.Selected);
                         }
                     }
 
@@ -146,10 +146,10 @@ namespace DiagramsForGrasshopper
                         break;
 
                     case VersionComparision.LibraryVersionIsNewer:
-                        this.AddUsefulMessage(DA, "ERROR01: The Diagrams Library (.dll) currently loaded in grasshopper is newer than the library this component was built against therefore results might be unpredicatble, error prone and newer features will be ignored. Check for an update on Food for Rhino or the Package Manager. Library Version: " + libraryVersion + ", Componant was Built Against Version:" + componantLibraryVersion, GH_RuntimeMessageLevel.Warning);
+                        this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning,"ERROR01: The Diagrams Library (.dll) currently loaded in grasshopper is newer than the library this component was built against therefore results might be unpredicatble, error prone and newer features will be ignored. Check for an update on Food for Rhino or the Package Manager. Library Version: " + libraryVersion + ", Componant was Built Against Version:" + componantLibraryVersion);
                         break;
                     case VersionComparision.ComponantVersionIsNewer:
-                        this.AddUsefulMessage(DA, "ERROR02: This Component was built against a newer version of the Diagrams Library (.dll) than the one currently loaded in grasshopper therefore results might be unpredicatble, error prone and newer features will be ignored. Check for an update on Food for Rhino or the Package Manager for any packages that create diagrams. Library Version: " + libraryVersion + ", Componant was Built Against Version:" + componantLibraryVersion, GH_RuntimeMessageLevel.Warning);
+                        this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning,"ERROR02: This Component was built against a newer version of the Diagrams Library (.dll) than the one currently loaded in grasshopper therefore results might be unpredicatble, error prone and newer features will be ignored. Check for an update on Food for Rhino or the Package Manager for any packages that create diagrams. Library Version: " + libraryVersion + ", Componant was Built Against Version:" + componantLibraryVersion);
                         break;
                 }
 

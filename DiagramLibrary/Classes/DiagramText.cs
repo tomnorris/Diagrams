@@ -316,7 +316,7 @@ namespace DiagramLibrary
         }
 
 
-        public override void DrawBitmap(Graphics g)
+        public override void DrawBitmap(Grasshopper.Kernel.GH_Component component, Graphics g)
         {
 
             var font = new System.Drawing.Font(m_FontName, m_TextSize);
@@ -329,7 +329,7 @@ namespace DiagramLibrary
             if (maskEnabled)
             {
                 m_Mask.UpdateRectangle(anchorCompensatedPoint, maskSize);
-                m_Mask.DrawBitmap(g);
+                m_Mask.DrawBitmap(component,g);
             }
 
             int lineSpacing = font.FontFamily.GetLineSpacing(FontStyle.Regular);
@@ -398,7 +398,7 @@ namespace DiagramLibrary
 
 
 
-        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform,bool colorOverride)
+        public override void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform,bool colorOverride)
         {
 
 
@@ -455,7 +455,7 @@ namespace DiagramLibrary
             {
 
                 m_Mask.UpdateRectangle(anchorCompensatedPoint, maskSize);
-                m_Mask.DrawRhinoPreview(pipeline, tolerance, xform, colorOverride);
+                m_Mask.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride);
             }
 
             for (int i =  0; i < lines.Count; i++)

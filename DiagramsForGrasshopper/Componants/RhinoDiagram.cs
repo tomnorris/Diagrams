@@ -53,7 +53,7 @@ namespace DiagramsForGrasshopper
                        
             if (diagram == null)
             {
-                AddUsefulMessage(DA, "Diagram cannot be null");
+                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error,"Diagram cannot be null");
                 return null;
             }
 

@@ -81,30 +81,30 @@ namespace DiagramsForGrasshopper
 
 
             DiagramText titleDiagram = null;
-            if (titleObj.GetType() == typeof(Grasshopper.Kernel.Types.GH_String)) {
-                titleObj.CastTo(out string diagramTitleString);
-                titleDiagram = DiagramText.Create(diagramTitleString, PointF.Empty, Diagram.DefaultColor, -1f, TextJustification.BottomLeft, Color.Transparent, Diagram.DefaultColor, 0, "Arial", new SizeF(-1, -1), 3, TextJustification.BottomLeft);
-
-            } else {
-                try
+            if (titleObj != null)
+            {
+                if (titleObj.GetType() == typeof(Grasshopper.Kernel.Types.GH_String))
                 {
-                    titleObj.CastTo(out Diagram diagramTitleDiagram);
-
-                    titleDiagram = (diagramTitleDiagram.Objects.Where(x => x.GetType() == typeof(DiagramText)).FirstOrDefault() as DiagramText).Duplicate() as DiagramText;
+                    titleObj.CastTo(out string diagramTitleString);
+                    titleDiagram = DiagramText.Create(diagramTitleString, PointF.Empty, Diagram.DefaultColor, -1f, TextJustification.BottomLeft, Color.Transparent, Diagram.DefaultColor, 0, "Arial", new SizeF(-1, -1), 3, TextJustification.BottomLeft);
 
                 }
-                catch (Exception)
+                else
                 {
+                    try
+                    {
+                        titleObj.CastTo(out Diagram diagramTitleDiagram);
 
-                 
+                        titleDiagram = (diagramTitleDiagram.Objects.Where(x => x.GetType() == typeof(DiagramText)).FirstOrDefault() as DiagramText).Duplicate() as DiagramText;
+
+                    }
+                    catch (Exception)
+                    {
+
+
+                    }
+                    
                 }
-                   
-
-
-
-                
-
-
             }
 
 
@@ -115,7 +115,7 @@ namespace DiagramsForGrasshopper
 
 
             Diagram diagram = Diagram.Create(width, height, titleDiagram, clr, (float)frameLineWeight, fclr);
-            diagram.AddObjects(objs, GH_Component.DocumentTolerance());
+            diagram.AddObjects(this,objs, GH_Component.DocumentTolerance());
 
 
 

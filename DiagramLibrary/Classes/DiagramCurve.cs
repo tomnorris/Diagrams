@@ -123,20 +123,20 @@ namespace DiagramLibrary
 
 
 
-        public override void DrawBitmap(Graphics g)
+        public override void DrawBitmap( Grasshopper.Kernel.GH_Component component,Graphics g)
         {
 
             if (m_StartCurveEnd != null)
 
             {
-                m_StartCurveEnd.DrawBitmap(g,m_Curve.PointAtStart, m_Curve.TangentAtStart);
+                m_StartCurveEnd.DrawBitmap( component,g,m_Curve.PointAtStart, m_Curve.TangentAtStart);
         }
 
 
 
             if (m_EndCurveEnd != null)
             {
-                m_EndCurveEnd.DrawBitmap(g,m_Curve.PointAtEnd, m_Curve.TangentAtEnd);
+                m_EndCurveEnd.DrawBitmap( component,g,m_Curve.PointAtEnd, m_Curve.TangentAtEnd);
   
         }
 
@@ -154,7 +154,7 @@ namespace DiagramLibrary
             
         }
 
-        public override void DrawRhinoPreview(Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride )
+        public override void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component,Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride )
         {
             Color clr = Diagram.SelectedColor;
             if (colorOverride == false)
@@ -166,13 +166,13 @@ namespace DiagramLibrary
             if (m_StartCurveEnd != null)
 
             {
-                m_StartCurveEnd.DrawRhinoPreview(pipeline,  tolerance,  transform,  colorOverride, m_Curve.PointAtStart, m_Curve.TangentAtStart);
+                m_StartCurveEnd.DrawRhinoPreview( component,pipeline,  tolerance,  transform,  colorOverride, m_Curve.PointAtStart, m_Curve.TangentAtStart);
             }
 
 
             if (m_EndCurveEnd != null)
             {
-                m_EndCurveEnd.DrawRhinoPreview( pipeline,  tolerance,  transform,  colorOverride, m_Curve.PointAtEnd, m_Curve.TangentAtEnd);
+                m_EndCurveEnd.DrawRhinoPreview( component, pipeline,  tolerance,  transform,  colorOverride, m_Curve.PointAtEnd, m_Curve.TangentAtEnd);
 
 
 
