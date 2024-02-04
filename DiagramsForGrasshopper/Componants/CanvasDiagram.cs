@@ -157,7 +157,7 @@ namespace DiagramsForGrasshopper
 
         {
 
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
 
         }
 
