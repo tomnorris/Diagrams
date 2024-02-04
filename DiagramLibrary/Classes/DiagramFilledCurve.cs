@@ -38,8 +38,9 @@ namespace DiagramLibrary
 
         public override Color Colour
         {
-            get { return m_BackColour; }
-    set { m_BackColour = value;
+            get { return m_Colour; }
+    set {
+                m_Colour = value;
                 m_CachedMaterial = null;
             }
         }

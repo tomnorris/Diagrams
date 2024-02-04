@@ -68,6 +68,7 @@
     <Compile Include="Componants\CreateDiagramTextComplex.cs" />
     <Compile Include="Componants\CreateDiagramCurve.cs" />
     <Compile Include="Componants\CreateDiagramCurveEnd.cs" />
+    <Compile Include="Componants\CreateDiagramDimention.cs" />
     <Compile Include="Componants\RhinoDiagram.cs" />
     <Compile Include="DiagramsForGrasshopperInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

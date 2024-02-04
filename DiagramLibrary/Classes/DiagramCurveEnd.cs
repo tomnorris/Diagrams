@@ -20,7 +20,7 @@ namespace DiagramLibrary
         private Vector3d m_BaseDirection = Vector3d.Unset;
         private bool m_Flipped = false;
 
-        public DiagramCurveEnd Dupliacte() {
+        public DiagramCurveEnd DuplicateCurveEnd() {
 
             return Duplicate() as DiagramCurveEnd;
         }
@@ -73,7 +73,21 @@ namespace DiagramLibrary
 
 
 
+        public static DiagramCurveEnd DefaultDimentionCurveEnd(double scale,Color color, float lineWieght)
+        {
+           
+                List<Curve> crvs = new List<Curve>();
+                crvs.Add(new Line(Point3d.Origin, Vector3d.YAxis, 10* scale).ToNurbsCurve());
+              crvs.Add(new Line(Point3d.Origin, Vector3d.XAxis, 5* scale).ToNurbsCurve());
+                crvs.Add(new Line(Point3d.Origin, Vector3d.XAxis, -5* scale).ToNurbsCurve());
+                crvs.Add(new Line(Point3d.Origin, new Vector3d(1,1,0), 5* scale).ToNurbsCurve());
+                crvs.Add(new Line(Point3d.Origin, new Vector3d(1, 1, 0), -5* scale).ToNurbsCurve());
 
+                DiagramCurveCollection crvCollection = DiagramCurveCollection.Create(crvs, color, lineWieght);
+                DiagramCurveEnd curveEnd = new DiagramCurveEnd(crvCollection, Point3d.Origin, Vector3d.YAxis, false);
+                return curveEnd;
+          
+        }
 
 
 

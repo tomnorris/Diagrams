@@ -95,7 +95,15 @@ namespace DiagramsForGrasshopper.Componants
 
                 }
 
-                CurveEndObj.CastTo(out Diagram CurveEndEndDiagram);
+            }
+            catch (Exception)
+            {
+
+
+            }
+
+            try { 
+            CurveEndObj.CastTo(out Diagram CurveEndEndDiagram);
 
                 for (int i = 0; i < CurveEndEndDiagram.Objects.Count; i++)
                 {
@@ -106,9 +114,9 @@ namespace DiagramsForGrasshopper.Componants
                         break;
                     }
 
-                    if (CurveEndStartDiagram.Objects[i] is DiagramCurveEnd)
+                    if (CurveEndEndDiagram.Objects[i] is DiagramCurveEnd)
                     {
-                        diagramCurve.AddCurveEnds(null,CurveEndStartDiagram.Objects[i] as DiagramCurveEnd);
+                        diagramCurve.AddCurveEnds(null, CurveEndEndDiagram.Objects[i] as DiagramCurveEnd);
                         break;
                     }
 

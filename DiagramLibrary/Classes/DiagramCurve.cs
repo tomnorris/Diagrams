@@ -10,9 +10,9 @@ namespace DiagramLibrary
 {
     public class DiagramCurve: BaseCurveDiagramObject
     {
-        private Curve m_Curve;
-        private DiagramCurveEnd m_StartCurveEnd = null;
-        private DiagramCurveEnd m_EndCurveEnd = null;
+        protected Curve m_Curve;
+        protected DiagramCurveEnd m_StartCurveEnd = null;
+        protected DiagramCurveEnd m_EndCurveEnd = null;
 
 
 
@@ -45,13 +45,13 @@ namespace DiagramLibrary
             diagramCurve.m_LineWeight = m_LineWeight;
             diagramCurve.m_Curve = m_Curve.DuplicateCurve();
             if (m_StartCurveEnd != null) {
-                diagramCurve.m_StartCurveEnd = m_StartCurveEnd.Dupliacte();
+                diagramCurve.m_StartCurveEnd = m_StartCurveEnd.DuplicateCurveEnd();
 
             }
 
             if (m_EndCurveEnd != null)
             {
-                diagramCurve.m_EndCurveEnd = m_EndCurveEnd.Dupliacte();
+                diagramCurve.m_EndCurveEnd = m_EndCurveEnd.DuplicateCurveEnd();
             }
         
 
