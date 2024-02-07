@@ -57,9 +57,11 @@ namespace DiagramLibrary
 
         public abstract void DrawBitmap(Grasshopper.Kernel.GH_Component component,Graphics g);
 
-        public abstract void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component,Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride);
+        public abstract void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component,Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride, Rhino.RhinoDoc doc, bool Bake);
 
         public abstract DiagramObject Duplicate();
+
+      
 
     }
 }

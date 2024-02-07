@@ -112,11 +112,11 @@ namespace DiagramLibrary
 
 
 
-        public override void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride)
+        public override void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride, Rhino.RhinoDoc doc, bool Bake)
         {
-            base.DrawRhinoPreview(component, pipeline, tolerance, transform, colorOverride);
+            base.DrawRhinoPreview(component, pipeline, tolerance, transform, colorOverride,  doc,  Bake);
 
-            getText().DrawRhinoPreview(component, pipeline, tolerance, transform, colorOverride);
+            getText().DrawRhinoPreview(component, pipeline, tolerance, transform, colorOverride,  doc,  Bake);
 
         }
 

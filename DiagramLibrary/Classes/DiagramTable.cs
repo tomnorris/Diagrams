@@ -206,7 +206,7 @@ namespace DiagramLibrary
 
 
 
-        public override void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride)
+        public override void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride, Rhino.RhinoDoc doc, bool Bake)
         {
 
 
@@ -219,7 +219,7 @@ namespace DiagramLibrary
             for (int i = 0; i < recs.Length; i++)
             {
                 var crv = DiagramCurve.Create(recs[i].ToNurbsCurve(), m_Colour, m_LineWeight);
-                crv.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride);
+                crv.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride, doc,  Bake);
             }
 
 
@@ -231,7 +231,7 @@ namespace DiagramLibrary
                 for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
                 {
                     var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, new PointF((float)recs[currentIndex].Plane.Origin.X, (float)recs[currentIndex].Plane.Origin.Y), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
-                    txt.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride);
+                    txt.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride, doc,  Bake);
                     currentIndex++;
                 }
 

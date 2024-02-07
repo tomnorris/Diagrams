@@ -76,10 +76,10 @@ namespace DiagramLibrary
             m_DiagramText.DrawBitmap(component, g);
         }
 
-        public override void DrawRhinoPreview(GH_Component component, DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride)
+        public override void DrawRhinoPreview(GH_Component component, DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride, Rhino.RhinoDoc doc, bool Bake)
         {
-            m_leader.DrawRhinoPreview(component, pipeline, tolerance, xform, colorOverride);
-            m_DiagramText.DrawRhinoPreview(component, pipeline, tolerance, xform, colorOverride);
+            m_leader.DrawRhinoPreview(component, pipeline, tolerance, xform, colorOverride,  doc, Bake);
+            m_DiagramText.DrawRhinoPreview(component, pipeline, tolerance, xform, colorOverride,  doc, Bake);
         }
 
 

@@ -418,7 +418,7 @@ namespace DiagramLibrary
 
 
 
-        public override void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform,bool colorOverride)
+        public override void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform,bool colorOverride, Rhino.RhinoDoc doc, bool Bake)
         {
 
 
@@ -476,14 +476,14 @@ namespace DiagramLibrary
             {
 
                 m_Mask.UpdateRectangle(anchorCompensatedPoint, maskSize);
-                m_Mask.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride);
+                m_Mask.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride,  doc,  Bake);
             }
 
-            for (int i =  0; i < lines.Count; i++)
+            for (int i = 0; i < lines.Count; i++)
             {
                 TextEntity txt = new TextEntity();
                 txt.PlainText = lines[i];
-               
+
                 txt.Font = new Rhino.DocObjects.Font(m_FontName, Rhino.DocObjects.Font.FontWeight.Normal, Rhino.DocObjects.Font.FontStyle.Upright, false, false);
                 Plane pln = Plane.WorldXY;
                 txt.Plane = pln;
@@ -512,17 +512,28 @@ namespace DiagramLibrary
 
 
 
-                Point3d pt = new Point3d(anchorCompensatedPoint.X + m_Padding + justificationCompensation, anchorCompensatedPoint.Y + m_Padding + verticalFustificationCompensation + (lineSpacingPixel  * (lines.Count-i)), 0);
+                Point3d pt = new Point3d(anchorCompensatedPoint.X + m_Padding + justificationCompensation, anchorCompensatedPoint.Y + m_Padding + verticalFustificationCompensation + (lineSpacingPixel * (lines.Count - i)), 0);
                 var scale = Transform.Scale(new Point3d(pt.X, pt.Y, 0), m_TextSize);
                 var trans = Transform.Translation(new Vector3d(pt.X, pt.Y, 0));
                 var localXform = scale * trans;
-                var combinedForm = localXform;
-                if (xform != Transform.ZeroTransformation) {
-                    combinedForm = Transform.Multiply(xform, localXform);
+                var combinedXform = localXform;
+                if (xform != Transform.ZeroTransformation)
+                {
+                    combinedXform = Transform.Multiply(xform, localXform);
                 }
 
-
-                pipeline.DrawText(txt, clr, combinedForm); //scale*trans order matters
+                if (Bake)
+                {
+                    var attr = new Rhino.DocObjects.ObjectAttributes();
+                    attr.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject;
+                    attr.ObjectColor = clr;
+                    txt.Transform(combinedXform);
+                    doc.Objects.AddText(txt, attr);
+                }
+                else
+                {
+                    pipeline.DrawText(txt, clr, combinedXform); //scale*trans order matters
+                }
             }
                                  
 

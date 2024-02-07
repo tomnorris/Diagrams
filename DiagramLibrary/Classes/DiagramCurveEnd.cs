@@ -47,7 +47,7 @@ namespace DiagramLibrary
 
     
 
-        public void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component,Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride,Point3d location, Vector3d rotation)
+        public void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component,Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform transform, bool colorOverride,Point3d location, Vector3d rotation, Rhino.RhinoDoc doc, bool Bake)
 
         {
 
@@ -59,7 +59,7 @@ namespace DiagramLibrary
             var positionedObject = m_Object.SetLocationAndDirectionForDrawing(m_BasePoint, flipCorrectedDirection, location, rotation);
             if (positionedObject != null)
             {
-                positionedObject.DrawRhinoPreview( component,pipeline,  tolerance,  transform,  colorOverride);
+                positionedObject.DrawRhinoPreview( component,pipeline,  tolerance,  transform, colorOverride, doc,  Bake);
             }
         }
 

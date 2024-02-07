@@ -114,12 +114,12 @@ namespace DiagramLibrary
         }
 
 
-        public override void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride)
+        public override void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride, Rhino.RhinoDoc doc,bool Bake)
         {
             foreach (DiagramCurve crv in m_Curves)
             {
 
-                crv.DrawRhinoPreview(component, pipeline,  tolerance,  xform,  colorOverride);
+                crv.DrawRhinoPreview(component, pipeline,  tolerance,  xform,  colorOverride, doc, Bake);
             }
 
 

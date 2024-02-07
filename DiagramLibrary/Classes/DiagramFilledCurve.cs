@@ -262,7 +262,7 @@ namespace DiagramLibrary
         }
 
 
-        public override void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride)
+        public override void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride, Rhino.RhinoDoc doc, bool Bake)
         {
 
             Color clr = Diagram.SelectedColor;
@@ -326,7 +326,38 @@ namespace DiagramLibrary
                     //pipeline.DrawBrepShaded(item, mat);
 
 
-                    pipeline.DrawBrepShaded(item, material);
+
+                    if (Bake)
+                    {
+                        var attr = new Rhino.DocObjects.ObjectAttributes();
+                        attr.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject;
+                        attr.ObjectColor = clr;
+                        string name = "DiagramsMaterial_" + material.Diffuse.R.ToString() + "_" + material.Diffuse.G.ToString() + "_" + material.Diffuse.B.ToString() + "_" + material.Transparency.ToString();
+
+                        int materialIndex =  doc.Materials.Find(name, true);
+
+                        if (materialIndex < 0) {
+                            var rhinoMaterial = new Rhino.DocObjects.Material();
+                            rhinoMaterial.DiffuseColor = material.Diffuse;
+                            rhinoMaterial.Transparency = material.Transparency;
+
+                            rhinoMaterial.Name = name;
+                               materialIndex = doc.Materials.Add(rhinoMaterial, false);
+                        }
+                       
+                        attr.MaterialSource = Rhino.DocObjects.ObjectMaterialSource.MaterialFromObject;
+                        attr.MaterialIndex = materialIndex;
+
+                        doc.Objects.AddBrep(item, attr);
+                    }
+                    else
+                    {
+                      
+                        pipeline.DrawBrepShaded(item, material);
+                    }
+
+
+                    
                 }
             }
 
@@ -335,11 +366,11 @@ namespace DiagramLibrary
             if (drawLines) {
                 foreach (var item in m_OuterCurves)
                 {
-                    item.DrawRhinoPreview( component,pipeline, tolerance,xform, colorOverride);
+                    item.DrawRhinoPreview( component,pipeline, tolerance,xform, colorOverride , doc,  Bake);
                 }
                 foreach (var item in m_InnerCurves)
                 {
-                    item.DrawRhinoPreview( component,pipeline, tolerance,xform, colorOverride);
+                    item.DrawRhinoPreview( component,pipeline, tolerance,xform, colorOverride, doc, Bake);
                 }
 
             }

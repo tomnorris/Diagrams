@@ -3,7 +3,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-
+using System.Windows.Forms;
 
 namespace DiagramsForGrasshopper
 {
@@ -109,7 +109,7 @@ namespace DiagramsForGrasshopper
 
                             if (diagram == null) { continue; }
                                                        
-                            diagram.DrawRhinoPreview(this, args.Display, GH_Component.DocumentTolerance(), m_Xform, this.m_attributes.Selected);
+                            diagram.DrawRhinoPreview(this, args.Display, GH_Component.DocumentTolerance(), m_Xform, this.m_attributes.Selected, null, false);
                         }
                     }
 
@@ -127,7 +127,34 @@ namespace DiagramsForGrasshopper
         }
 
 
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            base.AppendAdditionalComponentMenuItems(menu);
+           Menu_AppendItem(menu, "Bake", BakeHandler, true, false);
+            
+           // var setScale = Menu_AppendItem(menu, "Set Number");
+            //Menu_AppendTextItem(setScale.DropDown, Scale.ToString(System.Globalization.CultureInfo.InvariantCulture), null, TextChanged, true);
+        }
 
+        private void BakeHandler(object sender, EventArgs e)
+        {
+            var diagramOutput = this.Params.Output[1].VolatileData;
+            Rhino.RhinoDoc doc = Rhino.RhinoDoc.ActiveDoc;
+            for (int i = 0; i < diagramOutput.PathCount; i++)
+            {
+                var diagramGooList = diagramOutput.get_Branch(diagramOutput.Paths[i]);
+
+                for (int j = 0; j < diagramGooList.Count; j++)
+                {
+                    var diagramGoo = diagramGooList[j] as Grasshopper.Kernel.Types.IGH_Goo;
+                    diagramGoo.CastTo(out Diagram diagram);
+
+                    if (diagram == null) { continue; }
+
+                    diagram.DrawRhinoPreview(this, null, GH_Component.DocumentTolerance(), m_Xform,false,doc,true);
+                }
+            }
+        }
 
         private void CheckLibraryVersion(IGH_DataAccess DA)
         {

@@ -338,7 +338,7 @@ namespace DiagramLibrary
         }
 
 
-        public void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolernace, Transform xform, bool colorOverride)
+        public void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolernace, Transform xform, bool colorOverride, Rhino.RhinoDoc doc, bool Bake)
         {
             if (m_Location != PointF.Empty) {
                
@@ -347,7 +347,7 @@ namespace DiagramLibrary
                 
             }
 
-            GetBackground().DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride);
+            GetBackground().DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride,doc,Bake);
 
             if (m_Title != null)
             {
@@ -358,12 +358,12 @@ title.Location = pt;
                     title.TextSize = this.m_Width / 20;
                 }
                   
-                title.DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride);
+                title.DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride, doc, Bake);
             }
 
             foreach (DiagramObject obj in m_Objects)
             {
-                obj.DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride);
+                obj.DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride, doc, Bake);
 
             }
 

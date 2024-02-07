@@ -18,7 +18,7 @@ namespace DiagramLibrary
             return; //skip
         }
 
-        public override void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component,DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride)
+        public override void DrawRhinoPreview( Grasshopper.Kernel.GH_Component component,DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride, Rhino.RhinoDoc doc, bool Bake)
         {
             return; // skip
         }
