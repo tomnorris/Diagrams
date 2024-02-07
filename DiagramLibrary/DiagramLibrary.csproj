@@ -64,6 +64,7 @@
     <Compile Include="Classes\DiagramCurveCollection.cs" />
     <Compile Include="Classes\DiagramFilledRectangle.cs" />
     <Compile Include="Classes\DiagramLabel.cs" />
+    <Compile Include="Classes\DiagramPieChart.cs" />
     <Compile Include="Classes\DiagramPointLabel.cs" />
     <Compile Include="Classes\DiagramTable.cs" />
     <Compile Include="Classes\DiagramGoo.cs" />

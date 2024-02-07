@@ -138,7 +138,7 @@ namespace DiagramsForGrasshopper.Componants
 
 
             SizeF size = diagramLabel.GetTotalSize();
-            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, 0, Color.Transparent, diagramLabel.DiagramText.GetAnchorCompensatedPoint(size));
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, 0, Color.Transparent, location);
             diagram.AddDiagramObject(diagramLabel);
             return diagram;
         }
