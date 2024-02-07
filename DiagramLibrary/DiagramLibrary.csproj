@@ -63,6 +63,8 @@
     <Compile Include="Classes\DiagramDimention.cs" />
     <Compile Include="Classes\DiagramCurveCollection.cs" />
     <Compile Include="Classes\DiagramFilledRectangle.cs" />
+    <Compile Include="Classes\DiagramLabel.cs" />
+    <Compile Include="Classes\DiagramPointLabel.cs" />
     <Compile Include="Classes\DiagramTable.cs" />
     <Compile Include="Classes\DiagramGoo.cs" />
     <Compile Include="Classes\DiagramFilledCurve.cs" />

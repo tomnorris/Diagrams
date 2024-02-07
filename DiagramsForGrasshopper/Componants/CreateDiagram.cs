@@ -39,7 +39,7 @@ namespace DiagramsForGrasshopper
             pManager.AddIntegerParameter("Height", "H", "Diagram Height in Pixels", GH_ParamAccess.item, -1);
             pManager.AddIntegerParameter("Width", "W", "Diagram Width in Pixels", GH_ParamAccess.item, -1);
             pManager.AddGenericParameter("DiagramObjects", "DObjs", "Diagram objects or Rhino Geometry To Add to Diagram", GH_ParamAccess.list);
-        //    this.Params.Input[2].ObjectChanged += CreateDiagram_ObjectChanged;
+    
             pManager.AddGenericParameter("Title", "Title", "Optional Diagram Title", GH_ParamAccess.item);
             this.Params.Input[3].Optional = true;
             pManager.AddColourParameter("Colour", "BgClr", "Optional Background Colour", GH_ParamAccess.item, System.Drawing.Color.Transparent);

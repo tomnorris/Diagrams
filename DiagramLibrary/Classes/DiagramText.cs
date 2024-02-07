@@ -11,16 +11,16 @@ namespace DiagramLibrary
 {
     public class DiagramText : DiagramObject
     {
-        private string m_Text;
-        private PointF m_Location;
-        private TextJustification m_Anchor;
-        private DiagramFilledRectangle m_Mask = null;
-        private float m_TextSize;
-     
-        private string m_FontName = "Arial";
-        private SizeF m_WrapSize;
-        private float m_Padding = 0f;
-        private TextJustification m_Justification = TextJustification.None;
+        protected string m_Text;
+        protected PointF m_Location;
+        protected TextJustification m_Anchor;
+        protected DiagramFilledRectangle m_Mask = null;
+        protected float m_TextSize;
+
+        protected string m_FontName = "Arial";
+        protected SizeF m_WrapSize;
+        protected float m_Padding = 0f;
+        protected TextJustification m_Justification = TextJustification.None;
 
 
         public PointF Location
@@ -183,7 +183,7 @@ namespace DiagramLibrary
             //Create a dummy graphics, for the measure text
             using (var g = Graphics.FromImage(new Bitmap(10, 10)))
             {
-                SizeF tempSize = GetTotalTextSize(g, out totalSize, out List<string> lines, out List<SizeF> rowSizes);
+                SizeF tempSize = CalculteTextSize(g, out totalSize, out List<string> lines, out List<SizeF> rowSizes);
 
             }
 
@@ -194,7 +194,7 @@ namespace DiagramLibrary
     
 
 
-        public List<string> TextLines(Graphics g, Font font, SizeF maxSize, StringFormat format, out SizeF totalSize, out List<SizeF> rowSizes)
+        public List<string> CalulateTextLines(Graphics g, Font font, SizeF maxSize, StringFormat format, out SizeF totalSize, out List<SizeF> rowSizes)
         {
             List<string> outputStrings = new List<string>();
             rowSizes = new List<SizeF>();
@@ -281,7 +281,7 @@ namespace DiagramLibrary
 
 
 
-        public SizeF GetTotalTextSize(Graphics g , out SizeF maskSize , out List<string> lines, out List<SizeF> rowSizes) {
+        public SizeF CalculteTextSize(Graphics g , out SizeF maskSize , out List<string> lines, out List<SizeF> rowSizes) {
             if (m_TextSize <= 0) {
                 maskSize = SizeF.Empty;
                 lines = new List<string>();
@@ -317,14 +317,14 @@ namespace DiagramLibrary
 
                 //In this case we want the padding to be added to the Height but subracted from the width
                 
-                lines = TextLines(g, font, new SizeF(m_WrapSize.Width - m_Padding - m_Padding,-1), format, out SizeF measuredSize, out rowSizes);
+                lines = CalulateTextLines(g, font, new SizeF(m_WrapSize.Width - m_Padding - m_Padding,-1), format, out SizeF measuredSize, out rowSizes);
                 maskSize = new SizeF(m_WrapSize.Width, measuredSize.Height + m_Padding + m_Padding);
                 return measuredSize;
             }
 
             //In this case we want the padding to be subracted from the Height but subracted from the width
             maskSize = m_WrapSize;
-            lines = TextLines(g, font, new SizeF(m_WrapSize.Width - m_Padding - m_Padding, m_WrapSize.Height - m_Padding - m_Padding), format, out SizeF textSize_ConstrainedWidthAndHeight , out rowSizes);
+            lines = CalulateTextLines(g, font, new SizeF(m_WrapSize.Width - m_Padding - m_Padding, m_WrapSize.Height - m_Padding - m_Padding), format, out SizeF textSize_ConstrainedWidthAndHeight , out rowSizes);
             return textSize_ConstrainedWidthAndHeight;
 
 
@@ -341,7 +341,7 @@ namespace DiagramLibrary
 
             var font = new System.Drawing.Font(m_FontName, m_TextSize);
 
-            SizeF actualTotalTextSize = GetTotalTextSize(g, out SizeF maskSize, out List<string> lines, out List<SizeF> rowSizes);
+            SizeF actualTotalTextSize = CalculteTextSize(g, out SizeF maskSize, out List<string> lines, out List<SizeF> rowSizes);
                        
             PointF anchorCompensatedPoint = GetAnchorCompensatedPoint(maskSize);
 
@@ -443,7 +443,7 @@ namespace DiagramLibrary
             //Create a dummy graphics, for the measure text
             using (var g = Graphics.FromImage(new Bitmap(10, 10)))
             {
-                actualTotalTextSize = GetTotalTextSize(g,  out maskSize, out lines, out rowSizes);
+                actualTotalTextSize = CalculteTextSize(g,  out maskSize, out lines, out rowSizes);
 
                
             }
