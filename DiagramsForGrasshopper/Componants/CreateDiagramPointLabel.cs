@@ -5,7 +5,7 @@ using DiagramLibrary;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace DiagramsForGrasshopper.Componants
+namespace DiagramsForGrasshopper
 {
     public class CreateDiagramPointLabel : DiagramComponent
     {
@@ -28,7 +28,7 @@ namespace DiagramsForGrasshopper.Componants
                       pManager.AddPointParameter("LabelPoint", "L", "The point on the target for the label", GH_ParamAccess.item, Point3d.Origin);
             pManager.HideParameter(1);
                   pManager.AddNumberParameter("LabelScale", "LS", "Label size", GH_ParamAccess.item, Diagram.DefaultTextScale);
-            pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, "Arial");
+            pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, Diagram.DefaultFontName);
                    
             pManager.AddNumberParameter("Padding", "P", "Text Padding", GH_ParamAccess.item, 0);
             pManager.AddColourParameter("Colour", "Clr", "Colour for text", GH_ParamAccess.item, Diagram.DefaultColor);
@@ -51,7 +51,7 @@ namespace DiagramsForGrasshopper.Componants
             Color maskClr = Color.Transparent;
             string text = "";
             Point3d pt = new Point3d(0, 0, 0);
-            string font = "Arial";
+            string font = Diagram.DefaultFontName;
           
             double padding = 0;
             double frameLineWieght = Diagram.DefaultLineWeight;
@@ -77,7 +77,7 @@ namespace DiagramsForGrasshopper.Componants
 
 
 
-            PointF location = new PointF((float)pt.X, (float)pt.Y);
+            PointF location = Diagram.ConvertPoint(pt);
 
             DiagramPointLabel diagramLabel = DiagramPointLabel.Create(text, location, clr, (float)labelScale, maskClr, frameClr, (float)frameLineWieght, font,  (float)padding);
 

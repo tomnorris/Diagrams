@@ -24,14 +24,14 @@ namespace DiagramLibrary
         {
             
            
-            return Create(crv.PointAtStart, crv.PointAtEnd, Diagram.DefaultColor, Diagram.DefaultLineWeight, string.Empty, string.Empty, Color.Transparent, Diagram.DefaultTextScale, "Arial", 3f, 2, DiagramCurveEnd.DefaultDimentionCurveEnd(1, Diagram.DefaultColor, Diagram.DefaultLineWeight), offset);
+            return Create(crv.PointAtStart, crv.PointAtEnd, Diagram.DefaultColor, Diagram.DefaultLineWeight, string.Empty, string.Empty, Color.Transparent, Diagram.DefaultTextScale, Diagram.DefaultFontName, Diagram.DefaultPadding, 2, DiagramCurveEnd.DefaultDimentionCurveEnd(1, Diagram.DefaultColor, Diagram.DefaultLineWeight), offset);
         }
 
 
         public static DiagramDimention Create(Point3d pt1, Point3d pt2, Color color, float lineWieght, float textSize, float offset)
         {
 
-            return Create( pt1,  pt2,  color,  lineWieght, string.Empty, string.Empty, Color.Transparent,  textSize, "Arial",  3f,  2, DiagramCurveEnd.DefaultDimentionCurveEnd(1, color, lineWieght),  offset);
+            return Create( pt1,  pt2,  color,  lineWieght, string.Empty, string.Empty, Color.Transparent,  textSize, Diagram.DefaultFontName, Diagram.DefaultPadding,  2, DiagramCurveEnd.DefaultDimentionCurveEnd(1, color, lineWieght),  offset);
         }
 
 
@@ -98,7 +98,7 @@ namespace DiagramLibrary
                 textValue = Math.Round(m_Curve.GetLength(), m_RoundTo).ToString() + m_suffix;
             }
             Point3d pt = m_Curve.PointAt(0.5);
-            return DiagramText.Create(textValue, new PointF((float)pt.X, (float)pt.Y), m_Colour, m_TextSize, TextJustification.MiddleCenter, m_MaskColor, m_Colour, m_LineWeight, m_FontName, new SizeF(-1, -1), m_Padding, TextJustification.MiddleCenter);
+            return DiagramText.Create(textValue, Diagram.ConvertPoint(pt), m_Colour, m_TextSize, TextJustification.MiddleCenter, m_MaskColor, m_Colour, m_LineWeight, m_FontName, new SizeF(-1, -1), m_Padding, TextJustification.MiddleCenter);
         }
 
         public override void DrawBitmap(Grasshopper.Kernel.GH_Component component, Graphics g)

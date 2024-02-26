@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Classes\BaseCurveDiagramObject.cs" />
     <Compile Include="Classes\Diagram.cs" />
+    <Compile Include="Classes\DiagramColour.cs" />
     <Compile Include="Classes\DiagramCurve.cs" />
     <Compile Include="Classes\DiagramCurveEnd.cs" />
     <Compile Include="Classes\DiagramDimention.cs" />

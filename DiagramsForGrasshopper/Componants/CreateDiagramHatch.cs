@@ -6,7 +6,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System.Linq;
 
-namespace DiagramsForGrasshopper.Componants
+namespace DiagramsForGrasshopper
 {
     public class CreateDiagramHatch : DiagramComponent
     {

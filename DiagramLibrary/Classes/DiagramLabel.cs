@@ -36,8 +36,8 @@ namespace DiagramLibrary
 
             DiagramLabel diagramLabel = new DiagramLabel();
 
-            var line = new Line(new Point3d(leaderLocation.X, leaderLocation.Y, 0), direction, offset);
-            diagramLabel.m_DiagramText = DiagramText.Create(text, new PointF((float)line.To.X,(float)line.To.Y), colour, textSize, Rhino.Geometry.TextJustification.BottomLeft, maskColour, frameColor, frameLineWeight, fontName, new SizeF(-1, -1), padding, Rhino.Geometry.TextJustification.BottomLeft);
+            var line = new Line(Diagram.ConvertPoint(leaderLocation), direction, offset);
+            diagramLabel.m_DiagramText = DiagramText.Create(text, Diagram.ConvertPoint(line.To), colour, textSize, Rhino.Geometry.TextJustification.BottomLeft, maskColour, frameColor, frameLineWeight, fontName, new SizeF(-1, -1), padding, Rhino.Geometry.TextJustification.BottomLeft);
             var line2 = new Line(line.To, new Vector3d(1,0,0), diagramLabel.m_DiagramText.GetTotalSize().Width);
             diagramLabel.m_leader = DiagramCurve.Create(new Polyline( new Point3d[] { line.From,line.To,line2.To }).ToNurbsCurve(), colour, lineWeight);
 
@@ -64,7 +64,7 @@ namespace DiagramLibrary
 
         public override BoundingBox GetBoundingBox()
         {
-            BoundingBox bb = new BoundingBox(new Point3d[] { new Point3d(m_LeaderLocation.X, m_LeaderLocation.Y, 0) });
+            BoundingBox bb = new BoundingBox(new Point3d[] { Diagram.ConvertPoint( m_LeaderLocation) });
             bb.Union(m_DiagramText.GetBoundingBox());
          
             return bb;

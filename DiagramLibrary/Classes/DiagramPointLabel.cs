@@ -55,7 +55,7 @@ namespace DiagramLibrary
 
         public override BoundingBox GetBoundingBox()
         {
-            BoundingBox bb = new BoundingBox(new Point3d[] { new Point3d(m_PointLocation.X, m_PointLocation.Y, 0) });
+            BoundingBox bb = new BoundingBox(new Point3d[] { Diagram.ConvertPoint(m_PointLocation) });
             bb.Union(m_DiagramText.GetBoundingBox());
             bb.Union(m_Mask.GetBoundingBox());
             return bb;

@@ -5,7 +5,7 @@ using DiagramLibrary;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace DiagramsForGrasshopper.Componants
+namespace DiagramsForGrasshopper
 {
     public class CreateDiagramTextComplex : DiagramComponent
     {
@@ -32,7 +32,7 @@ namespace DiagramsForGrasshopper.Componants
                  "Text Anchor 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right",
                  GH_ParamAccess.item, 0);
             pManager.AddNumberParameter("TextScale", "TS", "Text size", GH_ParamAccess.item,Diagram.DefaultTextScale);
-            pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, "Arial");
+            pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, Diagram.DefaultFontName);
                       
             pManager.AddNumberParameter("Max Width", "W", "Maximum Width, Set to less than 0 to ignore ", GH_ParamAccess.item, -1);
             pManager.AddNumberParameter("Max Height", "H", "Maximum Height, Set to less than 0 to ignore", GH_ParamAccess.item, -1);
@@ -58,7 +58,7 @@ namespace DiagramsForGrasshopper.Componants
             Color maskClr = Color.Transparent;
             string text = "";
             Point3d pt = new Point3d(0, 0, 0);
-            string font = "Arial";
+            string font = Diagram.DefaultFontName;
             int anchorInt = 0;
             double padding = 0;
             double width = -1;
@@ -174,7 +174,7 @@ namespace DiagramsForGrasshopper.Componants
 
            
 
-            PointF location = new PointF((float)pt.X, (float)pt.Y);
+            PointF location = Diagram.ConvertPoint(pt);
 
             DiagramText diagramText = DiagramText.Create(text, location, clr, (float)textScale, anchor, maskClr, frameClr, (float)frameLineWieght, font, new SizeF((float)width, (float)height), (float)padding, jusitification);
 

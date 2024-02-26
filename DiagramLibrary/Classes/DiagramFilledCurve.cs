@@ -208,10 +208,10 @@ namespace DiagramLibrary
        
 
 
-        public override PointF GetLocation()
+        public override PointF GetBoundingBoxLocation()
         {
             BoundingBox bbox = GetBoundingBox();
-            return new PointF((float)(bbox.Min.X), (float)(bbox.Min.Y));
+            return Diagram.ConvertPoint(bbox.Min);
         }
 
 

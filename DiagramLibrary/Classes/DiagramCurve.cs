@@ -230,7 +230,7 @@ namespace DiagramLibrary
             PointF[] pts = new PointF[polyc.PointCount];
             for (int i = 0; i < polyc.PointCount; i++)
             {
-                pts[i] = new PointF((float)polyc.Point(i).X, (float)polyc.Point(i).Y);
+                pts[i] = Diagram.ConvertPoint(polyc.Point(i));
             }
 
             return pts;

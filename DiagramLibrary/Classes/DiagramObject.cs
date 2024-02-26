@@ -41,10 +41,10 @@ namespace DiagramLibrary
         }
 
 
-        public virtual PointF GetLocation()
+        public virtual PointF GetBoundingBoxLocation()
         {
             BoundingBox bbox = this.GetBoundingBox();
-            return new PointF((float)(bbox.Min.X), (float)(bbox.Min.Y));
+            return Diagram.ConvertPoint(bbox.Min);
         }
 
 
