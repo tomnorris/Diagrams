@@ -10,13 +10,15 @@ namespace DiagramLibrary
         public static Color DefaultColor = Color.Black;
         public static float DefaultLineWeight = 1f;
         public static float DefaultTextScale = 10f;
+        public static string DefaultFontName = "Arial";
+        public static float DefaultPadding = 3f;
         public static Color SelectedColor = Color.FromArgb(128, Color.ForestGreen);
 
         private PointF m_Location;
         private int m_Width;
         private int m_Height;
         private DiagramText m_Title;
-        private string m_TitleFont = "Arial";
+        private string m_TitleFont = Diagram.DefaultFontName;
       
         private Color m_BackgroundColour;
         private Color m_FrameColour;
@@ -24,6 +26,16 @@ namespace DiagramLibrary
     
 
         private List<DiagramObject> m_Objects;
+
+
+       public static PointF ConvertPoint(Point3d pt) {
+            return new PointF((float)pt.X, (float)pt.Y);
+        }
+
+        public static Point3d ConvertPoint(PointF pt)
+        {
+            return new Point3d(pt.X, pt.Y,0);
+        }
 
 
         static public string LibraryVersion()

@@ -8,7 +8,7 @@ using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using DiagramLibrary;
 
-namespace DiagramsForGrasshopper.Componants
+namespace DiagramsForGrasshopper
 {
     public class CreateDiagramTable : DiagramComponent
     { 
@@ -38,7 +38,7 @@ namespace DiagramsForGrasshopper.Componants
         pManager.AddColourParameter("LineColour", "LClr", "Colour for text and Lines", GH_ParamAccess.item, Diagram.DefaultColor);
             pManager.AddNumberParameter("Padding", "P", "Text Padding", GH_ParamAccess.item, 3);
             pManager.AddIntegerParameter("Jusitification", "J", "Text justification. Horizontals(Left, Center, Right) only take effect if Width is set, Verticals (Top, Middle, Bottom) only take effect if Height it set. 0: Bottom Left, 1: Bottom Center, 2: Bottom Right \n 3: Middle Left, 4: Middle Center, 5: Middle Right \n 6: Top Left, 7: Top Center, 8: Top Right", GH_ParamAccess.item, 0);
-            pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, "Arial");
+            pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, Diagram.DefaultFontName);
             pManager.AddColourParameter("Background Colour", "BClr", "Back Colour", GH_ParamAccess.item, Color.Transparent);
         }
 
@@ -68,7 +68,7 @@ namespace DiagramsForGrasshopper.Componants
             Color bgClr = Color.Transparent;
 
             Point3d pt = new Point3d(0, 0, 0);
-            string font = "Arial";
+            string font = Diagram.DefaultFontName;
 
             double padding = 3;
           
@@ -154,7 +154,7 @@ namespace DiagramsForGrasshopper.Componants
                     break;
             }
 
-            PointF location = new PointF((float)pt.X, (float)pt.Y);
+            PointF location = Diagram.ConvertPoint(pt);
 
             DiagramTable diagramTable = DiagramTable.Create(data,width,height, (float )textScale, location, clr, (float)lineWeight,font,(float)padding,jusitification);
             SizeF size = diagramTable.GetTotalSize();

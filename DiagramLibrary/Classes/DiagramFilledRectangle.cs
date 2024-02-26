@@ -38,7 +38,7 @@ namespace DiagramLibrary
 
         public void UpdateRectangle(PointF origin, SizeF size)
         {
-            Rectangle3d newRectangle = new Rectangle3d(new Plane(Point3d.Origin, Vector3d.XAxis, Vector3d.YAxis), new Point3d(origin.X, origin.Y, 0), new Point3d(origin.X + size.Width, origin.Y + size.Height, 0));
+            Rectangle3d newRectangle = new Rectangle3d(new Plane(Point3d.Origin, Vector3d.XAxis, Vector3d.YAxis), Diagram.ConvertPoint(origin), new Point3d(origin.X + size.Width, origin.Y + size.Height, 0));
             UpdateRectangle(newRectangle);
         }
 

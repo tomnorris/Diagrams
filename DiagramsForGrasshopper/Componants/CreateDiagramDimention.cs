@@ -5,7 +5,7 @@ using DiagramLibrary;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace DiagramsForGrasshopper.Componants
+namespace DiagramsForGrasshopper
 {
     public class CreateDiagramDimention : DiagramComponent
     {
@@ -33,7 +33,7 @@ namespace DiagramsForGrasshopper.Componants
             pManager.AddTextParameter("TextOverride", "TO", "Text to override of the dimention", GH_ParamAccess.item, string.Empty);
             pManager.AddTextParameter("Suffix", "S", "Suffix of the dimention", GH_ParamAccess.item, string.Empty);
             pManager.AddColourParameter("BackgroundColour", "BgClr", "Colour of the Text background", GH_ParamAccess.item, Color.Transparent);
-                    pManager.AddTextParameter("Fontname", "F", "Text Font Name", GH_ParamAccess.item, "Arial");
+                    pManager.AddTextParameter("Fontname", "F", "Text Font Name", GH_ParamAccess.item, Diagram.DefaultFontName);
             pManager.AddNumberParameter("Padding", "P", "Padding of text", GH_ParamAccess.item, 3);
             pManager.AddIntegerParameter("Round", "R", "The number of decimals the text will round to", GH_ParamAccess.item, 2);
             pManager.AddGenericParameter("CurveEndStart", "CES", "Diagram Object which will be the Curve End for the start of the Curve, only Curve and FilledCurves are supported", GH_ParamAccess.item);
@@ -63,7 +63,7 @@ namespace DiagramsForGrasshopper.Componants
             string suffix = string.Empty;
             string overrideText = string.Empty;
             double textSize = Diagram.DefaultTextScale;
-            string fontname = "Arial";
+            string fontname = Diagram.DefaultFontName;
             double padding = 3;
             int round = 2;
 
@@ -176,7 +176,7 @@ namespace DiagramsForGrasshopper.Componants
 
 
     SizeF size = diagramDimention.GetTotalSize();
-            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, 0, Color.Transparent, diagramDimention.GetLocation());
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, 0, Color.Transparent, diagramDimention.GetBoundingBoxLocation());
             diagram.AddDiagramObject(diagramDimention);
 
 

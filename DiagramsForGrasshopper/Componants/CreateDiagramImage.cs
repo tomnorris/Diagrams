@@ -5,7 +5,7 @@ using DiagramLibrary;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace DiagramsForGrasshopper.Componants
+namespace DiagramsForGrasshopper
 {
     public class CreateDiagramImage : DiagramComponent
     {
@@ -64,7 +64,7 @@ namespace DiagramsForGrasshopper.Componants
             }
 
 
-            PointF location = new PointF((float)pt.X, (float)pt.Y);
+            PointF location = Diagram.ConvertPoint(pt);
 
             DiagramImage diagramImage = DiagramImage.Create(path, location, new SizeF((float)width, (float)height));
             SizeF size = diagramImage.GetTotalSize();

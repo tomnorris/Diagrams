@@ -86,7 +86,7 @@ namespace DiagramsForGrasshopper
                 if (titleObj.GetType() == typeof(Grasshopper.Kernel.Types.GH_String))
                 {
                     titleObj.CastTo(out string diagramTitleString);
-                    titleDiagram = DiagramText.Create(diagramTitleString, PointF.Empty, Diagram.DefaultColor, -1f, TextJustification.BottomLeft, Color.Transparent, Diagram.DefaultColor, 0, "Arial", new SizeF(-1, -1), 3, TextJustification.BottomLeft);
+                    titleDiagram = DiagramText.Create(diagramTitleString, PointF.Empty, Diagram.DefaultColor, -1f, TextJustification.BottomLeft, Color.Transparent, Diagram.DefaultColor, 0, Diagram.DefaultFontName, new SizeF(-1, -1), 3, TextJustification.BottomLeft);
 
                 }
                 else

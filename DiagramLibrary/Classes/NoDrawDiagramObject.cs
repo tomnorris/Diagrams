@@ -28,7 +28,7 @@ namespace DiagramLibrary
             return BoundingBox.Empty;
         }
 
-        public override PointF GetLocation()
+        public override PointF GetBoundingBoxLocation()
         {
             return PointF.Empty;
         }

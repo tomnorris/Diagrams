@@ -71,6 +71,7 @@
     <Compile Include="Componants\CreateDiagramCurveEnd.cs" />
     <Compile Include="Componants\CreateDiagramDimention.cs" />
     <Compile Include="Componants\CreateDiagramLabel.cs" />
+    <Compile Include="Componants\CreateDiagramPieChart.cs" />
     <Compile Include="Componants\RhinoDiagram.cs" />
     <Compile Include="DiagramsForGrasshopperInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

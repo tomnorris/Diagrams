@@ -5,7 +5,7 @@ using DiagramLibrary;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace DiagramsForGrasshopper.Componants
+namespace DiagramsForGrasshopper
 {
     public class CreateDiagramText : DiagramComponent
     {
@@ -50,7 +50,7 @@ namespace DiagramsForGrasshopper.Componants
             Color maskClr = Color.Transparent;
             string text = "";
             Point3d pt = new Point3d(0, 0, 0);
-            string font = "Arial";
+            string font = Diagram.DefaultFontName;
          
             double padding = 3;
             double width = -1;
@@ -85,7 +85,7 @@ namespace DiagramsForGrasshopper.Componants
 
           
 
-            PointF location = new PointF((float)pt.X, (float)pt.Y);
+            PointF location = Diagram.ConvertPoint(pt);
 
             DiagramText diagramText = DiagramText.Create(text, location, clr, (float)textScale,anchor,maskClr, frameClr,-1f,font,new SizeF((float)width,(float)height),(float)padding, jusitification);
                                   

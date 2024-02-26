@@ -18,7 +18,7 @@ namespace DiagramLibrary
         List<double> m_CellHeights = new List<double>();
 
         private PointF m_Location;
-        private string m_FontName = "Arial";
+        private string m_FontName = Diagram.DefaultFontName;
         private float m_Padding = 0f;
         private float m_TextSize = 1f;
         private TextJustification m_Justification = TextJustification.None;
@@ -89,7 +89,7 @@ namespace DiagramLibrary
                   
             }
 
-            totalRec.Union(new Point3d(m_Location.X,m_Location.Y,0));
+            totalRec.Union(Diagram.ConvertPoint(m_Location));
 
             return totalRec;
 
@@ -169,6 +169,8 @@ namespace DiagramLibrary
             }
         }
 
+      
+
 
         public override void DrawBitmap(Grasshopper.Kernel.GH_Component component, Graphics g)
         {
@@ -194,7 +196,7 @@ namespace DiagramLibrary
 
                 for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
                 {
-                    var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, new PointF((float)recs[currentIndex].Plane.Origin.X, (float)recs[currentIndex].Plane.Origin.Y), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent,-1,  m_FontName, sizes[currentIndex], m_Padding, m_Justification);
+                    var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value,Diagram.ConvertPoint(recs[currentIndex].Plane.Origin), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent,-1,  m_FontName, sizes[currentIndex], m_Padding, m_Justification);
                     txt.DrawBitmap(component,g);
                     currentIndex++;
                 }
@@ -230,7 +232,7 @@ namespace DiagramLibrary
 
                 for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
                 {
-                    var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, new PointF((float)recs[currentIndex].Plane.Origin.X, (float)recs[currentIndex].Plane.Origin.Y), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
+                    var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, Diagram.ConvertPoint(recs[currentIndex].Plane.Origin), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
                     txt.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride, doc,  Bake);
                     currentIndex++;
                 }

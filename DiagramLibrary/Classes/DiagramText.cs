@@ -17,9 +17,9 @@ namespace DiagramLibrary
         protected DiagramFilledRectangle m_Mask = null;
         protected float m_TextSize;
 
-        protected string m_FontName = "Arial";
+        protected string m_FontName;
         protected SizeF m_WrapSize;
-        protected float m_Padding = 0f;
+        protected float m_Padding;
         protected TextJustification m_Justification = TextJustification.None;
 
 
@@ -61,10 +61,10 @@ namespace DiagramLibrary
             diagramText.m_Anchor = TextJustification.BottomLeft;
             diagramText.m_Mask = DiagramFilledRectangle.Create(new Rectangle3d(Plane.WorldXY, 1, 1), Color.Transparent, Diagram.DefaultColor, 0);//Size is updated at drawtime
 
-            diagramText.m_FontName = "Arial";
+            diagramText.m_FontName = Diagram.DefaultFontName;
 
             diagramText.m_WrapSize = new Size(-1,-1);
-            diagramText.m_Padding = 3f;
+            diagramText.m_Padding = Diagram.DefaultPadding;
             diagramText.m_Justification = TextJustification.BottomLeft;
             return diagramText;
         }
