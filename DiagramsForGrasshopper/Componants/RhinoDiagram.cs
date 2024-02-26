@@ -90,7 +90,7 @@ namespace DiagramsForGrasshopper
 
         {
 
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.tertiary; }
 
         }
 

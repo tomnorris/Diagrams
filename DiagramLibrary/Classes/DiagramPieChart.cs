@@ -15,7 +15,7 @@ using Grasshopper.Kernel.Types;
 
 namespace DiagramLibrary
 {
-   public class DiagramPieChart : DiagramObject
+   public class DiagramPieChart : DiagramCachedClass
     {
         List<double> m_Data = new List<double>();
         List<string> m_DataLabels = new List<string>();
@@ -35,9 +35,11 @@ namespace DiagramLibrary
         PointF m_Location;
 
 
+      
 
 
 
+      
 
         public static DiagramPieChart Create(List<double> Data, List<string> DataLabels, List<Color> DataFillColors, List<Color> DataLineColors, PointF Location,
         float OuterRadius, float InnerRadius, float LabelRadius,float LineWieght, float TextSize, Color textColor, Color maskColor, Color frameColor, float frameLineWieght,
@@ -103,10 +105,12 @@ namespace DiagramLibrary
             chart.m_CurveEnd = CurveEnd;
             chart.m_LineWeight = LineWieght;
 
-
+            chart.UpdateCache();
             return chart;
 
         }
+
+       
 
 
         public static DiagramPieChart Create(List<double> Data, List<string> DataLabels)
@@ -151,7 +155,7 @@ namespace DiagramLibrary
             chart.m_Padding = m_Padding;
             chart.m_CurveEnd = m_CurveEnd;
 
-
+            chart.UpdateCache();
 
             return chart;
         }
@@ -180,7 +184,7 @@ namespace DiagramLibrary
             return parameters;
         }
 
-        private List<DiagramObject> GenerateObjects()
+        public override List<DiagramObject> GenerateObjects()
         {
 
             List<DiagramObject> diagramObjects = new List<DiagramObject>();
@@ -244,39 +248,6 @@ namespace DiagramLibrary
 
 
 
-        public override void DrawBitmap(GH_Component component, Graphics g)
-        {
-            List<DiagramObject> objs = this.GenerateObjects();
-            for (int i = 0; i < objs.Count; i++)
-            {
-                objs[i].DrawBitmap(component, g);
-            }
-        }
-
-        public override void DrawRhinoPreview(GH_Component component, DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride, RhinoDoc doc, bool Bake)
-        {
-
-
-            List<DiagramObject> objs = this.GenerateObjects();
-            for (int i = 0; i < objs.Count; i++)
-            {
-                objs[i].DrawRhinoPreview(component, pipeline, tolerance, xform, colorOverride, doc, Bake);
-            }
-
-
-
-        }
-
-
-        public override BoundingBox GetBoundingBox()
-        {
-            BoundingBox bbox = BoundingBox.Empty;
-            List<DiagramObject> objs = this.GenerateObjects();
-            for (int i = 0; i < objs.Count; i++)
-            {
-                bbox.Union(objs[i].GetBoundingBox());
-            }
-            return bbox;
-        }
+      
     }
 }

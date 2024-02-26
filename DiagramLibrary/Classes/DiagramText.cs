@@ -53,20 +53,10 @@ namespace DiagramLibrary
 
         public static DiagramText Create(string Text, PointF Location,float textSize)
         {
-            DiagramText diagramText = new DiagramText();
-            diagramText.m_Colour = Diagram.DefaultColor;
-            diagramText.m_TextSize = textSize;
-            diagramText.m_Text = Text;
-            diagramText.m_Location = Location;
-            diagramText.m_Anchor = TextJustification.BottomLeft;
-            diagramText.m_Mask = DiagramFilledRectangle.Create(new Rectangle3d(Plane.WorldXY, 1, 1), Color.Transparent, Diagram.DefaultColor, 0);//Size is updated at drawtime
 
-            diagramText.m_FontName = Diagram.DefaultFontName;
-
-            diagramText.m_WrapSize = new Size(-1,-1);
-            diagramText.m_Padding = Diagram.DefaultPadding;
-            diagramText.m_Justification = TextJustification.BottomLeft;
-            return diagramText;
+            return DiagramText.Create(Text, Location, Diagram.DefaultColor, textSize,
+            TextJustification.BottomLeft, Color.Transparent, Diagram.DefaultColor, 0,
+            Diagram.DefaultFontName, new Size(-1, -1), Diagram.DefaultPadding, TextJustification.BottomLeft);
         }
 
 
@@ -78,7 +68,7 @@ namespace DiagramLibrary
             diagramText.m_Colour = Colour;
             diagramText.m_TextSize = textSize;
             diagramText.m_Text = Text;
-            diagramText.m_Location = Location;
+            diagramText.m_Location = new PointF(Location.X, Location.Y); ;
             diagramText.m_Anchor = anchor;
             diagramText.m_Mask = DiagramFilledRectangle.Create(new Rectangle3d(Plane.WorldXY,1,1),maskColour, frameColor,frameLineWeight);//Size is updated at drawtime
 
@@ -373,7 +363,7 @@ namespace DiagramLibrary
 
 
             //We have to draw this upside down as Bitmap is top to bottom but Rhino is bottom to top, to compensate we mirror-y the image for the canvas, but we have to draw the text upside down so it is correct when flipped.
-
+            var tempTransform = g.Transform;
             g.ScaleTransform(1, -1);// Begin Upside Down,
             
             for (int i = 0; i < lines.Count; i++)
@@ -400,7 +390,8 @@ namespace DiagramLibrary
                 //  g.DrawString(lines[i], font, this.GetBrush(), new RectangleF(pt, actualTotalTextSize));
                 g.DrawString(lines[i], font, this.GetBrush(), new RectangleF(pt, new SizeF(actualTotalTextSize.Width, actualTotalTextSize.Height + (m_TextSize * 0.1F))));
             }
-            g.ResetTransform();// End Upside Down
+
+            g.Transform = tempTransform;// End Upside Down
 
 
 

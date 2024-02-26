@@ -188,5 +188,13 @@ namespace DiagramsForGrasshopper
         {
             get { return new Guid("b0ba788e-7715-436d-8d7c-ef12e1f1fce3"); }
         }
+
+        public override GH_Exposure Exposure
+
+        {
+
+            get { return GH_Exposure.secondary; }
+
+        }
     }
 }
