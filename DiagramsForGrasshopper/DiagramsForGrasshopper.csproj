@@ -58,7 +58,6 @@
   <ItemGroup>
     <Compile Include="Classes\DiagramComponentAttibutes.cs" />
     <Compile Include="Classes\DiagramComponent.cs" />
-    <Compile Include="Classes\ReportBaseComponent.cs" />
     <Compile Include="Componants\CanvasDiagram.cs" />
     <Compile Include="Componants\CreateDiagram.cs" />
     <Compile Include="Componants\CreateDiagramHatch.cs" />

@@ -25,3 +25,5 @@ C:\Users\tomno\OneDrive - Point Space Limited\Git\Diagrams\DiagramsForGrasshoppe
 C:\Users\tomno\OneDrive - Point Space Limited\Git\Diagrams\DiagramsForGrasshopper\obj\Debug\DiagramsForGrasshopper.csproj.CopyComplete
 C:\Users\tomno\OneDrive - Point Space Limited\Git\Diagrams\DiagramsForGrasshopper\obj\Debug\DiagramsForGrasshopper.dll
 C:\Users\tomno\OneDrive - Point Space Limited\Git\Diagrams\DiagramsForGrasshopper\obj\Debug\DiagramsForGrasshopper.pdb
+C:\Users\tomno\OneDrive - Point Space Limited\Git\Diagrams\DiagramsForGrasshopper\obj\Debug\DiagramsForGrasshopper.Properties.Resources.resources
+C:\Users\tomno\OneDrive - Point Space Limited\Git\Diagrams\DiagramsForGrasshopper\obj\Debug\DiagramsForGrasshopper.csproj.GenerateResource.cache
