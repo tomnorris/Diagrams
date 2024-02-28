@@ -43,7 +43,9 @@ namespace DiagramsForGrasshopper
                 m_CapsuleHeight += INPUT_VERT_SPACING;
             }
 
-           
+            if (m_CapsuleHeight < INPUT_VERT_SPACING * 2) {
+                m_CapsuleHeight = INPUT_VERT_SPACING * 2; //Account for two outputs
+            }
        
            
 

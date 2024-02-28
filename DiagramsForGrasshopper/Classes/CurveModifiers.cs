@@ -65,88 +65,107 @@ namespace DiagramsForGrasshopper
         }
 
 
-        public override void GetValues(IGH_DataAccess DA)
+        public override void GetValues(IGH_DataAccess DA, IGH_Component componant)
         {
             if (this.HasBeenAdded)
             {
-                DA.GetData("LineWeight", ref LineWeight);
-                DA.GetData("LineColors", ref LineColors);
-                DA.GetData("StartingCurveEnd", ref StartingCurveEndVariable);
-                DA.GetData("EndingCurveEnd", ref EndingCurveEndVariable);
 
+                if (componant.Params.IndexOfInputParam("LineWeight") > -1)
+                {
+                    DA.GetData("LineWeight", ref LineWeight);
+                }
+                if (componant.Params.IndexOfInputParam("LineColor") > -1)
+                {
+                    DA.GetData("LineColor", ref LineColors);
+                }
+                if (componant.Params.IndexOfInputParam("StartingCurveEnd") > -1)
+                {
+                    DA.GetData("StartingCurveEnd", ref StartingCurveEndVariable);
+                }
+                if (componant.Params.IndexOfInputParam("EndingCurveEnd") > -1)
+                {
+                    DA.GetData("EndingCurveEnd", ref EndingCurveEndVariable);
+                }
 
                 try
                 {
-                    if (StartingCurveEndVariable is GH_Curve)
-                    {
-                        StartingCurveEndVariable.CastTo(out Curve crv);
-                        StartingCurveEnd = new DiagramCurveEnd(DiagramCurve.Create(crv, Diagram.DefaultColor, Diagram.DefaultLineWeight), crv.PointAtNormalizedLength(0.5), Plane.WorldXY.YAxis, false);
-
-                    }
-
-                    if (StartingCurveEndVariable is Diagram)
+                    if (StartingCurveEndVariable != null)
                     {
 
-                        StartingCurveEndVariable.CastTo(out Diagram CurveEndStartDiagram);
-
-                        for (int i = 0; i < CurveEndStartDiagram.Objects.Count; i++)
+                        if (StartingCurveEndVariable is GH_Curve)
                         {
-                            if (CurveEndStartDiagram.Objects[i] is BaseCurveDiagramObject)
-                            {
-                                StartingCurveEnd = new DiagramCurveEnd(CurveEndStartDiagram.Objects[i] as BaseCurveDiagramObject, Point3d.Origin, Plane.WorldXY.YAxis, false);
-                                break;
-                            }
-
-                            if (CurveEndStartDiagram.Objects[i] is DiagramCurveEnd)
-                            {
-                                StartingCurveEnd = CurveEndStartDiagram.Objects[i] as DiagramCurveEnd;
-                                break;
-                            }
+                            StartingCurveEndVariable.CastTo(out Curve crv);
+                            StartingCurveEnd = new DiagramCurveEnd(DiagramCurve.Create(crv, Diagram.DefaultColor, Diagram.DefaultLineWeight), crv.PointAtNormalizedLength(0.5), Plane.WorldXY.YAxis, false);
 
                         }
+                     
+                       
+
+                            StartingCurveEndVariable.CastTo(out Diagram CurveEndStartDiagram);
+
+                            for (int i = 0; i < CurveEndStartDiagram.Objects.Count; i++)
+                            {
+                                if (CurveEndStartDiagram.Objects[i] is BaseCurveDiagramObject)
+                                {
+                                    StartingCurveEnd = new DiagramCurveEnd(CurveEndStartDiagram.Objects[i] as BaseCurveDiagramObject, Point3d.Origin, Plane.WorldXY.YAxis, false);
+                                    break;
+                                }
+
+                                if (CurveEndStartDiagram.Objects[i] is DiagramCurveEnd)
+                                {
+                                    StartingCurveEnd = CurveEndStartDiagram.Objects[i] as DiagramCurveEnd;
+                                    break;
+                                }
+
+                            }
                     }
 
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Failed to unwrap Starting Curve End: " + ex.Message);
+                    componant.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning,"Failed to unwrap Starting Curve End, see input hint for help: " + ex.Message);
                 }
 
                 try
                 {
-                    if (EndingCurveEndVariable is GH_Curve)
+
+                    if (EndingCurveEndVariable != null)
                     {
-                        EndingCurveEndVariable.CastTo(out Curve crv);
-                        EndingCurveEnd = new DiagramCurveEnd(DiagramCurve.Create(crv, Diagram.DefaultColor, Diagram.DefaultLineWeight), crv.PointAtNormalizedLength(0.5), Plane.WorldXY.YAxis, false);
-
-                    }
-
-                    if (EndingCurveEndVariable is Diagram)
-                    {
-
-                        EndingCurveEndVariable.CastTo(out Diagram CurveEndEndDiagram);
-
-                        for (int i = 0; i < CurveEndEndDiagram.Objects.Count; i++)
+                        if (EndingCurveEndVariable is GH_Curve)
                         {
-                            if (CurveEndEndDiagram.Objects[i] is BaseCurveDiagramObject)
-                            {
-                                EndingCurveEnd = new DiagramCurveEnd(CurveEndEndDiagram.Objects[i] as BaseCurveDiagramObject, Point3d.Origin, Plane.WorldXY.YAxis, false);
-                                break;
-                            }
-
-                            if (CurveEndEndDiagram.Objects[i] is DiagramCurveEnd)
-                            {
-                                EndingCurveEnd = CurveEndEndDiagram.Objects[i] as DiagramCurveEnd;
-                                break;
-                            }
+                            EndingCurveEndVariable.CastTo(out Curve crv);
+                            EndingCurveEnd = new DiagramCurveEnd(DiagramCurve.Create(crv, Diagram.DefaultColor, Diagram.DefaultLineWeight), crv.PointAtNormalizedLength(0.5), Plane.WorldXY.YAxis, false);
 
                         }
+
+                      
+
+                            EndingCurveEndVariable.CastTo(out Diagram CurveEndEndDiagram);
+
+                            for (int i = 0; i < CurveEndEndDiagram.Objects.Count; i++)
+                            {
+                                if (CurveEndEndDiagram.Objects[i] is BaseCurveDiagramObject)
+                                {
+                                    EndingCurveEnd = new DiagramCurveEnd(CurveEndEndDiagram.Objects[i] as BaseCurveDiagramObject, Point3d.Origin, Plane.WorldXY.YAxis, false);
+                                    break;
+                                }
+
+                                if (CurveEndEndDiagram.Objects[i] is DiagramCurveEnd)
+                                {
+                                    EndingCurveEnd = CurveEndEndDiagram.Objects[i] as DiagramCurveEnd;
+                                    break;
+                                }
+
+                            }
+                        
+
                     }
 
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Failed to unwrap Ending Curve End: " + ex.Message);
+
+                    componant.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Failed to unwrap Ending Curve End, see input hint for help:: " + ex.Message);
                 }
 
 

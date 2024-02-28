@@ -27,7 +27,7 @@ namespace DiagramsForGrasshopper
         }
 
 
-        public abstract void GetValues(IGH_DataAccess DA);
+        public abstract void GetValues(IGH_DataAccess DA, IGH_Component componant);
 
 
         public static IGH_Param CreateParam(IGH_Param baseParam, string Name, string NickName, string Description)
