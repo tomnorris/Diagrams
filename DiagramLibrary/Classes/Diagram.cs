@@ -19,22 +19,23 @@ namespace DiagramLibrary
         private int m_Height;
         private DiagramText m_Title;
         private string m_TitleFont = Diagram.DefaultFontName;
-      
+
         private Color m_BackgroundColour;
         private Color m_FrameColour;
         private float m_FrameLineWeight;
-    
+
 
         private List<DiagramObject> m_Objects;
 
 
-       public static PointF ConvertPoint(Point3d pt) {
+        public static PointF ConvertPoint(Point3d pt)
+        {
             return new PointF((float)pt.X, (float)pt.Y);
         }
 
         public static Point3d ConvertPoint(PointF pt)
         {
-            return new Point3d(pt.X, pt.Y,0);
+            return new Point3d(pt.X, pt.Y, 0);
         }
 
 
@@ -55,7 +56,7 @@ namespace DiagramLibrary
         public List<DiagramObject> Objects
         {
             get { return m_Objects; }
-            
+
         }
 
 
@@ -70,7 +71,7 @@ namespace DiagramLibrary
             diagram.Title = m_Title;
             diagram.m_TitleFont = m_TitleFont;
             diagram.m_FrameColour = m_FrameColour;
-            diagram. m_FrameLineWeight = m_FrameLineWeight;
+            diagram.m_FrameLineWeight = m_FrameLineWeight;
 
 
             return diagram;
@@ -79,9 +80,9 @@ namespace DiagramLibrary
         public Diagram() { }
 
 
-        public static Diagram Create(int width, int height, DiagramText title, Color backgroundColour,float frameLineWeight, Color frameColour)
+        public static Diagram Create(int width, int height, DiagramText title, Color backgroundColour, float frameLineWeight, Color frameColour)
         {
-                      return Create( width,  height, title,  backgroundColour, frameLineWeight, frameColour, new PointF(0,0) );
+            return Create(width, height, title, backgroundColour, frameLineWeight, frameColour, new PointF(0, 0));
         }
 
 
@@ -90,10 +91,13 @@ namespace DiagramLibrary
         {
             Diagram diagram = new Diagram();
 
-         
-                diagram.m_Width = width;
-                  
+
+            diagram.m_Width = width;
+
             diagram.m_Height = height;
+       
+
+
             diagram.m_Objects = new List<DiagramObject>();
             diagram.m_Title = title;
             diagram.m_BackgroundColour = backgroundColour;
@@ -116,14 +120,14 @@ namespace DiagramLibrary
                 {
                     var goo = objs[i] as Grasshopper.Kernel.Types.IGH_GeometricGoo;
                     goo.CastTo(out GeometryBase geoBase);
-                    AddRhinoObject(component,objs[i], tolernace);
+                    AddRhinoObject(component, objs[i], tolernace);
 
 
 
                 }
                 catch (Exception)
                 {
-                    AddDiagramObjectFromGoo(component,objs[i]);
+                    AddDiagramObjectFromGoo(component, objs[i]);
 
                 }
 
@@ -143,7 +147,8 @@ namespace DiagramLibrary
 
         public void AddDiagramObjectFromGoo(Grasshopper.Kernel.GH_Component component, object obj)
         {
-            if (obj == null) {
+            if (obj == null)
+            {
                 component.AddRuntimeMessage(Grasshopper.Kernel.GH_RuntimeMessageLevel.Warning, "Cannont add null object to diagram");
                 return;
             }
@@ -152,11 +157,11 @@ namespace DiagramLibrary
 
 
             goo.CastTo(out Diagram diagram);
-            if (diagram == null) { return;  }
-            if (diagram.m_Objects.Count == 0) { return;  }
+            if (diagram == null) { return; }
+            if (diagram.m_Objects.Count == 0) { return; }
             m_Objects.AddRange(diagram.m_Objects);
 
-            
+
 
         }
 
@@ -275,11 +280,13 @@ namespace DiagramLibrary
                 double width = m_Width;
                 double height = m_Height;
 
-                if (m_Width <= 0) {
+                if (m_Width <= 0)
+                {
                     width = bb.Max.X - bb.Min.X;
                 }
 
-                if (height <= 0) {
+                if (height <= 0)
+                {
                     height = bb.Max.Y - bb.Min.Y;
                 }
 
@@ -288,61 +295,85 @@ namespace DiagramLibrary
 
 
             }
-            else {
+            else
+            {
                 return new Rectangle3d(pl, m_Width, m_Height);
             }
 
-          
+
         }
 
 
         public BoundingBox GetGeometryBoundingBox()
         {
             return this.GetGeometryBoundingRectangle().ToNurbsCurve().GetBoundingBox(false);
-                       
+
         }
 
-        public Size GetBoundingSize(double scale)
+        public Size GetBoundingSize(float scale)
         {
             Rectangle3d bb = GetGeometryBoundingRectangle();
-        
-            return new Size((int)Math.Ceiling(bb.Width), (int)Math.Ceiling(bb.Height));
+
+            return new Size((int)Math.Ceiling(bb.Width* scale), (int)Math.Ceiling(bb.Height* scale));
         }
 
 
-        private DiagramFilledRectangle GetBackground() {
+        private DiagramFilledRectangle GetBackground()
+        {
 
             Rectangle3d bbr = this.GetGeometryBoundingRectangle();
-            bbr.Transform(Transform.Translation(m_Location.X,m_Location.Y,0));
+            bbr.Transform(Transform.Translation(m_Location.X, m_Location.Y, 0));
 
-          return DiagramFilledRectangle.Create(bbr, m_BackgroundColour, m_FrameColour, m_FrameLineWeight);
+            return DiagramFilledRectangle.Create(bbr, m_BackgroundColour, m_FrameColour, m_FrameLineWeight);
 
         }
 
-        public Bitmap DrawBitmap(Grasshopper.Kernel.GH_Component component, double scale) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
+        public Bitmap DrawBitmap(Grasshopper.Kernel.GH_Component component, float scale) // be careful all the Y dimentions need to be be subtracted from the the hieght at this is drawn upside down
         {
             //TODO DrawBitmap needs to pass on the scale and draw accordingly
-            Size sz = GetBoundingSize(scale);
+            Size size = GetBoundingSize(scale);
 
-            Bitmap btm = new Bitmap(sz.Width, sz.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            if (size.Width < 1)
+            {
+                size.Width = 1;
+            }
+
+            if (size.Height < 1)
+            {
+                size.Height = 1;
+            }
+
+
+
+            Bitmap btm = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
 
 
             using (var graphics = Graphics.FromImage(btm))
             {
                 graphics.TranslateTransform(-m_Location.X, -m_Location.Y, System.Drawing.Drawing2D.MatrixOrder.Append);
+                graphics.ScaleTransform(scale, scale);
                 graphics.FillRectangle(Brushes.White, new RectangleF(0, 0, this.m_Width, this.m_Height));// text displays badly without this, if no background is set
-                GetBackground().DrawBitmap(component,graphics);
+                GetBackground().DrawBitmap(component, graphics);
                 foreach (DiagramObject obj in m_Objects)
                 {
-                    obj.DrawBitmap(component,graphics);
+                    try
+                    {
+                        obj.DrawBitmap(component, graphics);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        component.AddRuntimeMessage(Grasshopper.Kernel.GH_RuntimeMessageLevel.Warning, "GH Canvas: An Object was Skipped When Drawing: " + ex.Message);
+                    }
+                   
 
                 }
 
 
             }
 
-         btm.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            btm.RotateFlip(RotateFlipType.RotateNoneFlipY);
 
 
             return btm;
@@ -352,30 +383,43 @@ namespace DiagramLibrary
 
         public void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolernace, Transform xform, bool colorOverride, Rhino.RhinoDoc doc, bool Bake)
         {
-            if (m_Location != PointF.Empty) {
-               
+            if (m_Location != PointF.Empty)
+            {
 
-                    xform = Transform.Multiply(xform, Transform.Translation(new Vector3d(-m_Location.X, -m_Location.Y, 0)));
-                
+
+                xform = Transform.Multiply(xform, Transform.Translation(new Vector3d(-m_Location.X, -m_Location.Y, 0)));
+
             }
 
-            GetBackground().DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride,doc,Bake);
+            GetBackground().DrawRhinoPreview(component, pipeline, tolernace, xform, colorOverride, doc, Bake);
 
             if (m_Title != null)
             {
                 PointF pt = new PointF(0, this.m_Height);
                 DiagramText title = m_Title;
-title.Location = pt;
-                if (title.TextSize < 0) {
+                title.Location = pt;
+                if (title.TextSize < 0)
+                {
                     title.TextSize = this.m_Width / 20;
                 }
-                  
-                title.DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride, doc, Bake);
+
+                title.DrawRhinoPreview(component, pipeline, tolernace, xform, colorOverride, doc, Bake);
             }
 
             foreach (DiagramObject obj in m_Objects)
             {
-                obj.DrawRhinoPreview(component,pipeline, tolernace, xform, colorOverride, doc, Bake);
+
+                try
+                {
+                    obj.DrawRhinoPreview(component, pipeline, tolernace, xform, colorOverride, doc, Bake);
+                }
+                catch (Exception ex)
+                {
+
+                    component.AddRuntimeMessage(Grasshopper.Kernel.GH_RuntimeMessageLevel.Warning, "Rhino Preview: An Object was Skipped When Drawing: " + ex.Message);
+                    }
+
+                
 
             }
 

@@ -111,7 +111,7 @@ namespace DiagramsForGrasshopper
 
             for (int i = 0; i < Modifiers.Count; i++)
             {
-                Modifiers[i].GetValues(DA);
+                Modifiers[i].GetValues(DA,this);
             }
 
         }

@@ -231,7 +231,7 @@ namespace DiagramLibrary
             {
                
                 PointF[] pts = crv.GetPoints();
-              
+                if (pts == null) { continue;  }
                 path.AddLines(pts);
             }
 

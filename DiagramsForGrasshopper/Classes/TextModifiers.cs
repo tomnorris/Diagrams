@@ -93,18 +93,42 @@ namespace DiagramsForGrasshopper
 
         }
 
-        public override void GetValues(IGH_DataAccess DA)
+        public override void GetValues(IGH_DataAccess DA, IGH_Component componant)
         {
             if (this.HasBeenAdded)
             {
-                DA.GetData("TextScale", ref TextScale);
-                DA.GetData("Font", ref Font);
-                DA.GetData("TextPadding", ref TextPadding);
-                DA.GetData("TextJustification", ref m_TextJustificationInt);
-                DA.GetData("TextColor", ref TextColor);
-                DA.GetData("TextBackgroundColor", ref TextBackgroundColor);
-                DA.GetData("TextBorderColor", ref TextBorderColor);
-                DA.GetData("TextBorderLineweight", ref TextBorderLineweight);
+                if (componant.Params.IndexOfInputParam("TextScale") > -1)
+                {
+                    DA.GetData("TextScale", ref TextScale);
+                }
+                if (componant.Params.IndexOfInputParam("Font") > -1)
+                {
+                    DA.GetData("Font", ref Font);
+                }
+                if (componant.Params.IndexOfInputParam("TextPadding") > -1)
+                {
+                    DA.GetData("TextPadding", ref TextPadding);
+                }
+                if (componant.Params.IndexOfInputParam("TextJustification") > -1)
+                {
+                    DA.GetData("TextJustification", ref m_TextJustificationInt);
+                }
+                if (componant.Params.IndexOfInputParam("TextColor") > -1)
+                {
+                    DA.GetData("TextColor", ref TextColor);
+                }
+                if (componant.Params.IndexOfInputParam("TextBackgroundColor") > -1)
+                {
+                    DA.GetData("TextBackgroundColor", ref TextBackgroundColor);
+                }
+                if (componant.Params.IndexOfInputParam("TextBorderColor") > -1)
+                {
+                    DA.GetData("TextBorderColor", ref TextBorderColor);
+                }
+                if (componant.Params.IndexOfInputParam("TextBorderLineweight") > -1)
+                {
+                    DA.GetData("TextBorderLineweight", ref TextBorderLineweight);
+                }
 
                 switch (m_TextJustificationInt)
                 {

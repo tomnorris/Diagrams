@@ -9,7 +9,7 @@ namespace DiagramsForGrasshopper
     {
 
         
-        private float CapsuleHeight = 20;
+        private float m_CapsuleHeight = 20;
 
 
         public DiagramCanvasAttibutes(GH_Component owner) : base(owner) { }
@@ -21,7 +21,7 @@ namespace DiagramsForGrasshopper
 
 
             float width = 125;
-            float height = CapsuleHeight;
+            float height = m_CapsuleHeight;
 
 
             CanvasDiagram owner = this.Owner as CanvasDiagram;
@@ -106,10 +106,18 @@ namespace DiagramsForGrasshopper
             {
               
                 Size size = diagram.GetBoundingSize(canvasDiagram.Scale);
+                if (size.Width < 1) {
+                    size.Width = 1;
+                    }
 
-                graphics.DrawLine(Pens.DarkGray, m_innerBounds.Location, new Point((int)m_innerBounds.X, (int)(m_innerBounds.Y + CapsuleHeight)));
-                graphics.DrawLine(Pens.DarkGray, new Point((int)(m_innerBounds.X+m_innerBounds.Width), (int)(m_innerBounds.Y + CapsuleHeight)), 
-                    new Point((int)(m_innerBounds.X + m_innerBounds.Width), (int)(m_innerBounds.Y + CapsuleHeight)));
+                if (size.Height < 1)
+                {
+                    size.Height = 1;
+                }
+
+                graphics.DrawLine(Pens.DarkGray, m_innerBounds.Location, new Point((int)m_innerBounds.X, (int)(m_innerBounds.Y + m_CapsuleHeight)));
+                graphics.DrawLine(Pens.DarkGray, new Point((int)(m_innerBounds.X+m_innerBounds.Width), (int)(m_innerBounds.Y + m_CapsuleHeight)), 
+                    new Point((int)(m_innerBounds.X + m_innerBounds.Width), (int)(m_innerBounds.Y + m_CapsuleHeight)));
 
                 if (diagram.Title != null)
                 {
@@ -117,7 +125,12 @@ namespace DiagramsForGrasshopper
                     graphics.DrawString(text, new Font(diagram.Title.FontName,8f), new SolidBrush(canvas.ForeColor), new Point((int)(m_innerBounds.X + 3), (int)(m_innerBounds.Y + 3)));
                 }
 
-                Rectangle rec = new Rectangle((int)this.Bounds.X+4, (int)(this.Bounds.Y + CapsuleHeight)+4, (int)this.Bounds.Width-8, (int)(this.Bounds.Width / size.Width * size.Height) -8);
+
+                //Rectangle rec = new Rectangle((int)this.Bounds.X+4, (int)(this.Bounds.Y + m_CapsuleHeight)+4, (int)this.Bounds.Width-8, (int)(this.Bounds.Width / size.Width * size.Height) -8);
+              
+                double aspectRatio = (this.Bounds.Width / size.Width) * size.Height;
+                Rectangle rec = new Rectangle((int)this.Bounds.X + 4, (int)(this.Bounds.Y + m_CapsuleHeight) + 4, (int)this.Bounds.Width - 8, (int)(aspectRatio) - 8);
+                graphics.FillRectangle(Brushes.White, rec);
                 graphics.FillRectangle(Brushes.White, rec);
                 graphics.DrawRectangle(Pens.Black, rec);
 

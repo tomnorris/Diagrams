@@ -12,8 +12,8 @@ namespace DiagramsForGrasshopper
     {
 
 
-       // public Diagram m_Diagram = null;
-        public double Scale = 1;
+      
+        public float Scale = 1;
         public bool Update = true;
         public System.Drawing.Bitmap Bitmap = null;
 
@@ -80,9 +80,10 @@ namespace DiagramsForGrasshopper
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             base.AppendAdditionalComponentMenuItems(menu);
-            Menu_AppendItem(menu, "Save", SaveHandler, true,false);
+            Menu_AppendItem(menu, "Save At Current Scale", SaveHandler, true,false);
+            Menu_AppendItem(menu, "Save At Full Scale", SaveFullHandler, true, false);
 
-            var setScale = Menu_AppendItem(menu, "Set Number");
+            var setScale = Menu_AppendItem(menu, "Set Scale");
             Menu_AppendTextItem(setScale.DropDown, Scale.ToString(System.Globalization.CultureInfo.InvariantCulture), null, TextChanged, true);
         }
 
@@ -91,7 +92,15 @@ namespace DiagramsForGrasshopper
         {
             try
             {
-                Scale = Convert.ToDouble(newText);
+                float tempValue = (float)Convert.ToDouble(newText);
+                if (tempValue <= 0) {
+                    return;
+                }
+                if (tempValue > 10)
+                {
+                    return;
+                }
+                Scale = tempValue;
                 ExpireSolution(true);
             }
             catch (Exception)
@@ -107,6 +116,7 @@ namespace DiagramsForGrasshopper
 
         private void SaveHandler(object sender, EventArgs e)
         {
+            if (this.RuntimeMessageLevel != GH_RuntimeMessageLevel.Blank) { return; }
             Rhino.UI.SaveFileDialog saveFileDialog = new Rhino.UI.SaveFileDialog();
             saveFileDialog.DefaultExt = ".png";
             saveFileDialog.Filter = "Image files (*.png)|*.*";
@@ -119,6 +129,39 @@ namespace DiagramsForGrasshopper
                 this.Bitmap.Save(filename);
             }
         }
+
+        private void SaveFullHandler(object sender, EventArgs e)
+        {
+            if (this.RuntimeMessageLevel != GH_RuntimeMessageLevel.Blank) { return;  }
+            Rhino.UI.SaveFileDialog saveFileDialog = new Rhino.UI.SaveFileDialog();
+            saveFileDialog.DefaultExt = ".png";
+            saveFileDialog.Filter = "Image files (*.png)|*.*";
+            saveFileDialog.Filter = "Bitmap Image (.bmp)|*.bmp|JPEG Image (.jpeg)|*.jpeg|Png Image (.png)|*.png";
+
+            saveFileDialog.Title = "Save a file";
+            if (saveFileDialog.ShowSaveDialog())
+            {
+                string filename = saveFileDialog.FileName;
+                DiagramLibrary.Diagram diagram = null;
+                var diagramOutput = this.Params.Output[0].VolatileData;
+                for (int i = 0; i < diagramOutput.PathCount; i++)
+                {
+                    var diagramGooList = diagramOutput.get_Branch(diagramOutput.Paths[i]);
+
+                    for (int j = 0; j < diagramGooList.Count; j++)
+                    {
+                        var diagramGoo = diagramGooList[j] as Grasshopper.Kernel.Types.IGH_Goo;
+                        diagramGoo.CastTo(out diagram);
+                        break;
+                    }
+                    break;
+                }
+
+                diagram.DrawBitmap(this, 1).Save(filename);
+            
+            }
+        }
+
 
 
 
