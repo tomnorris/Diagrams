@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace DiagramsForGrasshopper
 {
-    public class CreateDiagramCurveEnd : DiagramComponent
+    public class CreateDiagramCurveEnd : DiagramComponentWithModifiers
     {
         /// <summary>
         /// Initializes a new instance of the DiagramCurveEnd class.
@@ -17,18 +17,16 @@ namespace DiagramsForGrasshopper
               "Description",
           "Display", "Diagram")
         {
+            Modifiers.Add(new CurveModifiers(true, true, false, false));
         }
 
 
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputStartingParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddCurveParameter("Curve", "Crv", "The Curve", GH_ParamAccess.item);
-            //    this.Params.Input[0].ObjectChanged += CreateDiagramCurve_ObjectChanged; 
-            pManager.AddColourParameter("Colour", "Clr", "Colour of the Curve", GH_ParamAccess.item, Diagram.DefaultColor);
-            pManager.AddNumberParameter("Weight", "LW", "Line Weigh of the Curve", GH_ParamAccess.item, Diagram.DefaultLineWeight);
+            pManager.AddCurveParameter("Curves", "Crvs", "The Curve", GH_ParamAccess.list);
             pManager.AddPointParameter("Point", "P", "Pivot point of the Curve End, this is the point which will be put on the target Curve's end point, Default is the Origin", GH_ParamAccess.item, Point3d.Origin);
             pManager.AddVectorParameter("Direction", "D", "This is the direction of the Curve End which will be aligned with the tangent of the Target Curve's end point, Default is the Y - Axis", GH_ParamAccess.item,Vector3d.YAxis);
             pManager.AddBooleanParameter("Flipped", "F", "Flip the direction of the Curve End", GH_ParamAccess.item, true);
@@ -43,42 +41,39 @@ namespace DiagramsForGrasshopper
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
+            this.GetAllValues(DA);
 
-            double weight = Diagram.DefaultLineWeight;
-            Color clr = Diagram.DefaultColor;
-            Curve crv = null;
+       
+            List<Curve> crvs = new List<Curve>();
             Point3d point = Point3d.Origin;
            Vector3d direction = Vector3d.YAxis;
             bool flipped = true;
 
 
-            DA.GetData(0, ref crv);
-            DA.GetData(1, ref clr);
-            DA.GetData(2, ref weight);
-            DA.GetData(3, ref point);
-            DA.GetData(4, ref direction);
-
-
-            DA.GetData(5, ref flipped);
+            DA.GetDataList(0, crvs);
+            DA.GetData(1, ref point);
+            DA.GetData(2, ref direction);
+            DA.GetData(3, ref flipped);
        
 
-            if (crv == null)
+            if (crvs.Count == 0)
             {
                  this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error,"Curve cannot be Null");
                 return null;
             }
 
+            CurveModifiers curveModifiers = this.GetFirstOrDefaultCurveModifier();
 
+         
+            DiagramCurveCollection diagramCurveCollection = DiagramCurveCollection.Create(crvs,curveModifiers.LineColors, (float)curveModifiers.LineWeight);
 
-            DiagramCurve diagramCurve = DiagramCurve.Create(crv, clr, (float)weight);
-
-            DiagramCurveEnd diagramCurveEnd = new DiagramCurveEnd(diagramCurve, point, direction, flipped);
+            DiagramCurveEnd diagramCurveEnd = new DiagramCurveEnd(diagramCurveCollection, point, direction, flipped);
 
            
 
 
-            SizeF size = diagramCurve.GetTotalSize();
-            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, 0, Color.Transparent, diagramCurve.GetBoundingBoxLocation());
+            SizeF size = diagramCurveCollection.GetTotalSize();
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, 0, Color.Transparent, diagramCurveCollection.GetBoundingBoxLocation());
             diagram.AddDiagramObject(diagramCurveEnd);
 
 

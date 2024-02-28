@@ -7,34 +7,30 @@ using Rhino.Geometry;
 
 namespace DiagramsForGrasshopper
 {
-    public class CreateDiagramPointLabel : DiagramComponent
+    public class CreateDiagramPointLabel : DiagramComponentWithModifiers
     {
         /// <summary>
         /// Initializes a new instance of the CreateDiagramLabel class.
         /// </summary>
         public CreateDiagramPointLabel()
-          : base("CreateDiagramPointLabel", "DPointLabel",
+          : base("CreateDiagramPointLabel", "DPtLabel",
               "Description",
             "Display", "Diagram")
         {
+            Modifiers.Add(new TextModifiers(true, true, true, false, false, true, true, true));
+          
+
         }
 
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputStartingParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Text", "T", "Text as a string", GH_ParamAccess.item);
                       pManager.AddPointParameter("LabelPoint", "L", "The point on the target for the label", GH_ParamAccess.item, Point3d.Origin);
             pManager.HideParameter(1);
-                  pManager.AddNumberParameter("LabelScale", "LS", "Label size", GH_ParamAccess.item, Diagram.DefaultTextScale);
-            pManager.AddTextParameter("Font", "F", "Font family name", GH_ParamAccess.item, Diagram.DefaultFontName);
-                   
-            pManager.AddNumberParameter("Padding", "P", "Text Padding", GH_ParamAccess.item, 0);
-            pManager.AddColourParameter("Colour", "Clr", "Colour for text", GH_ParamAccess.item, Diagram.DefaultColor);
-            pManager.AddColourParameter("FrameColor", "FClr", "Colour for text", GH_ParamAccess.item, Diagram.DefaultColor);
-            pManager.AddColourParameter("BackgroundColor", "BgClr", "BackgroundColour for text", GH_ParamAccess.item, Color.Transparent);
-            pManager.AddNumberParameter("FrameLineWeight", "FLW", "Line Weight of the Frame", GH_ParamAccess.item, Diagram.DefaultLineWeight);
+      
         }
 
 
@@ -45,27 +41,14 @@ namespace DiagramsForGrasshopper
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
-            double labelScale = Diagram.DefaultTextScale;
-            Color clr = Diagram.DefaultColor;
-            Color frameClr = Diagram.DefaultColor;
-            Color maskClr = Color.Transparent;
+            GetAllValues( DA);
+
             string text = "";
             Point3d pt = new Point3d(0, 0, 0);
-            string font = Diagram.DefaultFontName;
-          
-            double padding = 0;
-            double frameLineWieght = Diagram.DefaultLineWeight;
-
-
+            
             DA.GetData(0, ref text);
             DA.GetData(1, ref pt);
-            DA.GetData(2, ref labelScale);
-            DA.GetData(3, ref font);
-            DA.GetData(4, ref padding);
-            DA.GetData(5, ref clr);
-            DA.GetData(6, ref frameClr);
-            DA.GetData(7, ref maskClr);
-            DA.GetData(8, ref frameLineWieght);
+          
 
             if (text == "")
             {
@@ -73,13 +56,13 @@ namespace DiagramsForGrasshopper
                 return null;
             }
 
-
+            TextModifiers textModifiers = GetFirstOrDefaultTextModifier();
 
 
 
             PointF location = Diagram.ConvertPoint(pt);
 
-            DiagramPointLabel diagramLabel = DiagramPointLabel.Create(text, location, clr, (float)labelScale, maskClr, frameClr, (float)frameLineWieght, font,  (float)padding);
+            DiagramPointLabel diagramLabel = DiagramPointLabel.Create(text, location, textModifiers.TextColor, (float)textModifiers.TextScale, textModifiers.TextBackgroundColor, textModifiers.TextBorderColor, (float)textModifiers.TextBorderLineweight, textModifiers.Font,  (float)textModifiers.TextPadding);
 
             SizeF size = diagramLabel.GetTotalSize();
             Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, 0, Color.Transparent, diagramLabel.DiagramText.GetAnchorCompensatedPoint(size));

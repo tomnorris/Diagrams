@@ -56,8 +56,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\DiagramComponentAttibutes.cs" />
+    <Compile Include="Classes\DiagramComponentWithModifiers.cs" />
+    <Compile Include="Classes\DiagramCanvasAttibutes.cs" />
     <Compile Include="Classes\DiagramComponent.cs" />
+    <Compile Include="Classes\CurveModifiers.cs" />
+    <Compile Include="Classes\TextModifiers.cs" />
+    <Compile Include="Classes\ModifiersBase.cs" />
+    <Compile Include="Classes\ModifiersAttributes.cs" />
     <Compile Include="Componants\CanvasDiagram.cs" />
     <Compile Include="Componants\CreateDiagram.cs" />
     <Compile Include="Componants\CreateDiagramHatch.cs" />
@@ -65,7 +70,6 @@
     <Compile Include="Componants\CreateDiagramPointLabel.cs" />
     <Compile Include="Componants\CreateDiagramTable.cs" />
     <Compile Include="Componants\CreateDiagramText.cs" />
-    <Compile Include="Componants\CreateDiagramTextComplex.cs" />
     <Compile Include="Componants\CreateDiagramCurve.cs" />
     <Compile Include="Componants\CreateDiagramCurveEnd.cs" />
     <Compile Include="Componants\CreateDiagramDimention.cs" />

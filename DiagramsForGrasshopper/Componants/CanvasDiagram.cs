@@ -35,7 +35,7 @@ namespace DiagramsForGrasshopper
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Diagram", "D", "Diagram to display inside this componant", GH_ParamAccess.item);
-          //  this.Params.Input[0].ObjectChanged += RhinoDiagram_ObjectChanged;
+        
         }
          
 
@@ -148,7 +148,7 @@ namespace DiagramsForGrasshopper
         public override void CreateAttributes()
         {
             base.CreateAttributes();
-            m_attributes = new DiagramComponentAttibutes(this);
+            m_attributes = new DiagramCanvasAttibutes(this);
 
         }
 
