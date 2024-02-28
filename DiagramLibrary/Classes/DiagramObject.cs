@@ -23,7 +23,7 @@ namespace DiagramLibrary
             set { m_Colour = value;  }
         }
 
-        public float LineWeight //For text this is text size?!
+        public virtual float LineWeight 
         {
             get { return m_LineWeight; }
             set { m_LineWeight = value; }

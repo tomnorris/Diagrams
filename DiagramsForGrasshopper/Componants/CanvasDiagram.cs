@@ -35,7 +35,7 @@ namespace DiagramsForGrasshopper
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Diagram", "D", "Diagram to display inside this componant", GH_ParamAccess.item);
-          //  this.Params.Input[0].ObjectChanged += RhinoDiagram_ObjectChanged;
+        
         }
          
 
@@ -132,7 +132,7 @@ namespace DiagramsForGrasshopper
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return DiagramsForGrasshopper.Properties.Resources.GrasshopperIcon;
             }
         }
 
@@ -148,7 +148,7 @@ namespace DiagramsForGrasshopper
         public override void CreateAttributes()
         {
             base.CreateAttributes();
-            m_attributes = new DiagramComponentAttibutes(this);
+            m_attributes = new DiagramCanvasAttibutes(this);
 
         }
 
@@ -157,7 +157,7 @@ namespace DiagramsForGrasshopper
 
         {
 
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.tertiary; }
 
         }
 

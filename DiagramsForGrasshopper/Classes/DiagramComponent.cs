@@ -7,10 +7,11 @@ using System.Windows.Forms;
 
 namespace DiagramsForGrasshopper
 {
-    public abstract class DiagramComponent : ReportBaseComponent
+    public abstract class DiagramComponent : GH_Component
 
     {
 
+                      
 
         protected bool m_VersionChecked = false;
         protected Transform m_Xform = Transform.ZeroTransformation;
@@ -24,27 +25,29 @@ namespace DiagramsForGrasshopper
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            base.RegisterOutputParams(pManager);
-            pManager.AddGenericParameter("Diagram Objects", "DObjs", "The Diagram Objects Created by this componant", GH_ParamAccess.list);
+        //base.RegisterOutputParams(pManager);
+        pManager.AddTextParameter("Report", "R", "A report from this componant", GH_ParamAccess.list);
+        pManager.AddGenericParameter("Diagram Objects", "DObjs", "The Diagram Objects Created by this componant", GH_ParamAccess.list);
 
         }
 
 
-
-
-        public override void DiagramCompnentSolveInstance(IGH_DataAccess DA)
+        protected override void SolveInstance(IGH_DataAccess DA)
         {
-     
+            this.ClearRuntimeMessages();
             m_Xform = Transform.ZeroTransformation;
             this.CheckLibraryVersion(DA);
-            
+
             Diagram diagram = DiagramSolveInstance(DA);
 
 
 
             DA.SetData(1, diagram);
+
+            DA.SetData(0, this.RuntimeMessages(GH_RuntimeMessageLevel.Blank | GH_RuntimeMessageLevel.Error | GH_RuntimeMessageLevel.Remark | GH_RuntimeMessageLevel.Warning));
         }
 
+    
         public abstract DiagramLibrary.Diagram DiagramSolveInstance(IGH_DataAccess DA);
 
 
@@ -215,6 +218,7 @@ namespace DiagramsForGrasshopper
             return VersionComparision.VersionMatch;
 
         }
+
 
         private enum VersionComparision
         {

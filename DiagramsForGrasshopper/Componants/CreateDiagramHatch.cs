@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace DiagramsForGrasshopper
 {
-    public class CreateDiagramHatch : DiagramComponent
+    public class CreateDiagramHatch : DiagramComponentWithModifiers
     {
         /// <summary>
         /// Initializes a new instance of the CreateDiagramHatch class.
@@ -18,19 +18,19 @@ namespace DiagramsForGrasshopper
               "Description",
               "Display", "Diagram")
         {
+            Modifiers.Add(new CurveModifiers(true, true, false, false));
         }
 
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputStartingParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddBrepParameter("Brep", "B", "Height in Pixels", GH_ParamAccess.item);
-         //   this.Params.Input[0].ObjectChanged += CreateDiagramHatch_ObjectChanged ;
+   
             pManager.AddColourParameter("FillColour", "FClr", "Height in Pixels", GH_ParamAccess.item, Diagram.DefaultColor);
        
-            pManager.AddColourParameter("LineColour", "LClr", "Height in Pixels", GH_ParamAccess.item, Diagram.DefaultColor);
-            pManager.AddNumberParameter("Weight", "LW", "Height in Pixels", GH_ParamAccess.item, Diagram.DefaultLineWeight);
+        
         }
 
      
@@ -40,16 +40,14 @@ namespace DiagramsForGrasshopper
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
-            double weight = Diagram.DefaultLineWeight;
+            this.GetAllValues(DA);
             Color clr = Diagram.DefaultColor;
-            Color lnClr = Diagram.DefaultColor;
-            Brep brep = null;
+          Brep brep = null;
       
 
             DA.GetData(0, ref brep);
             DA.GetData(1, ref clr);
-            DA.GetData(2, ref lnClr);
-            DA.GetData(3, ref weight);
+         
 
 
             if (brep == null) {
@@ -57,8 +55,9 @@ namespace DiagramsForGrasshopper
                 return null;
             }
 
+            CurveModifiers curveModifiers = this.GetFirstOrDefaultCurveModifier();
 
-            List<DiagramFilledCurve> diagramCurves = DiagramFilledCurve.CreateFromBrep(brep, clr, lnClr, (float)weight);
+            List<DiagramFilledCurve> diagramCurves = DiagramFilledCurve.CreateFromBrep(brep, clr, curveModifiers.LineColors, (float)curveModifiers.LineWeight);
 
 
 
@@ -75,7 +74,7 @@ namespace DiagramsForGrasshopper
 
             SizeF maxSize = new SizeF((float)(bb.Max.X - bb.Min.X), (float)(bb.Max.Y - bb.Min.Y));
 
-            Diagram diagram = Diagram.Create((int)Math.Ceiling(maxSize.Width), (int)Math.Ceiling(maxSize.Height), null, Color.Transparent, 0, Color.Transparent, new PointF((float)bb.Min.X,(float)bb.Min.Y));
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(maxSize.Width), (int)Math.Ceiling(maxSize.Height), null, Color.Transparent, 0, Color.Transparent);
 
             for (int i = 0; i < diagramCurves.Count; i++)
             {
@@ -94,7 +93,7 @@ namespace DiagramsForGrasshopper
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return DiagramsForGrasshopper.Properties.Resources.FilledCurveIcon;
             }
         }
 

@@ -11,7 +11,7 @@ using Grasshopper.Kernel.Types;
 
 namespace DiagramLibrary
 {
-    public class DiagramTable : DiagramObject
+    public class DiagramTable : DiagramCachedClass
     {
         GH_Structure<GH_String> m_Data = new GH_Structure<GH_String>();
         List<double> m_CellWidths = new List<double>();
@@ -40,6 +40,8 @@ namespace DiagramLibrary
             diagramTable.m_FontName = fontName;
             diagramTable.m_Padding = padding;
             diagramTable.m_Justification = justification;
+
+            diagramTable.UpdateCache();
             return diagramTable;
         }
 
@@ -57,6 +59,7 @@ namespace DiagramLibrary
 
             diagramTable.m_Padding = m_Padding;
             diagramTable.m_Justification = m_Justification;
+            diagramTable.UpdateCache();
             return diagramTable;
         }
 
@@ -75,7 +78,7 @@ namespace DiagramLibrary
             return returnString;
         }
 
-        public override BoundingBox GetBoundingBox()
+     /*   public override BoundingBox GetBoundingBox()
         {
         
             GetSizes(out SizeF[] sizes, out Rectangle3d[] recs);
@@ -93,7 +96,7 @@ namespace DiagramLibrary
 
             return totalRec;
 
-        }
+        }*/
 
 
             public void GetSizes(out SizeF[] sizes, out Rectangle3d[] recs)
@@ -243,6 +246,39 @@ namespace DiagramLibrary
 
 
 
+        }
+
+        public override List<DiagramObject> GenerateObjects()
+        {
+            List<DiagramObject> diagramObjects = new List<DiagramObject>();
+
+            //calculate sizes
+            GetSizes(out SizeF[] sizes, out Rectangle3d[] recs);
+
+
+
+            //draw lines
+            for (int i = 0; i < recs.Length; i++)
+            {
+                diagramObjects.Add(DiagramCurve.Create(recs[i].ToNurbsCurve(), m_Colour, m_LineWeight));
+               
+            }
+
+
+            //draw text
+            int currentIndex = 0;
+            for (int i = 0; i < this.m_Data.Branches.Count; i++)
+            {
+
+                for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
+                {
+                    diagramObjects.Add(DiagramText.Create(this.m_Data.Branches[i][j].Value, Diagram.ConvertPoint(recs[currentIndex].Plane.Origin), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification));
+                                      currentIndex++;
+                }
+
+            }
+
+            return diagramObjects;
         }
     }
 

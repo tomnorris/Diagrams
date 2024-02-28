@@ -8,31 +8,26 @@ using Rhino.Geometry;
 
 namespace DiagramsForGrasshopper
 {
-    public class CreateDiagramCurve : DiagramComponent
+    public class CreateDiagramCurve : DiagramComponentWithModifiers
     {
         /// <summary>
         /// Initializes a new instance of the CreateDiagramCurve class.
         /// </summary>
         public CreateDiagramCurve()
-          : base("CreateDiagramCurve", "DCruve",
+          : base("CreateDiagramCurve", "DCrv",
               "Description",
               "Display", "Diagram")
         {
+            Modifiers.Add(new CurveModifiers(true, true, true, true));
         }
 
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputStartingParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("Curve", "Crv", "The Curve", GH_ParamAccess.item);
-        //    this.Params.Input[0].ObjectChanged += CreateDiagramCurve_ObjectChanged; 
-            pManager.AddColourParameter("Colour", "Clr", "Colour of the Curve", GH_ParamAccess.item, Diagram.DefaultColor);
-            pManager.AddNumberParameter("Weight", "LW", "Line Weigh of the Curve", GH_ParamAccess.item,Diagram.DefaultLineWeight);
-            pManager.AddGenericParameter("CurveEndStart", "CES", "Diagram Object which will be the Curve End for the start of the Curve, only Curve and FilledCurves are supported", GH_ParamAccess.item);
-            pManager.AddGenericParameter("CurveEndEnd", "CEE", "Diagram Object which will be the Curve End for the End of the Curve, only Curve and FilledCurves are supported", GH_ParamAccess.item);
-            this.Params.Input[3].Optional = true;
-            this.Params.Input[4].Optional = true;
+ 
 
         }
 
@@ -44,96 +39,24 @@ namespace DiagramsForGrasshopper
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
-
-            double weight = Diagram.DefaultLineWeight;
-            Color clr = Diagram.DefaultColor;
+            this.GetAllValues(DA);
+        
             Curve crv = null;
-
-            Grasshopper.Kernel.Types.IGH_Goo CurveStartObj = null;
-            Grasshopper.Kernel.Types.IGH_Goo CurveEndObj = null;
 
 
             DA.GetData(0, ref crv);
-            DA.GetData(1, ref clr);
-           DA.GetData(2, ref weight);
-            DA.GetData(3, ref CurveStartObj);
-            DA.GetData(4, ref CurveEndObj);
-
+           
             if (crv == null)
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error,"Curve cannot be Null");
                 return null;
             }
 
+            CurveModifiers curveModifiers = this.GetFirstOrDefaultCurveModifier();
            
-             
 
-
-            DiagramCurve diagramCurve = DiagramCurve.Create(crv,clr, (float)weight);
-
-
-         
-            try
-            {
-                CurveStartObj.CastTo(out Diagram CurveEndStartDiagram);
-
-                for (int i = 0; i < CurveEndStartDiagram.Objects.Count; i++)
-                {
-                    if (CurveEndStartDiagram.Objects[i] is BaseCurveDiagramObject)
-                    {
-
-                      
-                        diagramCurve.AddCurveEnds(CurveEndStartDiagram.Objects[i] as BaseCurveDiagramObject, new Point3d(0, 0, 0), Plane.WorldXY.YAxis, null, Point3d.Unset, Vector3d.Unset);
-                        break;
-                    }
-
-                    if (CurveEndStartDiagram.Objects[i] is DiagramCurveEnd)
-                    {
-                        diagramCurve.AddCurveEnds(CurveEndStartDiagram.Objects[i] as DiagramCurveEnd, null);
-                                               break;
-                    }
-
-                }
-
-            }
-            catch (Exception)
-            {
-
-
-            }
-
-            try { 
-            CurveEndObj.CastTo(out Diagram CurveEndEndDiagram);
-
-                for (int i = 0; i < CurveEndEndDiagram.Objects.Count; i++)
-                {
-                    if (CurveEndEndDiagram.Objects[i] is BaseCurveDiagramObject)
-                    {
-
-                        diagramCurve.AddCurveEnds(null, Point3d.Unset, Vector3d.Unset, CurveEndEndDiagram.Objects[i] as BaseCurveDiagramObject, new Point3d(0, 0, 0), Plane.WorldXY.YAxis);
-                        break;
-                    }
-
-                    if (CurveEndEndDiagram.Objects[i] is DiagramCurveEnd)
-                    {
-                        diagramCurve.AddCurveEnds(null, CurveEndEndDiagram.Objects[i] as DiagramCurveEnd);
-                        break;
-                    }
-
-                }
-
-
-
-
-            }
-            catch (Exception)
-            {
-
-
-            }
-
-
-
+            DiagramCurve diagramCurve = DiagramCurve.Create(crv, curveModifiers.LineColors, (float)curveModifiers.LineWeight);
+            diagramCurve.AddCurveEnds(curveModifiers.StartingCurveEnd, curveModifiers.EndingCurveEnd);
 
             SizeF size = diagramCurve.GetTotalSize();
             Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent,0,Color.Transparent, diagramCurve.GetBoundingBoxLocation());
@@ -154,7 +77,7 @@ namespace DiagramsForGrasshopper
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return DiagramsForGrasshopper.Properties.Resources.CurveIcon;   
             }
         }
 

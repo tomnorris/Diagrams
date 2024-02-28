@@ -56,9 +56,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\DiagramComponentAttibutes.cs" />
+    <Compile Include="Classes\DiagramComponentWithModifiers.cs" />
+    <Compile Include="Classes\DiagramCanvasAttibutes.cs" />
     <Compile Include="Classes\DiagramComponent.cs" />
-    <Compile Include="Classes\ReportBaseComponent.cs" />
+    <Compile Include="Classes\CurveModifiers.cs" />
+    <Compile Include="Classes\TextModifiers.cs" />
+    <Compile Include="Classes\ModifiersBase.cs" />
+    <Compile Include="Classes\ModifiersAttributes.cs" />
     <Compile Include="Componants\CanvasDiagram.cs" />
     <Compile Include="Componants\CreateDiagram.cs" />
     <Compile Include="Componants\CreateDiagramHatch.cs" />
@@ -66,7 +70,6 @@
     <Compile Include="Componants\CreateDiagramPointLabel.cs" />
     <Compile Include="Componants\CreateDiagramTable.cs" />
     <Compile Include="Componants\CreateDiagramText.cs" />
-    <Compile Include="Componants\CreateDiagramTextComplex.cs" />
     <Compile Include="Componants\CreateDiagramCurve.cs" />
     <Compile Include="Componants\CreateDiagramCurveEnd.cs" />
     <Compile Include="Componants\CreateDiagramDimention.cs" />
@@ -75,13 +78,42 @@
     <Compile Include="Componants\RhinoDiagram.cs" />
     <Compile Include="DiagramsForGrasshopperInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Icons\CurveEndsIcon.png" />
+    <Content Include="Icons\CurveIcon.png" />
+    <Content Include="Icons\DiagramIcon.png" />
+    <Content Include="Icons\DimIcon.png" />
+    <Content Include="Icons\FilledCurveIcon.png" />
+    <Content Include="Icons\GrasshopperIcon.png" />
+    <Content Include="Icons\ImageIcon.png" />
+    <Content Include="Icons\LabelIcon.png" />
+    <Content Include="Icons\PieIcon.png" />
+    <Content Include="Icons\PointIcon.png" />
+    <Content Include="Icons\RhinoIcon.png" />
+    <Content Include="Icons\TableIcon.png" />
+    <Content Include="Icons\TextComplexIcon.png" />
+    <Content Include="Icons\TextIcon.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DiagramLibrary\DiagramLibrary.csproj">
       <Project>{7685df9d-4700-493c-99c6-4247f6f9b43b}</Project>
       <Name>DiagramLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\Icons.psd" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

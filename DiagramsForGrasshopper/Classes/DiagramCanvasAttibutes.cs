@@ -5,14 +5,14 @@ using Grasshopper.Kernel.Attributes;
 
 namespace DiagramsForGrasshopper
 {
-    public class DiagramComponentAttibutes : GH_ComponentAttributes
+    public class DiagramCanvasAttibutes : GH_ComponentAttributes
     {
 
         
         private float CapsuleHeight = 20;
 
 
-        public DiagramComponentAttibutes(GH_Component owner) : base(owner) { }
+        public DiagramCanvasAttibutes(GH_Component owner) : base(owner) { }
 
         protected override void Layout()
         {
@@ -136,86 +136,6 @@ namespace DiagramsForGrasshopper
 
             }
         }
-        /* protected override void Layout()
-         {
-
-             Pivot = GH_Convert.ToPoint(Pivot);
-
-
-             float width = 125;
-             float height = 100;
-
-
-             CanvasDiagram owner = this.Owner as CanvasDiagram;
-
-             if (owner.Diagram != null)
-             {
-                 Scale = owner.Scale;
-                 Size size = owner.Diagram.GetBoundingSize(Scale);
-                 if (size.Height > 10 && size.Width > 10)
-                 {
-                     height = size.Height + HalfMargin + HalfMargin;
-                     width = size.Width + HalfMargin + HalfMargin;
-                 }
-             }
-
-
-             m_innerBounds = new RectangleF(Pivot.X, Pivot.Y, width, height);
-             LayoutInputParams(Owner, m_innerBounds);
-             LayoutOutputParams(Owner, m_innerBounds);
-             Bounds = LayoutBounds(Owner, m_innerBounds);
-
-
-
-         }
-
-
-         protected override void Render(Grasshopper.GUI.Canvas.GH_Canvas canvas, Graphics graphics, Grasshopper.GUI.Canvas.GH_CanvasChannel channel)
-         {
-             if (channel != Grasshopper.GUI.Canvas.GH_CanvasChannel.Objects)
-             {
-                 base.Render(canvas, graphics, channel);
-                 return;
-             }
-
-             //RenderComponentCapsule(canvas, graphics, true, false, false, true, true, true);
-             RenderComponentCapsule(canvas, graphics, true, false, false, true, true, true);
-
-
-             Rectangle rec = GH_Convert.ToRectangle(m_innerBounds);
-             graphics.FillRectangle(Brushes.White, rec);
-
-             if (Grasshopper.GUI.Canvas.GH_Canvas.ZoomFadeLow > 0)
-             {
-                 Rectangle reci = rec;
-                 reci.Inflate(-5, -5);
-
-                 CanvasDiagram owner = this.Owner as CanvasDiagram;
-                 if (owner.Diagram != null)
-                 {
-                     if (owner.Update || owner.Bitmap == null)
-                     {
-                         owner.Bitmap = owner.Diagram.GetBitmap(Scale);
-                         owner.Update = false;
-                         }
-                     graphics.DrawImage(owner.Bitmap, m_innerBounds.X + HalfMargin, m_innerBounds.Y + HalfMargin, m_innerBounds.Width - HalfMargin - HalfMargin, m_innerBounds.Height - HalfMargin - HalfMargin);
-
-                 }
-             }
-             else
-             {
-                 Brush blendfill = new SolidBrush(Color.FromArgb(255 - Grasshopper.GUI.Canvas.GH_Canvas.ZoomFadeLow, Color.White));
-                 graphics.FillRectangle(blendfill, rec);
-                 blendfill.Dispose();
-
-             }
-             if (Grasshopper.GUI.Canvas.GH_Canvas.ZoomFadeLow < 255)
-             {
-                 Brush blendfill = new SolidBrush(Color.FromArgb(255 - Grasshopper.GUI.Canvas.GH_Canvas.ZoomFadeLow, Color.White));
-                 graphics.FillRectangle(blendfill, rec);
-                 blendfill.Dispose();
-             }
-             graphics.DrawRectangle(Pens.Black, rec);
-         }*/
+       
     }
 }

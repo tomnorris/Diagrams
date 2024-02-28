@@ -170,17 +170,13 @@ namespace DiagramLibrary
             if (m_StartCurveEnd != null)
 
             {
-                m_StartCurveEnd.DrawRhinoPreview(component, pipeline, tolerance, transform, colorOverride, m_Curve.PointAtStart, m_Curve.TangentAtStart,  doc,  Bake);
+                m_StartCurveEnd.DrawRhinoPreview(component, pipeline, tolerance, transform.Clone(), colorOverride, m_Curve.PointAtStart, m_Curve.TangentAtStart,  doc,  Bake);
             }
 
 
             if (m_EndCurveEnd != null)
             {
-                m_EndCurveEnd.DrawRhinoPreview(component, pipeline, tolerance, transform, colorOverride, m_Curve.PointAtEnd, m_Curve.TangentAtEnd,  doc,  Bake);
-
-
-
-
+                m_EndCurveEnd.DrawRhinoPreview(component, pipeline, tolerance, transform.Clone(), colorOverride, m_Curve.PointAtEnd, m_Curve.TangentAtEnd,  doc,  Bake);
             }
             int thickness = (int)this.m_LineWeight;
             if (thickness <= 0)
@@ -211,7 +207,7 @@ namespace DiagramLibrary
             }
             else
             {
-                pipeline.DrawCurve(m_Curve, clr, thickness);
+                pipeline.DrawCurve(drawCurve, clr, thickness);
             }
 
 

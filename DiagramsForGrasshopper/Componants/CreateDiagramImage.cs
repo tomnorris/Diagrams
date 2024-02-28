@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace DiagramsForGrasshopper
 {
-    public class CreateDiagramImage : DiagramComponent
+    public class CreateDiagramImage : DiagramComponentWithModifiers
     {
         /// <summary>
         /// Initializes a new instance of the CreateDiagramImage class.
@@ -22,7 +22,7 @@ namespace DiagramsForGrasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputStartingParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Image", "Img", "File path to the image", GH_ParamAccess.item);
          //   this.Params.Input[0].ObjectChanged += CreateDiagramImage_ObjectChanged;
@@ -40,6 +40,8 @@ namespace DiagramsForGrasshopper
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         public override Diagram DiagramSolveInstance(IGH_DataAccess DA)
         {
+            this.GetAllValues(DA);
+
             string path = "";
             Point3d pt = Point3d.Unset;
               double width = -1;
@@ -87,7 +89,7 @@ namespace DiagramsForGrasshopper
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return DiagramsForGrasshopper.Properties.Resources.ImageIcon;
             }
         }
 
