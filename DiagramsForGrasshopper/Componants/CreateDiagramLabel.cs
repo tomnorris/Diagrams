@@ -79,7 +79,7 @@ namespace DiagramsForGrasshopper
 
 
             SizeF size = diagramLabel.GetTotalSize();
-            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, 0, Color.Transparent, location);
+            Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, Color.Transparent, 0, Color.Transparent, diagramLabel.GetBoundingBoxLocation());
             diagram.AddDiagramObject(diagramLabel);
             return diagram;
         }
