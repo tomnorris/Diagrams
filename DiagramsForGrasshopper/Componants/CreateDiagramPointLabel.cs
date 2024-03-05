@@ -17,7 +17,7 @@ namespace DiagramsForGrasshopper
               "Description",
             "Display", "Diagram")
         {
-            Modifiers.Add(new TextModifiers(true, true, true, false, false, true, true, true));
+            Modifiers.Add(new TextModifiers(true, true, false, false, false, true, true, true));
           
 
         }

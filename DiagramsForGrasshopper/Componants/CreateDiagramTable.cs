@@ -33,6 +33,8 @@ namespace DiagramsForGrasshopper
             pManager.AddNumberParameter("CellWidths", "CW", "List of Widths for each column, first value will be the default width", GH_ParamAccess.list, 100);
             pManager.AddNumberParameter("CellHeight", "CH", "List of Heights for each Row, first value will be the default height", GH_ParamAccess.list, 30);
             pManager.AddColourParameter("Background Colour", "BClr", "Back Colour", GH_ParamAccess.item, Color.Transparent);
+            pManager.AddColourParameter("Header Colour", "HClr", "Header Colour", GH_ParamAccess.item, Color.Gray);
+            pManager.AddBooleanParameter("Flip Direction", "Flip", "Flip the Direction of the table",GH_ParamAccess.item,false);
         }
 
 
@@ -64,6 +66,9 @@ namespace DiagramsForGrasshopper
               List<double> width = new List<double>();
             List<double> height = new List<double>();
             GH_Structure<GH_String> data;
+            bool flip = false;
+            Color headerColour = Color.Gray;
+
 
             if (!DA.GetDataTree(0, out data))
             {
@@ -75,7 +80,8 @@ namespace DiagramsForGrasshopper
             DA.GetDataList(2,  width);
             DA.GetDataList(3, height);
             DA.GetData(4, ref bgClr);
-
+            DA.GetData(5, ref headerColour);
+            DA.GetData(6, ref flip);
 
 
             if (data == null)
@@ -100,8 +106,9 @@ namespace DiagramsForGrasshopper
             TextModifiers textModifiers = GetFirstOrDefaultTextModifier();
             CurveModifiers curveModifiers = GetFirstOrDefaultCurveModifier();
 
+          
 
-            DiagramTable diagramTable = DiagramTable.Create(data,width,height, (float )textModifiers.TextScale, location, curveModifiers.LineColors, (float)curveModifiers.LineWeight, textModifiers.Font,(float)textModifiers.TextPadding,textModifiers.TextJustification);
+            DiagramTable diagramTable = DiagramTable.Create(data,width,height, (float )textModifiers.TextScale, location, curveModifiers.LineColors, (float)curveModifiers.LineWeight, textModifiers.Font,(float)textModifiers.TextPadding,textModifiers.TextJustification,headerColour,flip);
             SizeF size = diagramTable.GetTotalSize();
             Diagram diagram = Diagram.Create((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height), null, bgClr,0,Color.Transparent,location);
             diagram.AddDiagramObject( diagramTable );

@@ -35,7 +35,7 @@ namespace DiagramLibrary
           string fontName, float padding)
         {
             DiagramPointLabel diagramLabel = new DiagramPointLabel();
-            diagramLabel.m_DiagramText = DiagramText.Create(text, leaderLocation, colour, textSize / Math.Max(text.Length / 1.667f, 1f), Rhino.Geometry.TextJustification.MiddleCenter, Color.Transparent, Color.Transparent, 0, fontName, new SizeF(textSize * 2, textSize * 2), padding, Rhino.Geometry.TextJustification.MiddleCenter);
+            diagramLabel.m_DiagramText = DiagramText.Create(text, leaderLocation, colour, textSize / Math.Max(text.Length / 1.667f, 1f), Rhino.Geometry.TextJustification.MiddleCenter, Color.Transparent, Color.Transparent, 0, fontName, new SizeF(textSize * 4, textSize * 4), padding, Rhino.Geometry.TextJustification.MiddleCenter);
             diagramLabel.m_PointLocation = leaderLocation;
             diagramLabel. m_Mask = DiagramFilledCurve.Create(new Circle(new Plane(new Point3d(leaderLocation.X, leaderLocation.Y, 0),Plane.WorldXY.ZAxis),textSize).ToNurbsCurve(), maskColour, frameColor, frameLineWeight);
 

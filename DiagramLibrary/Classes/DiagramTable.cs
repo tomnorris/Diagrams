@@ -22,12 +22,13 @@ namespace DiagramLibrary
         private float m_Padding = 0f;
         private float m_TextSize = 1f;
         private TextJustification m_Justification = TextJustification.None;
-
+        private bool m_flip = false;
+        private Color m_HeaderColor;
 
      
 
 
-        public static DiagramTable Create(GH_Structure<GH_String> data, List<double> cellWidths, List<double> cellHeights, float textSize, PointF Location, Color Colour, float LineWeight, string fontName, float padding, TextJustification justification)
+        public static DiagramTable Create(GH_Structure<GH_String> data, List<double> cellWidths, List<double> cellHeights, float textSize, PointF Location, Color Colour, float LineWeight, string fontName, float padding, TextJustification justification, Color headerColor, bool flip)
         {
             DiagramTable diagramTable = new DiagramTable();
             diagramTable.m_Colour = Colour;
@@ -40,7 +41,8 @@ namespace DiagramLibrary
             diagramTable.m_FontName = fontName;
             diagramTable.m_Padding = padding;
             diagramTable.m_Justification = justification;
-
+            diagramTable.m_flip = flip;
+            diagramTable.m_HeaderColor = headerColor;
             diagramTable.UpdateCache();
             return diagramTable;
         }
@@ -78,25 +80,7 @@ namespace DiagramLibrary
             return returnString;
         }
 
-     /*   public override BoundingBox GetBoundingBox()
-        {
-        
-            GetSizes(out SizeF[] sizes, out Rectangle3d[] recs);
-
-            BoundingBox totalRec = recs[0].BoundingBox;
-
-            for (int i = 1; i < recs.Length; i++)
-            {
-                totalRec.Union(recs[i].BoundingBox);
-                    
-                  
-            }
-
-            totalRec.Union(Diagram.ConvertPoint(m_Location));
-
-            return totalRec;
-
-        }*/
+  
 
 
             public void GetSizes(out SizeF[] sizes, out Rectangle3d[] recs)
@@ -104,6 +88,8 @@ namespace DiagramLibrary
 
             int numberOfCols = 0;
             int numberOfRows = 0;
+
+
 
             //calculate sizes
             for (int i = 0; i < this.m_Data.Branches.Count; i++)
@@ -115,6 +101,13 @@ namespace DiagramLibrary
                 }
 
             }
+
+            if (m_flip) {
+                var temp = numberOfCols;
+                numberOfCols = numberOfRows;
+                numberOfRows = temp;
+            }
+
 
             sizes = new SizeF[numberOfCols * numberOfRows];
             recs = new Rectangle3d[numberOfCols * numberOfRows];
@@ -161,12 +154,22 @@ namespace DiagramLibrary
                         }
                     }
 
+                 
+
                     sizes[rowIndex * numberOfCols + colIndex] = new SizeF(width, height);
-                    recs[rowIndex * numberOfCols + colIndex] = new Rectangle3d(new Plane(new Point3d(m_Location.X + currentX, m_Location.Y + currnetY, 0), Plane.WorldXY.ZAxis), width, height);
+
+                    if (m_flip)
+                    {
+                        recs[colIndex * numberOfRows + rowIndex] = new Rectangle3d(new Plane(new Point3d(m_Location.X + currentX, m_Location.Y + currnetY, 0), Plane.WorldXY.ZAxis), width, height);
+                    } else {
+                        recs[rowIndex * numberOfCols + colIndex] = new Rectangle3d(new Plane(new Point3d(m_Location.X + currentX, m_Location.Y + currnetY, 0), Plane.WorldXY.ZAxis), width, height);
+
+                    }
                     currentX += width;
 
                 }
                 currnetY += height;
+               
 
 
             }
@@ -194,15 +197,50 @@ namespace DiagramLibrary
 
             //draw text
             int currentIndex = 0;
-            for (int i = 0; i < this.m_Data.Branches.Count; i++)
+            if (m_flip)
             {
-
-                for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
+                for (int i = 0; i < this.m_Data.Branches.Count; i++)
                 {
-                    var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value,Diagram.ConvertPoint(recs[currentIndex].Plane.Origin), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent,-1,  m_FontName, sizes[currentIndex], m_Padding, m_Justification);
-                    txt.DrawBitmap(component,g);
-                    currentIndex++;
+
+                    for (int j = this.m_Data.Branches[i].Count -1; j >= 0; j--)
+                    {
+
+                        var clr = Color.Transparent;
+                        if (j == 0)
+                        {
+                            clr = m_HeaderColor;
+                        }
+
+
+                        var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, Diagram.ConvertPoint(recs[currentIndex].Plane.Origin), m_Colour, m_TextSize, TextJustification.BottomLeft, clr, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
+                        txt.DrawBitmap(component, g);
+                        currentIndex++;
+                    }
+
                 }
+            }
+            else {
+                for (int i = this.m_Data.Branches.Count - 1; i >= 0; i--)
+                {
+
+                    for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
+                    {
+
+                        var clr = Color.Transparent;
+                        if (i == 0)
+                        {
+                            clr = m_HeaderColor;
+                        }
+
+
+                        var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, Diagram.ConvertPoint(recs[currentIndex].Plane.Origin), m_Colour, m_TextSize, TextJustification.BottomLeft, clr, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
+                        txt.DrawBitmap(component, g);
+                        currentIndex++;
+                    }
+
+                }
+
+
 
             }
 
@@ -229,18 +267,60 @@ namespace DiagramLibrary
 
 
             //draw text
-            int currentIndex = 0;
-            for (int i = 0; i < this.m_Data.Branches.Count; i++)
-            {
+          
+          
 
-                for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
+            if (m_flip)
+               {
+                int currentIndex = 0;
+                for (int i = 0; i < this.m_Data.Branches.Count; i++)
                 {
-                    var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, Diagram.ConvertPoint(recs[currentIndex].Plane.Origin), m_Colour, m_TextSize, TextJustification.BottomLeft, Color.Transparent, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
-                    txt.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride, doc,  Bake);
-                    currentIndex++;
+
+                    for (int j = this.m_Data.Branches[i].Count - 1; j >= 0; j--)
+                    {
+
+                        var clr = Color.Transparent;
+                        if (j == 0)
+                        {
+                            clr = m_HeaderColor;
+                        }
+
+
+                        var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, Diagram.ConvertPoint(recs[currentIndex].Plane.Origin), m_Colour, m_TextSize, TextJustification.BottomLeft, clr, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
+                        txt.DrawRhinoPreview(component, pipeline, tolerance, xform, colorOverride, doc, Bake);
+                        currentIndex++;
+                    }
+                   
+                }
+            }
+            else
+            {
+                int currentIndex = 0;
+                for (int i = this.m_Data.Branches.Count - 1; i >= 0; i--)
+                {
+
+                    for (int j = 0; j < this.m_Data.Branches[i].Count; j++)
+                    {
+
+                        var clr = Color.Transparent;
+                        if (i == 0)
+                        {
+                            clr = m_HeaderColor;
+                        }
+
+
+                        var txt = DiagramText.Create(this.m_Data.Branches[i][j].Value, Diagram.ConvertPoint(recs[currentIndex].Plane.Origin), m_Colour, m_TextSize, TextJustification.BottomLeft, clr, Color.Transparent, -1, m_FontName, sizes[currentIndex], m_Padding, m_Justification);
+                        txt.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride, doc,  Bake);
+                        currentIndex++;
+                    }
+
                 }
 
+
+
             }
+
+
 
 
 
