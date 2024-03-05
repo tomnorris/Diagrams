@@ -335,13 +335,10 @@ namespace DiagramLibrary
                        
             PointF anchorCompensatedPoint = GetAnchorCompensatedPoint(maskSize);
 
-            bool maskEnabled = m_Mask.LineWeight > 0;
-            if (maskEnabled)
-            {
+           
                 m_Mask.UpdateRectangle(anchorCompensatedPoint, maskSize);
                 m_Mask.DrawBitmap(component,g);
-            }
-
+           
             int lineSpacing = font.FontFamily.GetLineSpacing(FontStyle.Regular);
             float lineSpacingPixel = font.Size * lineSpacing / font.FontFamily.GetEmHeight(FontStyle.Regular);
 
@@ -463,13 +460,11 @@ namespace DiagramLibrary
 
             PointF anchorCompensatedPoint = GetAnchorCompensatedPoint(maskSize);
 
-            if (drawLines && m_Mask != null)
-            {
+           
 
                 m_Mask.UpdateRectangle(anchorCompensatedPoint, maskSize);
                 m_Mask.DrawRhinoPreview(component,pipeline, tolerance, xform, colorOverride,  doc,  Bake);
-            }
-
+           
             for (int i = 0; i < lines.Count; i++)
             {
                 TextEntity txt = new TextEntity();
