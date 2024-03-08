@@ -44,7 +44,7 @@ namespace DiagramsForGrasshopper
 
             DA.SetData(1, diagram);
 
-            DA.SetData(0, this.RuntimeMessages(GH_RuntimeMessageLevel.Blank | GH_RuntimeMessageLevel.Error | GH_RuntimeMessageLevel.Remark | GH_RuntimeMessageLevel.Warning));
+            DA.SetDataList(0, this.RuntimeMessages(GH_RuntimeMessageLevel.Blank | GH_RuntimeMessageLevel.Error | GH_RuntimeMessageLevel.Remark | GH_RuntimeMessageLevel.Warning));
         }
 
     
