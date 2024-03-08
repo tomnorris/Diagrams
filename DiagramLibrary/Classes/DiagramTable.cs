@@ -156,14 +156,15 @@ namespace DiagramLibrary
 
                  
 
-                    sizes[rowIndex * numberOfCols + colIndex] = new SizeF(width, height);
+                   
 
                     if (m_flip)
                     {
                         recs[colIndex * numberOfRows + rowIndex] = new Rectangle3d(new Plane(new Point3d(m_Location.X + currentX, m_Location.Y + currnetY, 0), Plane.WorldXY.ZAxis), width, height);
+                         sizes[colIndex * numberOfRows + rowIndex] = new SizeF(width, height);
                     } else {
                         recs[rowIndex * numberOfCols + colIndex] = new Rectangle3d(new Plane(new Point3d(m_Location.X + currentX, m_Location.Y + currnetY, 0), Plane.WorldXY.ZAxis), width, height);
-
+                        sizes[rowIndex * numberOfCols + colIndex] = new SizeF(width, height);
                     }
                     currentX += width;
 
