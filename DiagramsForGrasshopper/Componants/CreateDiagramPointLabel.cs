@@ -11,7 +11,7 @@ namespace DiagramsForGrasshopper
     {
         /// <summary>
         /// Initializes a new instance of the CreateDiagramLabel class.
-        /// </summary>
+        /// </summary>  
         public CreateDiagramPointLabel()
           : base("CreateDiagramPointLabel", "DPtLabel",
               "Description",
