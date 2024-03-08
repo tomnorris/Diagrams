@@ -15,7 +15,7 @@ namespace DiagramsForGrasshopper
         public CreateDiagramDimention()
           : base("DiagramDimention", "DDimention",
               "Description",
-              "Category", "Subcategory")
+             "Display", "Diagram")
         {
             Modifiers.Add(new TextModifiers(true, true, true,false,false,true,false, false));
             Modifiers.Add(new CurveModifiers(true, true, true, true));
