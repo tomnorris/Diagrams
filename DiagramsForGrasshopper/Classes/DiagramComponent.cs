@@ -164,7 +164,7 @@ namespace DiagramsForGrasshopper
             if (m_VersionChecked == false)
             {
                 string libraryVersion = DiagramLibrary.Diagram.LibraryVersion();
-                string componantLibraryVersion = "1.0.0.0";
+                string componantLibraryVersion = "1.0.0.1";
                 VersionComparision compareVersion = CompareVersion(libraryVersion, componantLibraryVersion);
                 switch (compareVersion)
                 {

@@ -331,7 +331,7 @@ namespace DiagramLibrary
         public override void DrawBitmap(Grasshopper.Kernel.GH_Component component, Graphics g)
         {
 
-            var font = new System.Drawing.Font(m_FontName, m_TextSize);
+            var font = new System.Drawing.Font(m_FontName, m_TextSize,GraphicsUnit.Pixel);
 
             SizeF actualTotalTextSize = CalculteTextSize(g, out SizeF maskSize, out List<string> lines, out List<SizeF> rowSizes);
                        
@@ -384,10 +384,10 @@ namespace DiagramLibrary
                 }
 
                 //Add Padding and Justification Compensation, note Y is negative and signes are reverse as we drawing this upside down
-                PointF pt = new PointF(anchorCompensatedPoint.X + m_Padding + justificationCompensation, -anchorCompensatedPoint.Y - m_Padding - actualTotalTextSize.Height - verticalFustificationCompensation + (lineSpacingPixel * i));
-
-                //  g.DrawString(lines[i], font, this.GetBrush(), new RectangleF(pt, actualTotalTextSize));
-                g.DrawString(lines[i], font, this.GetBrush(), new RectangleF(pt, new SizeF(actualTotalTextSize.Width, actualTotalTextSize.Height + (m_TextSize * 0.1F))));
+                PointF pt = new PointF(anchorCompensatedPoint.X + m_Padding + justificationCompensation,  -anchorCompensatedPoint.Y - m_Padding - actualTotalTextSize.Height - verticalFustificationCompensation + (lineSpacingPixel * i));
+                
+              //  g.DrawRectangle(this.GetPen(), pt.X, pt.Y,actualTotalTextSize.Width, m_TextSize);//good for debugging text
+                  g.DrawString(lines[i], font, this.GetBrush(), pt); 
             }
 
             g.Transform = tempTransform;// End Upside Down
@@ -499,7 +499,7 @@ namespace DiagramLibrary
                 //Add Padding and Justification Compensation, note Y is negative and signes are reverse as we drawing this upside down
 
 
-
+              
                 Point3d pt = new Point3d(anchorCompensatedPoint.X + m_Padding + justificationCompensation, anchorCompensatedPoint.Y + m_Padding + verticalFustificationCompensation + (lineSpacingPixel * (lines.Count - i)), 0);
                 var scale = Transform.Scale(new Point3d(pt.X, pt.Y, 0), m_TextSize);
                 var trans = Transform.Translation(new Vector3d(pt.X, pt.Y, 0));
@@ -515,8 +515,10 @@ namespace DiagramLibrary
                     var attr = new Rhino.DocObjects.ObjectAttributes();
                     attr.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject;
                     attr.ObjectColor = clr;
-                    txt.Transform(combinedXform);
-                    doc.Objects.AddText(txt, attr);
+                   // txt.Transform(combinedXform);
+                    var guid = doc.Objects.AddText(txt, attr);
+                    var obj = doc.Objects.FindId(guid);
+                    obj.Geometry.Transform(combinedXform);
                 }
                 else
                 {
