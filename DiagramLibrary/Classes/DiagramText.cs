@@ -110,10 +110,11 @@ namespace DiagramLibrary
             switch (m_Anchor)
             {
                 case TextJustification.None:
-                    newPoint = new PointF(m_Location.X - m_Padding, m_TextSize);
+                    newPoint = new PointF(m_Location.X, m_TextSize);
+                    
                     break;
                 case TextJustification.Left:
-                    newPoint = new PointF(m_Location.X - m_Padding, m_TextSize);
+                    newPoint = new PointF(m_Location.X, m_TextSize);
                     break;
                 case TextJustification.Center:
                     newPoint = new PointF(m_Location.X - (size.Width / 2), m_Location.Y);
@@ -158,11 +159,11 @@ namespace DiagramLibrary
                     newPoint = new PointF(m_Location.X - size.Width, m_Location.Y - size.Height);
                     break;
                 default:
-                    newPoint = new PointF(m_Location.X - m_Padding, m_TextSize);
+                    newPoint = new PointF(m_Location.X, m_TextSize);
                     break;
             }
 
-            return newPoint;// new PointF(newPoint.X - m_Padding, newPoint.Y - m_Padding);
+            return newPoint; //new PointF(newPoint.X - m_Padding, newPoint.Y - m_Padding);
         }
 
 
@@ -285,7 +286,7 @@ namespace DiagramLibrary
             }
 
             SizeF allowedTextSize = SizeF.Empty;
-            var font = new System.Drawing.Font(m_FontName, m_TextSize);
+            var font = new System.Drawing.Font(m_FontName, m_TextSize,GraphicsUnit.Pixel);
 
             StringFormat format = new StringFormat();
 
@@ -418,6 +419,8 @@ namespace DiagramLibrary
 
             List<TextEntity> texts = GeneratePreviewGeometry(state, xform, out Color clr, out List<Transform> combinedXforms);
 
+        m_Mask.DrawRhinoPreview(pipeline,tolerance, xform, state);
+
             for (int i = 0; i < texts.Count; i++)
             {
                 pipeline.DrawText(texts[i], clr, combinedXforms[i]); //scale*trans order matters
@@ -439,10 +442,10 @@ namespace DiagramLibrary
             {
                 attr.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject;
                 attr.ObjectColor = clr;
-                // txt.Transform(combinedXform);
+                texts[i].Transform(combinedXforms[i]);
+                texts[i].Transform(Transform.Translation(0, -m_TextSize, 0));// Corrects for rhino draw positioning
                 var guid = doc.Objects.AddText(texts[i], attr);
-                var obj = doc.Objects.FindId(guid);
-                obj.Geometry.Transform(combinedXforms[i]);
+          
                 outList.Add(guid);
             }
 
@@ -554,7 +557,7 @@ namespace DiagramLibrary
 
 
                 Point3d pt = new Point3d(anchorCompensatedPoint.X + m_Padding + justificationCompensation, anchorCompensatedPoint.Y + m_Padding + verticalFustificationCompensation + (lineSpacingPixel * (lines.Count - i)), 0);
-                var scale = Transform.Scale(new Point3d(pt.X, pt.Y, 0), m_TextSize);
+                var scale = Transform.Scale(new Point3d(pt.X, pt.Y, 0), m_TextSize * (0.77)); //0.77 seems to be a good value to match the system drawing font size
                 var trans = Transform.Translation(new Vector3d(pt.X, pt.Y, 0));
                 var localXform = scale * trans;
                 var combinedXform = localXform;

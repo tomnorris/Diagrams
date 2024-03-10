@@ -24,7 +24,7 @@ namespace DiagramsForGrasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Diagram", "D", "Diagram to display inside this componant", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Diagram", "DObjs", "Diagram to display inside this componant", GH_ParamAccess.item);
             pManager.AddBooleanParameter("No Fill", "NoFll", "Optional, Removes all fills from the diagrams", GH_ParamAccess.item, false);
             pManager.AddTransformParameter("Transform", "Xfrom", "A transformation for the diagram", GH_ParamAccess.item);
             this.Params.Input[2].Optional = true;
@@ -87,7 +87,7 @@ namespace DiagramsForGrasshopper
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return DiagramsForGrasshopper.Properties.Resources.BakeIcon;
             }
         }
 

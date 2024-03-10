@@ -299,34 +299,37 @@ namespace DiagramLibrary
             List<Guid> outList = new List<Guid>();
             List<Brep> breps = GeneratePreviewGeometry( tolerance,  xform,  state, out Color clr, out Rhino.Display.DisplayMaterial material, out bool drawLines);
 
-            if (state != DrawState.NoFills)
+            if (state != DrawState.NoFills )
             {
-
-                foreach (Brep item in breps)
-
+                if (clr != Color.Transparent)
                 {
 
-                    attr.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject;
-                    attr.ObjectColor = clr;
-                    string name = "DiagramsMaterial_" + material.Diffuse.R.ToString() + "_" + material.Diffuse.G.ToString() + "_" + material.Diffuse.B.ToString() + "_" + material.Transparency.ToString();
+                    foreach (Brep item in breps)
 
-                    int materialIndex = doc.Materials.Find(name, true);
-
-                    if (materialIndex < 0)
                     {
-                        var rhinoMaterial = new Rhino.DocObjects.Material();
-                        rhinoMaterial.DiffuseColor = material.Diffuse;
-                        rhinoMaterial.Transparency = material.Transparency;
 
-                        rhinoMaterial.Name = name;
-                        materialIndex = doc.Materials.Add(rhinoMaterial, false);
+                        attr.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject;
+                        attr.ObjectColor = clr;
+                        string name = "DiagramsMaterial_" + material.Diffuse.R.ToString() + "_" + material.Diffuse.G.ToString() + "_" + material.Diffuse.B.ToString() + "_" + material.Transparency.ToString();
+
+                        int materialIndex = doc.Materials.Find(name, true);
+
+                        if (materialIndex < 0)
+                        {
+                            var rhinoMaterial = new Rhino.DocObjects.Material();
+                            rhinoMaterial.DiffuseColor = material.Diffuse;
+                            rhinoMaterial.Transparency = material.Transparency;
+
+                            rhinoMaterial.Name = name;
+                            materialIndex = doc.Materials.Add(rhinoMaterial, false);
+                        }
+
+                        attr.MaterialSource = Rhino.DocObjects.ObjectMaterialSource.MaterialFromObject;
+                        attr.MaterialIndex = materialIndex;
+
+                        outList.Add(doc.Objects.AddBrep(item, attr));
+
                     }
-
-                    attr.MaterialSource = Rhino.DocObjects.ObjectMaterialSource.MaterialFromObject;
-                    attr.MaterialIndex = materialIndex;
-
-                    outList.Add(doc.Objects.AddBrep(item, attr));
-
                 }
             }
             
@@ -376,9 +379,7 @@ namespace DiagramLibrary
                     material = m_CachedSelectedMaterial;
                     break;
                 case DrawState.NoFills:
-                    clr = Color.Transparent;
                    
-                    material = new Rhino.Display.DisplayMaterial(clr, 1.0 - (clr.A / 255));
                     break;
 
             }
