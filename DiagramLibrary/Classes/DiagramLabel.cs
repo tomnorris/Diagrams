@@ -37,8 +37,33 @@ namespace DiagramLibrary
             DiagramLabel diagramLabel = new DiagramLabel();
 
             var line = new Line(Diagram.ConvertPoint(leaderLocation), direction, offset);
-            diagramLabel.m_DiagramText = DiagramText.Create(text, Diagram.ConvertPoint(line.To), colour, textSize, Rhino.Geometry.TextJustification.BottomLeft, maskColour, frameColor, frameLineWeight, fontName, new SizeF(-1, -1), padding, Rhino.Geometry.TextJustification.BottomLeft);
-            var line2 = new Line(line.To, new Vector3d(1,0,0), diagramLabel.m_DiagramText.GetTotalSize().Width);
+            var directionUnitized = direction;
+            directionUnitized.Unitize();
+            var justification = Rhino.Geometry.TextJustification.None;
+            Vector3d underlineDirection = new Vector3d(1, 0, 0);
+
+            if (directionUnitized.X == 0)
+            {
+                justification = TextJustification.BottomCenter;
+            }
+
+
+            if (directionUnitized.X < 0) {
+                justification = TextJustification.BottomRight;
+                underlineDirection = new Vector3d(-1, 0, 0);
+            }
+
+            if (directionUnitized.X > 0)
+            {
+                justification = TextJustification.BottomLeft;
+            }
+
+           
+
+
+
+            diagramLabel.m_DiagramText = DiagramText.Create(text, Diagram.ConvertPoint(line.To), colour, textSize, justification, maskColour, frameColor, frameLineWeight, fontName, new SizeF(-1, -1), padding, Rhino.Geometry.TextJustification.BottomLeft);
+            var line2 = new Line(line.To, underlineDirection, diagramLabel.m_DiagramText.GetTotalSize().Width);
             diagramLabel.m_leader = DiagramCurve.Create(new Polyline( new Point3d[] { line.From,line.To,line2.To }).ToNurbsCurve(), colour, lineWeight);
 
             if (crvEnd != null) {
