@@ -181,41 +181,12 @@ namespace DiagramLibrary
       
 
 
-        public override void DrawBitmap(Grasshopper.Kernel.GH_Component component, Graphics g)
-        {
-            for (int i = 0; i < m_ObjectCache.Count; i++)
-            {
-                m_ObjectCache[i].DrawBitmap(component, g);
-            }
-            
-
-        }
-
-
-
-
-        public override void DrawRhinoPreview(Grasshopper.Kernel.GH_Component component, Rhino.Display.DisplayPipeline pipeline, double tolerance, Transform xform, bool colorOverride, Rhino.RhinoDoc doc, bool Bake)
-        {
-            for (int i = 0; i < m_ObjectCache.Count; i++)
-            {
-                m_ObjectCache[i].DrawRhinoPreview(component, pipeline, tolerance, xform, colorOverride, doc, Bake);
-            }
-
-
-
-        }
-
         public override List<DiagramObject> GenerateObjects()
         {
             List<DiagramObject> diagramObjects = new List<DiagramObject>();
 
             //calculate sizes
             GetSizes(out SizeF[] sizes, out Rectangle3d[] recs);
-
-
-
-           
-
 
             //draw text
         
