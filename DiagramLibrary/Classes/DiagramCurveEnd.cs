@@ -87,7 +87,14 @@ namespace DiagramLibrary
 
 
         public void DrawBitmap(Graphics g, Point3d location, Vector3d rotation) {
-            var positionedObject = m_Object.SetLocationAndDirectionForDrawing(m_BasePoint, m_BaseDirection,location, rotation);
+
+            Vector3d flipCorrectedDirection = m_BaseDirection;
+            if (m_Flipped)
+            {
+                flipCorrectedDirection.Reverse();
+            }
+
+            var positionedObject = m_Object.SetLocationAndDirectionForDrawing(m_BasePoint, flipCorrectedDirection, location, rotation);
             if (positionedObject != null) {
                 positionedObject.DrawBitmap(g);
             }

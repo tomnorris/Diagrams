@@ -44,7 +44,13 @@ namespace DiagramLibrary
             DiagramCurve diagramCurve = new DiagramCurve();
             diagramCurve.m_Colour = m_Colour;
             diagramCurve.m_LineWeight = m_LineWeight;
-            diagramCurve.m_Curve = m_Curve.DuplicateCurve();
+            if (m_Curve != null)
+            {
+                diagramCurve.m_Curve = m_Curve.DuplicateCurve();
+            }
+            else {
+                diagramCurve.m_Curve = null;
+            }
             if (m_StartCurveEnd != null)
             {
                 diagramCurve.m_StartCurveEnd = m_StartCurveEnd.DuplicateCurveEnd();
@@ -62,6 +68,7 @@ namespace DiagramLibrary
 
         public override BoundingBox GetBoundingBox()
         {
+            if (m_Curve == null) { return BoundingBox.Empty;  }
             return this.m_Curve.GetBoundingBox(true);
         }
 

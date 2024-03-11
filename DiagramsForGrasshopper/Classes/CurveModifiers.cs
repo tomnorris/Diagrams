@@ -47,7 +47,7 @@ namespace DiagramsForGrasshopper
             {
                 var new_param = ModifiersBase.CreateParam(new Grasshopper.Kernel.Parameters.Param_GenericObject(), "StartingCurveEnd", "StartCrvEnd", "The optional CurveEnd for the Start of the Diagram Object. You can Create a CurveEnd 3 differnt ways: \n 1) (Prefered) Use the CreateDiagramCurevEnd Component. \n " +
                     "2) Use a DiagramCurve or DiagramHatch Component. \n 3) Imput a Grasshopper Curve") as Grasshopper.Kernel.Parameters.Param_GenericObject;
-                new_param.PersistentData.Append(StartingCurveEndVariable);
+               // new_param.PersistentData.Append(StartingCurveEndVariable.Duplicate());
                 m_Params.Add(new_param);
                 m_ItemCount++;
             }
@@ -56,7 +56,7 @@ namespace DiagramsForGrasshopper
             {
                 var new_param = ModifiersBase.CreateParam(new Grasshopper.Kernel.Parameters.Param_GenericObject(), "EndingCurveEnd", "EndCrvEnd", "The optional CurveEnd for the End of the Diagram Object. You can Create a CurveEnd 3 differnt ways: \n 1) (Prefered) Use the CreateDiagramCurevEnd Component. \n " +
                     "2) Use a DiagramCurve or DiagramHatch Component. \n 3) Imput a Grasshopper Curve") as Grasshopper.Kernel.Parameters.Param_GenericObject;
-                new_param.PersistentData.Append(EndingCurveEndVariable);
+               // new_param.PersistentData.Append(EndingCurveEndVariable.Duplicate());
                 m_Params.Add(new_param);
                 m_ItemCount++;
             }
@@ -69,6 +69,10 @@ namespace DiagramsForGrasshopper
         {
             if (this.HasBeenAdded)
             {
+                StartingCurveEndVariable = null; //Reset these so they are not persistent
+                EndingCurveEndVariable = null;
+                StartingCurveEnd = null;
+                EndingCurveEnd = null;
 
                 if (componant.Params.IndexOfInputParam("LineWeight") > -1)
                 {
